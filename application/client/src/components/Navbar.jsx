@@ -1,6 +1,8 @@
 import { useEffect, useState, useRef } from 'react';
 
 const Navbar = () => {
+    const loggedIn = true; // !Placeholder for log in state!
+
     // Handle Hamburger dropdown button
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -36,112 +38,81 @@ const Navbar = () => {
 
     return (
         <div className="App">
-
-            <nav className="bg-red-600 border-gray-200 dark:bg-gray-900">
+            <nav className="bg-[#231161] border-gray-20">
                 <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-                    {/* Logo */}
-                    <a href="https://flowbite.com/" className="flex items-center space-x-3 rtl:space-x-reverse">
-                        <img src="https://flowbite.com/docs/images/logo.svg" className="h-8" alt="Flowbite Logo" />
-                        <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Flowbite</span>
-                    </a>
+                    <div className="flex flex-grow items-center space-x-3 rtl:space-x-reverse mr-20">
+                        {/* Logo */}
+                        <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
+                            <img src="https://www.sfsu.edu/profiles/custom/sfstatedrupal/themes/custom/sfstatetemplate/patternlab/public/images/SFState_logo_color.jpg" className="h-8" alt="Flowbite Logo" />
+                            <span className="self-center text-2xl font-semibold whitespace-nowrap text-white">Tutor</span>
+                        </a>
 
-                    {/* Middle Buttons */}
-                    <div className={`items-center justify-between w-full md:flex md:w-auto md:order-1 ${isMenuOpen ? '' : 'hidden'}`} id="navbar-user">
-                        {/* Mobile search bar */}
-                        <div className="relative mt-3 md:hidden">
-                            <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                                <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                        {/* Search Bar */}
+                        <div className="relative hidden lg:block w-full">
+                            <input type="text" id="search-navbar" style={{ width: "97%" }} className="block p-2 pl-3 ml-12 pe-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="Search..." />
+                            <div className="absolute inset-y-0 end-0 flex items-center pointer-events-none">
+                                <svg className="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
                                 </svg>
+                                <span className="sr-only">Search icon</span>
                             </div>
-                            <input type="text" id="search-navbar" className="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search..." />
                         </div>
-
-                        {/* Mobile navbar dropdown */}
-                        <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-                            <li>
-                                <a href="#" className="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500" aria-current="page">Home</a>
-                            </li>
-                            <li>
-                                <a href="#" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">About</a>
-                            </li>
-                            <li>
-                                <a href="#" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Services</a>
-                            </li>
-                            <li>
-                                <a href="#" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Pricing</a>
-                            </li>
-                            <li>
-                                <a href="#" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Contact</a>
-                            </li>
-                        </ul>
                     </div>
 
-                    {/* Search bar */}
-                    <div className="flex md:order-2 ml-auto">
-                        {/* Search Icon */}
-                        <button type="button" data-collapse-toggle="navbar-search" aria-controls="navbar-search" aria-expanded="false" className="md:hidden text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 me-1">
+                    {/* Right Section (User button, Hamburger menu) */}
+                    <div className="flex lg:order-2 items-center space-x-3">
+
+                        {/* Mobile Search Icon */}
+                        <button onClick={toggleMenu} type="button" data-collapse-toggle="navbar-search" aria-controls="navbar-search" aria-expanded="false" className="lg:hidden text-white hover:bg-[#fc3] focus:outline-none focus:ring-4 focus:ring-gray-200  rounded-lg text-sm p-2.5 me-1">
                             <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
                             </svg>
                             <span className="sr-only">Search</span>
                         </button>
 
-                        {/* Search Bar */}
-                        <div className="relative hidden md:block">
-                            <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                                <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                                </svg>
-                                <span className="sr-only">Search icon</span>
-                            </div>
-                            <input type="text" id="search-navbar" className="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search..." />
-                        </div>
-                    </div>
-
-                    {/* User button */}
-                    <div ref={dropdownRef} className="flex items-center md:order-3 space-x-3 md:space-x-0 rtl:space-x-reverse">
-                        <button
-                            type="button"
-                            className="flex ml-2 text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-                            id="user-menu-button"
-                            aria-expanded={isDropdownOpen}
-                            onClick={toggleDropdown}
-                        >
-                            <span className="sr-only">Open user menu</span>
-                            <img className="w-8 h-8 rounded-full" src="" alt="user photo" />
-                        </button>
-
-                        {/* User dropdown menu */}
-                        {isDropdownOpen && (
-                            <div
-                                className="absolute -mt-1.5 transform translate-y-2/3 -translate-x-3/4 w-48 bg-green-200 divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
-                                id="user-dropdown"
+                        {/* User Button */}
+                        <div ref={dropdownRef} className={`relative ${loggedIn ? '' : 'hidden'}`}>
+                            <button
+                                type="button"
+                                className="flex text-sm bg-[#FFDC70] rounded-full lg:me-0 focus:ring-4 focus:ring-gray-300 lg:ml-4"
+                                id="user-menu-button"
+                                aria-expanded={isDropdownOpen}
+                                onClick={toggleDropdown}
                             >
+                                <span className="sr-only">Open user menu</span>
+                                <img className="w-8 h-8 rounded-full" src="" alt="user photo" />
+                            </button>
 
-                                <div className="px-4 py-3">
-                                    <span className="block text-sm text-gray-900 dark:text-white">Bonnie Green</span>
-                                    <span className="block text-sm text-gray-500 truncate dark:text-gray-400">name@flowbite.com</span>
+                            {/* User Dropdown */}
+                            {isDropdownOpen && (
+                                <div
+                                    className="absolute -right-4 z-10 mt-5 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow"
+                                    id="user-dropdown"
+                                >
+                                    <div className="px-4 py-3">
+                                        <span className="block text-sm text-gray-900">Bryan Lee</span>
+                                        <span className="block text-sm text-gray-500 truncate">bryan@sfsu.edu</span>
+                                    </div>
+                                    <ul className="py-3" aria-labelledby="user-menu-button">
+                                        <li>
+                                            <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dashboard</a>
+                                        </li>
+                                        <li>
+                                            <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
+                                        </li>
+                                        <li>
+                                            <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Earnings</a>
+                                        </li>
+                                        <li>
+                                            <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sign out</a>
+                                        </li>
+                                    </ul>
                                 </div>
-                                <ul className="py-3 md:py-2 lg:py-2" aria-labelledby="user-menu-button">
-                                    <li>
-                                        <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Dashboard</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Settings</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Earnings</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign out</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        )}
+                            )}
+                        </div>
 
-                        {/* Hamburger bars */}
-                        <button onClick={toggleMenu} data-collapse-toggle="navbar-user" type="button" className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-user" aria-expanded="false">
+                        {/* Hamburger Button */}
+                        <button onClick={toggleMenu} data-collapse-toggle="navbar-user" type="button" className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-white rounded-lg lg:hidden hover:bg-[#fc3] focus:outline-none focus:ring-2 focus:ring-gray-200" aria-controls="navbar-user" aria-expanded="false">
                             <span className="sr-only">Open main menu</span>
                             <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15" />
@@ -149,12 +120,60 @@ const Navbar = () => {
                         </button>
                     </div>
 
+                    {/* Navbar for Mobile screens */}
+                    <div className={`items-center justify-between w-full lg:flex lg:w-auto lg:order-1 ${isMenuOpen ? '' : 'hidden'}`} id="navbar-user">
+
+                        {/* Search Bar mobile version */}
+                        <div className="relative lg:hidden">
+                            <input type="text" id="search-navbar" className="block mt-4 lg:mt-0 w-full p-2 pl-3 pe-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="Search..." />
+                            <div className="absolute inset-y-0 end-0 flex items-center pe-3 pointer-events-none">
+                                <svg className="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                                </svg>
+                                <span className="sr-only">Search icon</span>
+                            </div>
+                        </div>
+
+                        {/* Buttons mobile version */}
+                        <ul className="flex flex-col font-medium p-4 lg:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 lg:space-x-8 rtl:space-x-reverse lg:flex-row lg:mt-0 lg:border-0 lg:bg-transparent">
+                            <li className={`${loggedIn ? '' : 'lg:flex items-center justify-center'}`}>
+                                {loggedIn ? (
+                                    <a href="#" className="block py-2 px-3 text-black bg-[#FFDC70] hover:bg-[#fc3] rounded lg:bg-transparent lg:hover:text-[#FFDC70] lg:text-white lg:hover:bg-transparent lg:p-0" aria-current="page">Home</a>
+                                ) : (
+                                    <a href="#" className="block py-2 px-3 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:hover:text-[#FFDC70] lg:text-white lg:p-0">Home</a>
+                                )}
+                            </li>
+                            <li className={`${loggedIn ? '' : 'lg:flex items-center justify-center'}`}>
+                                <a href="#" className="block py-2 px-3 text-black lg:text-white rounded hover:bg-gray-100 lg:hover:bg-transparent lg:hover:text-[#FFDC70] lg:p-0">
+                                    Explore
+                                </a>
+                            </li>
+                            <li className={`${loggedIn ? '' : 'lg:flex items-center justify-center'}`}>
+                                <a href="#" className="block py-2 px-3 text-black lg:text-white rounded hover:bg-gray-100 lg:hover:bg-transparent lg:hover:text-[#FFDC70] lg:p-0">
+                                    Services
+                                </a>
+                            </li>
+                            <li className={`${loggedIn ? '' : 'lg:flex items-center justify-center'}`}>
+                                <a href="#" className="block py-2 px-3 text-black lg:text-white rounded hover:bg-gray-100 lg:hover:bg-transparent lg:hover:text-[#FFDC70] lg:p-0">
+                                    About
+                                </a>
+                            </li>
+
+                            {!loggedIn && (
+                                <>
+                                    <li className={`${loggedIn ? '' : 'lg:flex items-center justify-center'}`}>
+                                        <a href="#" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:hover:text-[#FFDC70] lg:text-white lg:p-0">Log In</a>
+                                    </li>
+                                    <button type="button" class=" text-black lg:text-center bg-[#FFDC70] hover:bg-[#fc3] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-left font-16" style={{ fontSize: "16px" }}>Sign Up</button>
+                                </>
+                            )}
+                        </ul>
+
+                    </div>
                 </div>
             </nav>
-
-
         </div>
     );
-}
+};
 
-export default Navbar
+export default Navbar;
