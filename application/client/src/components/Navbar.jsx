@@ -154,7 +154,7 @@ const Navbar = () => {
                                 </a>
                             </li>
                             <li className={`${loggedIn ? '' : 'lg:flex items-center justify-center'}`}>
-                                <a href="#" className="block py-2 px-3 text-black lg:text-white rounded hover:bg-gray-100 lg:hover:bg-transparent lg:hover:text-[#FFDC70] lg:p-0">
+                                <a href="/about" className="block py-2 px-3 text-black lg:text-white rounded hover:bg-gray-100 lg:hover:bg-transparent lg:hover:text-[#FFDC70] lg:p-0">
                                     About
                                 </a>
                             </li>
