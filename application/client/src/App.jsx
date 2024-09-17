@@ -22,6 +22,7 @@ function App() {
                         <Route element={<DefaultLayout />}>
                             <Route path="/" element={<Home />} />
                             <Route path="/about" element={<About />} />
+                            <Route path="/about/:name" element={<About />} />
                         </Route>
 
                     </Routes>
