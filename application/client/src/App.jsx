@@ -10,7 +10,7 @@ import About from "./about/AboutPage.jsx";
 
 function App() {
 
-    document.title = "CSC648-08";
+    document.title = "CSC648";
 
     return (
         <div>
