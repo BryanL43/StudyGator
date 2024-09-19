@@ -1,3 +1,14 @@
+/**************************************************************
+* Author(s): Kenneth Wen, Bryan Lee 
+* Last Updated: 9/19/2024
+*
+* File:: AboutPage.jsx
+*
+* Description:: This file handles the "About Us" page for our website.
+*               Clicking on each profile will prompt a description 
+*               of each member.
+*
+**************************************************************/
 import React from 'react'
 import { Link, useParams } from 'react-router-dom';
 
@@ -21,7 +32,7 @@ const usersData = [
         role: "Github Master",
         imgUrl: "/pfp.png",
         linkUrl: "/Kenneth",
-        description: "Kenneth is a senior at SFSU majoring in Computer Science. He is a full-stack developer with a passion for creating user-friendly applications. He is also a huge fan of the Golden State Warriors and enjoys playing basketball in his free time."
+        description: "Kenneth is a senior at SFSU majoring in Computer Science. Recently, he has been trying to learn simple cooking recipes. During his free time, he enjoys gambling for JPEGs in gacha games."
     },
     {
         name: "Min Ye Thway Khaing",
@@ -54,7 +65,8 @@ const Team = () => {
             <div className="mx-auto max-w-screen-sm text-center mb-8 lg:mb-16">
                 <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Our Team</h2>
                 <p className="font-light text-gray-500 lg:mb-16 sm:text-xl dark:text-gray-400">
-                    As Team #8, we're proud of our ability to tackle challenges head-on, innovate, and deliver high-quality solutions for clients and users alike.
+                    This is Team#8's group project for 648/848 Software Engineering class. As a team, innovating and delivering
+                    high-quality solutions for clients and users alike.
                 </p>
             </div>
             <div className="grid gap-8 mb-6 lg:mb-16 lg:grid-cols-2">
