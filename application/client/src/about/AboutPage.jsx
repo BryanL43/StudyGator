@@ -1,5 +1,5 @@
 /**************************************************************
-* Author(s): Kenneth Wen, Bryan Lee 
+* Author(s): Kenneth Wen, Bryan Lee , Nishi Suratia
 * Last Updated: 9/19/2024
 *
 * File:: AboutPage.jsx
