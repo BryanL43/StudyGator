@@ -23,9 +23,9 @@ const usersData = [
     {
         name: "Nishi Suratia",
         role: "Lead Back-end Developer",
-        imgUrl: "/pfp.png",
+        imgUrl: "/phto.jpg",
         linkUrl: "/Nishi",
-        description: "Nishi is a senior at SFSU majoring in Computer Science. She is a full-stack developer with a passion for creating user-friendly applications. She is also a huge fan of the Golden State Warriors and enjoys playing basketball in her free time."
+        description: "Nishi is a graduate student at SFSU majoring in Computer Science. She is a software developer that develops scalable cloud applications with the help of Artifical intelligence. When she is not coding ,She is either enjoying various cusines or travelling around."
     },
     {
         name: "Kenneth Wen",
