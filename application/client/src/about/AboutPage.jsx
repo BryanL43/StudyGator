@@ -5,28 +5,28 @@ const usersData = [
     {
         name: "Bryan Lee",
         role: "Team Lead",
-        imgUrl: "https://www.mutkut.com/wp-content/uploads/2015/12/Loving-You-White-Dog-Display-Picture-300x300.jpg",
+        imgUrl: "/pfp.png",
         linkUrl: "/Bryan",
-        description: "Bryan is a senior at SFSU majoring in Computer Science. He is a full-stack developer with a passion for creating user-friendly applications. He is also a huge fan of the Golden State Warriors and enjoys playing basketball in his free time."
+        description: "Bryan is a junior at SFSU pursuing a major in Computer Science and minor in Mathematics. He enjoys traveling the world, learning new things, and enjoys sweet treats."
     },
     {
         name: "Nishi Suratia",
         role: "Lead Back-end Developer",
-        imgUrl: "https://www.mutkut.com/wp-content/uploads/2015/12/Loving-You-White-Dog-Display-Picture-300x300.jpg",
+        imgUrl: "/pfp.png",
         linkUrl: "/Nishi",
         description: "Nishi is a senior at SFSU majoring in Computer Science. She is a full-stack developer with a passion for creating user-friendly applications. She is also a huge fan of the Golden State Warriors and enjoys playing basketball in her free time."
     },
     {
         name: "Kenneth Wen",
         role: "Github Master",
-        imgUrl: "https://www.mutkut.com/wp-content/uploads/2015/12/Loving-You-White-Dog-Display-Picture-300x300.jpg",
+        imgUrl: "/pfp.png",
         linkUrl: "/Kenneth",
         description: "Kenneth is a senior at SFSU majoring in Computer Science. He is a full-stack developer with a passion for creating user-friendly applications. He is also a huge fan of the Golden State Warriors and enjoys playing basketball in his free time."
     },
     {
         name: "Min Ye Thway Khaing",
         role: "Front-end Developer",
-        imgUrl: "https://www.mutkut.com/wp-content/uploads/2015/12/Loving-You-White-Dog-Display-Picture-300x300.jpg",
+        imgUrl: "/pfp.png",
         linkUrl: "/Kai",
         description: "Kai is a senior at SFSU majoring in Computer Science. He is a full-stack developer with a passion for creating user-friendly applications. He is also a huge fan of the Golden State Warriors and enjoys playing basketball in his free time."
     }
@@ -78,7 +78,7 @@ const RenderUser = ({ user }) => {
     return (
         <section className="bg-white flex justify-center items-center dark:bg-gray-900 min-h-[calc(100vh-136px)] lg:min-h-[calc(100vh-198px)]">
             <div className="gap-8 items-center py-8 px-4 mx-auto max-w-screen-xl xl:gap-16 md:grid md:grid-cols-2 sm:py-16 lg:px-6">
-                <img className="w-full" src={imgUrl} />
+                <img className="w-full" src={imgUrl} alt={description} />
                 <div className="mt-4 md:mt-0">
                     <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">{name} - {role}</h2>
                     <p className="mb-6 font-light text-gray-500 md:text-lg dark:text-gray-400">{description}</p>

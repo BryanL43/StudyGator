@@ -44,7 +44,7 @@ const Navbar = () => {
                     <div className="flex flex-grow items-center space-x-3 rtl:space-x-reverse mr-16">
                         {/* Logo */}
                         <a href="/" className="flex w-fit items-center space-x-3 rtl:space-x-reverse">
-                            <img src="https://www.sfsu.edu/profiles/custom/sfstatedrupal/themes/custom/sfstatetemplate/patternlab/public/images/SFState_logo_color.jpg" className="h-8" alt="Flowbite Logo" />
+                            <img src="https://www.sfsu.edu/profiles/custom/sfstatedrupal/themes/custom/sfstatetemplate/patternlab/public/images/SFState_logo_color.jpg" className="h-8" alt="SFSU Logo" />
                             <span className="self-center text-2xl font-semibold whitespace-nowrap text-white">Tutor</span>
                         </a>
 
@@ -53,7 +53,7 @@ const Navbar = () => {
                             <input type="text" id="search-navbar" className="w-full block p-2 pl-3  pe-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="Search..." />
                             <div className="absolute right-[20px] top-1/2 -translate-y-1/2  flex items-center pointer-events-none">
                                 <svg className="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
                                 </svg>
                                 <span className="sr-only">Search icon</span>
                             </div>
@@ -82,7 +82,7 @@ const Navbar = () => {
                                 onClick={toggleDropdown}
                             >
                                 <span className="sr-only">Open user menu</span>
-                                <img className="w-8 h-8 rounded-full" src="" alt="user photo" />
+                                <img className="w-8 h-8 rounded-full" src="" alt="Open user menu" />
                             </button>
 
                             {/* User Dropdown */}
