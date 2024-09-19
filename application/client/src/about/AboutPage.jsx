@@ -39,7 +39,7 @@ const usersData = [
         role: "Front-end Developer",
         imgUrl: "/pfp.png",
         linkUrl: "/Kai",
-        description: "Kai is a senior at SFSU majoring in Computer Science. He is a full-stack developer with a passion for creating user-friendly applications. He is also a huge fan of the Golden State Warriors and enjoys playing basketball in his free time."
+        description: "Kai is a senior at SFSU majoring in Computer Science. He enjoys playing badminton in his free time."
     }
 ]
 
