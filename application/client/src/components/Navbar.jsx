@@ -29,7 +29,7 @@ const Navbar = () => {
         setDropdownOpen(!isDropdownOpen);
     };
 
-    // Hide user dropdown when user click anywhere outside of the menu
+    // Hide user dropdown when user clicks anywhere outside of the menu
     const handleClickOutside = (event) => {
         if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
             setDropdownOpen(false);
@@ -49,6 +49,12 @@ const Navbar = () => {
         };
     }, [isDropdownOpen]);
 
+    // State for managing search input value
+    const [searchInput, setSearchInput] = useState('');
+    const handleSearchChange = (event) => {
+        setSearchInput(event.target.value);
+    };
+
     return (
         <div className="App">
             <nav className="bg-[#231161] border-gray-20">
@@ -62,7 +68,7 @@ const Navbar = () => {
 
                         {/* Search Bar */}
                         <div className="relative hidden lg:block flex-1 pr-2">
-                            <input type="text" id="search-navbar" pattern="[A-Za-z\s]*" maxlength="40" className="w-full block p-2 pl-3 pe-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="Search..." />
+                            <input type="text" id="search-navbar" value={searchInput} onChange={handleSearchChange} pattern="[A-Za-z\s]*" maxLength="40" className="w-full block p-2 pl-3 pe-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="Search..." />
                             <div className="absolute right-[20px] top-1/2 -translate-y-1/2  flex items-center pointer-events-none">
                                 <svg className="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
@@ -139,7 +145,7 @@ const Navbar = () => {
 
                         {/* Search Bar mobile version */}
                         <div className="relative lg:hidden">
-                            <input type="text" id="search-navbar" className="block mt-4 lg:mt-0 w-full p-2 pl-3 pe-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="Search..." />
+                            <input type="text" id="search-navbar" value={searchInput} onChange={handleSearchChange} pattern="[A-Za-z\s]*" maxLength="40" className="block mt-4 lg:mt-0 w-full p-2 pl-3 pe-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="Search..." />
                             <div className="absolute inset-y-0 end-0 flex items-center pe-3 pointer-events-none">
                                 <svg className="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
