@@ -1,12 +1,23 @@
+/**************************************************************
+* Author(s): Bryan Lee
+* Last Updated: 9/19/2024
+*
+* File:: Navbar.jsx
+*
+* Description:: This file handles the web app's responsive navigation bar.
+*               It controls the frontend of the search bar, user profile button,
+*               and quick navigation.
+*
+**************************************************************/
+
 import { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom'
 
 const Navbar = () => {
-    const loggedIn = true; // !Placeholder for log in state!
+    const loggedIn = true; // !Placeholder for log in state! (will be implemented with login system)
 
     // Handle Hamburger dropdown button
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     };
@@ -14,17 +25,18 @@ const Navbar = () => {
     // Handle user dropdown button
     const [isDropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
-
     const toggleDropdown = () => {
         setDropdownOpen(!isDropdownOpen);
     };
 
+    // Hide user dropdown when user clicks anywhere outside of the menu
     const handleClickOutside = (event) => {
         if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
             setDropdownOpen(false);
         }
     };
 
+    // Load the user dropdown menu mouse event
     useEffect(() => {
         if (isDropdownOpen) {
             document.addEventListener('mousedown', handleClickOutside);
@@ -37,21 +49,27 @@ const Navbar = () => {
         };
     }, [isDropdownOpen]);
 
+    // State for managing search input value
+    const [searchInput, setSearchInput] = useState('');
+    const handleSearchChange = (event) => {
+        setSearchInput(event.target.value);
+    };
+
     return (
         <div className="App">
             <nav className="bg-[#231161] border-gray-20">
                 <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-                    <div className="flex flex-grow items-center space-x-3  rtl:space-x-reverse mr-16">
+                    <div className="flex flex-grow items-center space-x-3 rtl:space-x-reverse mr-16">
                         {/* Logo */}
                         <a href="/" className="flex w-fit items-center space-x-3 rtl:space-x-reverse">
-                            <img src="https://www.sfsu.edu/profiles/custom/sfstatedrupal/themes/custom/sfstatetemplate/patternlab/public/images/SFState_logo_color.jpg" className="h-8" alt="Flowbite Logo" />
+                            <img src="https://www.sfsu.edu/profiles/custom/sfstatedrupal/themes/custom/sfstatetemplate/patternlab/public/images/SFState_logo_color.jpg" className="h-8" alt="SFSU Logo" />
                             <span className="self-center text-2xl font-semibold whitespace-nowrap text-white">Tutor</span>
                         </a>
 
                         {/* Search Bar */}
                         <div className="relative hidden lg:block flex-1 pr-2">
-                            <input type="text" id="search-navbar" className="w-full block p-2 pl-3  pe-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="Search..." />
-                            <div className="absolute right-[15px] top-1/2 -translate-y-1/2  flex items-center pointer-events-none">
+                            <input type="text" id="search-navbar" value={searchInput} onChange={handleSearchChange} pattern="[A-Za-z\s]*" maxLength="40" className="w-full block p-2 pl-3 pe-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="Search..." />
+                            <div className="absolute right-[20px] top-1/2 -translate-y-1/2  flex items-center pointer-events-none">
                                 <svg className="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
                                 </svg>
@@ -82,7 +100,7 @@ const Navbar = () => {
                                 onClick={toggleDropdown}
                             >
                                 <span className="sr-only">Open user menu</span>
-                                <img className="w-8 h-8 rounded-full" src="" alt="user photo" />
+                                <img className="w-8 h-8 rounded-full" src="" alt="Open user menu" />
                             </button>
 
                             {/* User Dropdown */}
@@ -127,7 +145,7 @@ const Navbar = () => {
 
                         {/* Search Bar mobile version */}
                         <div className="relative lg:hidden">
-                            <input type="text" id="search-navbar" className="block mt-4 lg:mt-0 w-full p-2 pl-3 pe-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="Search..." />
+                            <input type="text" id="search-navbar" value={searchInput} onChange={handleSearchChange} pattern="[A-Za-z\s]*" maxLength="40" className="block mt-4 lg:mt-0 w-full p-2 pl-3 pe-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="Search..." />
                             <div className="absolute inset-y-0 end-0 flex items-center pe-3 pointer-events-none">
                                 <svg className="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
