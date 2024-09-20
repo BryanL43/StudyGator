@@ -11,15 +11,14 @@
 2. SSH username: ubuntu
 3. SSH password or key.
     <br> If a ssh key is used please upload the key to the credentials folder.
-4. Database URL or IP and port used.: 3306
+4. Database URL or IP and port used.: csc648-team-08-db.c30mm4sa4ezq.us-west-1.rds.amazonaws.com & port 3306
     <br><strong> NOTE THIS DOES NOT MEAN YOUR DATABASE NEEDS A PUBLIC FACING PORT.</strong> But knowing the IP and port number will help with SSH tunneling into the database. The default port is more than sufficient for this class.
 5. Database username: admin
 6. Database password: q2lfkuUORuEvi5vzNpJs
-7. Database name (basically the name that contains all your tables):csc648-team-08-db
+7. Database name (basically the name that contains all your tables): csc648-team-08-db
 8. Instructions on how to use the above information.
 
 # Most important things to Remember
 ## These values need to kept update to date throughout the semester. <br>
 ## <strong>Failure to do so will result it points be deducted from milestone submissions.</strong><br>
 ## You may store the most of the above in this README.md file. DO NOT Store the SSH key or any keys in this README.md file.
-Server URL or IP: 
