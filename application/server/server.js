@@ -15,7 +15,7 @@ const upload = multer({ storage: storage });
 
 
 app.use(cors({
-    origin: ['http://localhost:3000'],
+    origin: ['http://localhost:3000, http://ec2-54-176-10-43.us-west-1.compute.amazonaws.com/'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
     credentials: true,

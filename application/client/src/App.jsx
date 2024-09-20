@@ -16,7 +16,7 @@ import { AuthProvider } from './AuthContext';
 import DefaultLayout from './layouts/DefaultLayout.jsx';
 
 // Import the subpages
-import Home from "./Home/Home.jsx";
+// import Home from "./Home/Home.jsx";
 import About from "./about/AboutPage.jsx";
 
 function App() {
@@ -31,7 +31,8 @@ function App() {
 
                         {/* Default Routes */}
                         <Route element={<DefaultLayout />}>
-                            <Route path="/" element={<Home />} />
+                            <Route path="/" element={<About />} /> {/* Force redirect to about page for m0 */}
+                            {/* <Route path="/" element={<Home />} /> */}
                             <Route path="/about" element={<About />} />
                             <Route path="/about/:name" element={<About />} />
                         </Route>
