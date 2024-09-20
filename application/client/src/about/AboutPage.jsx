@@ -1,5 +1,5 @@
 /**************************************************************
-* Author(s): Kenneth Wen, Bryan Lee , Nishi Suratia
+* Author(s): Kenneth Wen, Bryan Lee, Nishi Suratia, & Min Ye Thway Khaing
 * Last Updated: 9/19/2024
 *
 * File:: AboutPage.jsx
@@ -9,6 +9,7 @@
 *               of each member.
 *
 **************************************************************/
+
 import React from 'react'
 import { Link, useParams } from 'react-router-dom';
 
@@ -43,6 +44,7 @@ const usersData = [
     }
 ]
 
+// Card template to display a team member
 const TeamMember = ({ name, role, imgUrl, linkUrl }) => (
     <Link to={`/about${linkUrl}`} rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
         <div className="items-center bg-gray-50 xl:h-full rounded-lg shadow sm:flex dark:bg-gray-800 dark:border-gray-700">
@@ -59,6 +61,7 @@ const TeamMember = ({ name, role, imgUrl, linkUrl }) => (
     </Link>
 );
 
+// Render the About page
 const Team = () => {
     return (
         <>
@@ -84,6 +87,7 @@ const Team = () => {
     )
 }
 
+// Page template for the sub about page containing specific individual team member's information
 const RenderUser = ({ user }) => {
     const { name, role, imgUrl, description } = user;
 
@@ -107,6 +111,7 @@ const RenderUser = ({ user }) => {
     )
 }
 
+// Render the sub about page
 const About = () => {
     const { name } = useParams();
     const foundUser = usersData.find(user => user.linkUrl.replace("/", "") === name);

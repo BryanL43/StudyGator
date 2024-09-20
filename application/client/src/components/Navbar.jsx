@@ -1,12 +1,23 @@
+/**************************************************************
+* Author(s): Bryan Lee
+* Last Updated: 9/19/2024
+*
+* File:: Navbar.jsx
+*
+* Description:: This file handles the web app's responsive navigation bar.
+*               It controls the frontend of the search bar, user profile button,
+*               and quick navigation.
+*
+**************************************************************/
+
 import { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom'
 
 const Navbar = () => {
-    const loggedIn = true; // !Placeholder for log in state!
+    const loggedIn = true; // !Placeholder for log in state! (will be implemented with login system)
 
     // Handle Hamburger dropdown button
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     };
@@ -14,17 +25,18 @@ const Navbar = () => {
     // Handle user dropdown button
     const [isDropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
-
     const toggleDropdown = () => {
         setDropdownOpen(!isDropdownOpen);
     };
 
+    // Hide user dropdown when user click anywhere outside of the menu
     const handleClickOutside = (event) => {
         if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
             setDropdownOpen(false);
         }
     };
 
+    // Load the user dropdown menu mouse event
     useEffect(() => {
         if (isDropdownOpen) {
             document.addEventListener('mousedown', handleClickOutside);
@@ -50,7 +62,7 @@ const Navbar = () => {
 
                         {/* Search Bar */}
                         <div className="relative hidden lg:block flex-1 pr-2">
-                            <input type="text" id="search-navbar" className="w-full block p-2 pl-3  pe-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="Search..." />
+                            <input type="text" id="search-navbar" pattern="[A-Za-z\s]*" maxlength="40" className="w-full block p-2 pl-3 pe-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="Search..." />
                             <div className="absolute right-[20px] top-1/2 -translate-y-1/2  flex items-center pointer-events-none">
                                 <svg className="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />

@@ -1,3 +1,14 @@
+/**************************************************************
+* Author(s): Bryan Lee
+* Last Updated: 9/19/2024
+*
+* File:: App.jsx
+*
+* Description:: This file handles the web application's routing.
+*               It acts as the "middleware" for the React application.
+*
+**************************************************************/
+
 import { useEffect, useState, useRef } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
