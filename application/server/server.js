@@ -22,7 +22,7 @@ app.use(cors({
 }));
 
 
-const PORT = process.env.SERVER_PORT || 3000;
+const PORT = process.env.SERVER_PORT || 2000;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
