@@ -9,14 +9,13 @@
 
 1. Server URL or IP: https://eclipsesakura.online/
 2. SSH username: ubuntu
-3. SSH password or key (execute the following in terminal and within the correct directory: ssh -i "csc648-team-08.pem" ubuntu@ec2-54-176-10-43.us-west-1.compute.amazonaws.com)
-    <br> If a ssh key is used please upload the key to the credentials folder.
-5. Database URL or IP and port used.: csc648-team-08-db.c30mm4sa4ezq.us-west-1.rds.amazonaws.com & port 3306
-    <br><strong> NOTE THIS DOES NOT MEAN YOUR DATABASE NEEDS A PUBLIC FACING PORT.</strong> But knowing the IP and port number will help with SSH tunneling into the database. The default port is more than sufficient for this class.
-6. Database username: admin
-7. Database password: q2lfkuUORuEvi5vzNpJs
-8. Database name (basically the name that contains all your tables): csc648-team-08-db
-9. Instructions on how to use the above information.
+3. SSH password or key. Execute the following in terminal and within the correct directory: **ssh -i "csc648-team-08.pem" ubuntu@ec2-54-176-10-43.us-west-1.compute.amazonaws.com**
+5. Database URL or IP & port: csc648-team-08.c30mm4sa4ezq.us-west-1.rds.amazonaws.com & port 3306 (port 2000 for reverse proxy Nginx)
+6. Database username: **admin**
+7. Database password: **q2lfkuUORuEvi5vzNpJs**
+8. Database name: **data-schema**
+9. Instructions on how to use the above information: <br>
+[Insert video links here]
 
 # Most important things to Remember
 ## These values need to kept update to date throughout the semester. <br>
