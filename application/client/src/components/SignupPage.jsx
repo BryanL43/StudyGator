@@ -4,34 +4,25 @@ import { MdLock, MdPerson } from 'react-icons/md';
 import Navbar from './Navbar';
 
 
-const LoginPage = () => {
+const SignupPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(false);
 
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Logic to handle login
+    // Logic to handle sign up
     console.log('Username:', username);
     console.log('Password:', password);
-    console.log('Remember Me:' , rememberMe);
-
-
-    if(rememberMe){
-      localStorage.setItem('authToken', 'token'); // token logic
-
-
-    }
   };
 
 
   return (
-    <>
+   <>
     <Navbar />
     <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
       <div className="w-full max-w-md bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6 text-center">Login</h2>
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6 text-center">Sign Up</h2>
 
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -73,37 +64,17 @@ const LoginPage = () => {
           </div>
 
 
-          {/* Remember Me Checkbox */}
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              id="rememberMe"
-              className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-400"
-              checked={rememberMe}
-              onChange={(e) => setRememberMe(e.target.checked)}
-            />
-            <label htmlFor="rememberMe" className="ml-2 block text-sm text-gray-900 dark:text-gray-300">
-              Remember Me
-            </label>
-          </div>
-
-
-          <div className="flex justify-between items-center">
-            <span className="text-sm text-blue-500 hover:underline">
-              Forgot Password?
-            </span>
-            <button
-              type="submit"
-              className="bg-[#231161] hover:bg-[#1f0e55] text-white font-medium rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#231161] focus:ring-offset-2 dark:focus:ring-offset-gray-800"
-            >
-              Login
-            </button>
-          </div>
+          <button
+            type="submit"
+            className="w-full bg-[#231161] hover:bg-[#1f0e55] text-white font-medium rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#231161] focus:ring-offset-2 dark:focus:ring-offset-gray-800"
+          >
+            Sign Up
+          </button>
 
 
           <div className="text-sm text-center">
             <p className="text-gray-500 dark:text-gray-400">
-              Don’t have an account? <Link to="/signup" className="text-blue-500 hover:underline">Sign up</Link>
+              Already have an account? <Link to="/login" className="text-blue-500 hover:underline">Log In</Link>
             </p>
           </div>
         </form>
@@ -114,7 +85,7 @@ const LoginPage = () => {
 };
 
 
-export default LoginPage;
+export default SignupPage;
 
 
 

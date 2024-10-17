@@ -18,7 +18,9 @@ const DefaultLayout = () => {
     return (
         <>
             <Navbar />
-            <Outlet />
+            <div>
+                <Outlet />
+            </div>
             {/* <Footer /> */}
         </>
     )
