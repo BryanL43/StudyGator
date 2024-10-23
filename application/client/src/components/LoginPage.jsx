@@ -2,51 +2,54 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MdLock, MdPerson } from 'react-icons/md';
 
+import axios from 'axios';
+import BASE_URL from "../utils/config";
+
 const LoginPage = () => {
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
 
-
-    const handleSubmit = (e) => {
+    const handleSubmit = async(e) => {
         e.preventDefault();
-        // Logic to handle login
-        console.log('Username:', username);
-        console.log('Password:', password);
-        console.log('Remember Me:', rememberMe);
-
-
-        if (rememberMe) {
-            localStorage.setItem('authToken', 'token'); // token logic
+        
+        try {
+            const response = await axios.post(`${BASE_URL}/api/login`, {
+                email,
+                password,
+            });
+            
+            if (rememberMe) {
+                localStorage.setItem('authToken', response.data.token);
+            }
+        } catch (err) {
+            console.error('Error during login:', err.response ? err.response.data : err.message);
         }
     };
-
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
             <div className="w-full max-w-md bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
                 <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6 text-center">Login</h2>
 
-
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
-                        <label htmlFor="username" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Username
+                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            SFSU Email
                         </label>
                         <div className="mt-1 flex items-center border border-gray-300 dark:border-gray-700 rounded-md shadow-sm">
                             <MdPerson className="ml-2 text-gray-400" size={30} />
                             <input
                                 type="text"
-                                id="username"
-                                name="username"
+                                id="email"
+                                name="email"
                                 className="block w-full p-2 border-none focus:ring-transparent dark:bg-gray-700 dark:text-gray-200"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
                                 required
                             />
                         </div>
                     </div>
-
 
                     <div>
                         <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -66,7 +69,6 @@ const LoginPage = () => {
                         </div>
                     </div>
 
-
                     {/* Remember Me Checkbox */}
                     <div className="flex items-center">
                         <input
@@ -81,7 +83,6 @@ const LoginPage = () => {
                         </label>
                     </div>
 
-
                     <div className="flex justify-between items-center">
                         <span className="text-sm text-blue-500 hover:underline">
                             Forgot Password?
@@ -94,7 +95,6 @@ const LoginPage = () => {
                         </button>
                     </div>
 
-
                     <div className="text-sm text-center">
                         <p className="text-gray-500 dark:text-gray-400">
                             Don't have an account? <Link to="/signup" className="text-blue-500 hover:underline">Sign up</Link>
@@ -106,8 +106,4 @@ const LoginPage = () => {
     );
 };
 
-
 export default LoginPage;
-
-
-
