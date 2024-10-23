@@ -30,7 +30,7 @@ function App() {
         <div>
             <AuthProvider>
                 <Router>
-                <Routes>
+                    <Routes>
                         {/* Routes with Default Layout (Authenticated) */}
                         <Route element={<DefaultLayout />}>
                             <Route path="/" element={<Home />} />

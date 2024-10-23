@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { MdLock, MdPerson } from 'react-icons/md';
+import { useAuth } from '../AuthContext';
 
 import axios from 'axios';
 import BASE_URL from "../utils/config";
 
 const LoginPage = () => {
+    const navigate = useNavigate();
+    const { login } = useAuth();
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
@@ -19,9 +23,9 @@ const LoginPage = () => {
                 password,
             });
             
-            if (rememberMe) {
-                localStorage.setItem('authToken', response.data.token);
-            }
+            login(response.data.token, rememberMe);
+
+            navigate("/");
         } catch (err) {
             console.error('Error during login:', err.response ? err.response.data : err.message);
         }

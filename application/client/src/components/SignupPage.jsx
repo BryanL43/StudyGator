@@ -19,8 +19,7 @@ const SignupPage = () => {
                 email,
                 password,
             }
-            const response = await axios.put(`${BASE_URL}/api/register`, requestBody);
-            console.log("Response: ", response.data);
+            await axios.put(`${BASE_URL}/api/register`, requestBody);
         } catch (err) {
             console.error("Error during signup: ", err.response ? err.response.data : err.message);
         }
