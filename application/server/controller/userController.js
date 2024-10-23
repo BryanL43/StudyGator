@@ -1,4 +1,5 @@
-const { getUser , addUser } = require("../models/userModel");
+const jwt = require('jsonwebtoken');
+const { getUser , addUser, loginUser } = require("../models/userModel");
 
 const userHandler = async(req, res) => {
     const { username } = req.params;
@@ -13,7 +14,7 @@ const userHandler = async(req, res) => {
         }
     } catch (error) {
         console.error('Error fetching user:', error);
-        res.status(500).json({ message: "Server error" });
+        res.status(500).json({ error: "Server error" });
     }
 }
 
@@ -28,8 +29,23 @@ const addUserHandler = async(req, res) => {
     }
 }
 
+const loginUserHandler = async(req, res) => {
+    const { email, password } = req.body;
+    try {
+        const user = await loginUser(email, password);
+        if (user) {
+            const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET, { expiresIn: '1m' });
+            res.json({ token });
+        } else {
+            res.status(401).json({ error: "Invalid credentials" });
+        }
+    } catch (err) {
+        res.status(500).json({ error: err.message })
+    }
+}
 
 module.exports = {
     userHandler,
-    addUserHandler
+    addUserHandler,
+    loginUserHandler
 }

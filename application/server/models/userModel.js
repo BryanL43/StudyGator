@@ -9,8 +9,7 @@ const getUser = async(email) => {
     return result;
 }
 
-const addUser = async (name, email, password, dateCreated) => {
-    console.log(password);
+const addUser = async(name, email, password, dateCreated) => {
     const connection = await connectDB();
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -32,7 +31,26 @@ const addUser = async (name, email, password, dateCreated) => {
     }
 };
 
+const loginUser = async(email, password) => {
+    const connection = await connectDB();
+    const [result] = await connection.query(
+        `SELECT * FROM \`data-schema\`.REGISTEREDUSERS WHERE email = ?`, [email]
+    );
+
+    if (!result || result.length === 0) {
+        throw new Error("User not found!");
+    }
+    
+    const validatePwd = await bcrypt.compare(password, result[0].password);
+    if (!validatePwd) {
+        throw new Error("Invalid password");
+    }
+
+    return result[0];
+}
+
 module.exports = {
     getUser,
-    addUser
+    addUser,
+    loginUser
 }
