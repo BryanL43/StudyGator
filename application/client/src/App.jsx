@@ -18,6 +18,9 @@ import DefaultLayout from './layouts/DefaultLayout.jsx';
 // Import the subpages
 import Home from "./Home/Home.jsx";
 import About from "./about/AboutPage.jsx";
+import LoginPage from './components/LoginPage.jsx';
+import SignupPage from './components/SignupPage.jsx';
+
 
 function App() {
 
@@ -27,15 +30,15 @@ function App() {
         <div>
             <AuthProvider>
                 <Router>
-                    <Routes>
-
-                        {/* Default Routes */}
+                <Routes>
+                        {/* Routes with Default Layout (Authenticated) */}
                         <Route element={<DefaultLayout />}>
                             <Route path="/" element={<Home />} />
                             <Route path="/about" element={<About />} />
                             <Route path="/about/:name" element={<About />} />
+                            <Route path="/login" element={<LoginPage />} />
+                            <Route path="/signup" element={<SignupPage />} />
                         </Route>
-
                     </Routes>
                 </Router>
             </AuthProvider>
