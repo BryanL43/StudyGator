@@ -1,4 +1,4 @@
-const { getUser } = require("../models/userModel");
+const { getUser , addUser } = require("../models/userModel");
 
 const userHandler = async(req, res) => {
     const { username } = req.params;
@@ -17,6 +17,19 @@ const userHandler = async(req, res) => {
     }
 }
 
+const addUserHandler = async(req, res) => {
+    const { name, email, password } = req.body;
+    try {
+        await addUser(name, email, password, Math.floor(Date.now() / 1000));
+        res.json({ success: true });
+    } catch (err) {
+        console.error("Error adding user: ", err);
+        res.status(500).json({ success: false, error: err.message });
+    }
+}
+
+
 module.exports = {
-    userHandler
+    userHandler,
+    addUserHandler
 }
