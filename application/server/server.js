@@ -15,14 +15,14 @@ const upload = multer({ storage: storage });
 
 
 app.use(cors({
-    origin: ['http://localhost:3000'],
+    origin: ['http://localhost:3000', 'http://localhost:2000', 'https://eclipsesakura.online'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
     credentials: true,
 }));
 
 
-const PORT = process.env.SERVER_PORT || 3000;
+const PORT = process.env.SERVER_PORT || 2000;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

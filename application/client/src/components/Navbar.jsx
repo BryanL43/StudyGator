@@ -14,7 +14,7 @@ import { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom'
 
 const Navbar = () => {
-    const loggedIn = true; // !Placeholder for log in state! (will be implemented with login system)
+    const loggedIn = !!localStorage.getItem("authToken"); // !Placeholder for log in state! (will be implemented with login system)
 
     // Handle Hamburger dropdown button
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -63,7 +63,7 @@ const Navbar = () => {
                         {/* Logo */}
                         <a href="/" className="flex w-fit items-center space-x-3 rtl:space-x-reverse">
                             <img src="https://www.sfsu.edu/profiles/custom/sfstatedrupal/themes/custom/sfstatetemplate/patternlab/public/images/SFState_logo_color.jpg" className="h-8" alt="SFSU Logo" />
-                            <span className="self-center text-2xl font-semibold whitespace-nowrap text-white">Tutor</span>
+                            <span className="self-center text-2xl font-semibold whitespace-nowrap text-white">StudyGator</span>
                         </a>
 
                         {/* Search Bar */}
@@ -182,9 +182,11 @@ const Navbar = () => {
                             {!loggedIn && (
                                 <>
                                     <li className={`${loggedIn ? '' : 'lg:flex items-center justify-center'}`}>
-                                        <Link href="#" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:hover:text-[#FFDC70] lg:text-white lg:p-0">Log In</Link>
+                                        <Link to="/login" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:hover:text-[#FFDC70] lg:text-white lg:p-0">Log In</Link>
                                     </li>
-                                    <button type="button" class=" text-black lg:text-center bg-[#FFDC70] hover:bg-[#fc3] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-left font-16" style={{ fontSize: "16px" }}>Sign Up</button>
+                                    <li className='lg:flex items-center justify-center'>
+                                        <Link to="/signup" className=" text-black lg:text-center bg-[#FFDC70] hover:bg-[#fc3] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-left font-16" style={{ fontSize: "16px" }}>Sign Up</Link>
+                                </li>
                                 </>
                             )}
                         </ul>

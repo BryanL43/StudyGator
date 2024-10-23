@@ -1,8 +1,8 @@
 const express = require('express');
-const { getUser } = require('../models/userModel');
-const { meHandler } = require('../controller/userController');
 const router = express.Router();
+const { userHandler } = require('../controller/userController');
 
-router.get("/me", meHandler);
+// Takes email username and will automatically append @sfsu.edu
+router.get("/:username", userHandler);
 
 module.exports = router;
