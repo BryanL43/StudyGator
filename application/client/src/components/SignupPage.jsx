@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { MdLock, MdPerson } from 'react-icons/md';
 
 import axios from 'axios';
 import BASE_URL from "../utils/config";
 
 const SignupPage = () => {
+    const navigate = useNavigate();
+    
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const name = "Bryan Lee" // Temp as we didnt add yet
@@ -17,9 +19,11 @@ const SignupPage = () => {
             const requestBody = {
                 name,
                 email,
-                password,
+                password
             }
             await axios.put(`${BASE_URL}/api/register`, requestBody);
+
+            navigate("/");
         } catch (err) {
             console.error("Error during signup: ", err.response ? err.response.data : err.message);
         }
