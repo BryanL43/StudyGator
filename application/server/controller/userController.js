@@ -21,7 +21,7 @@ const userHandler = async(req, res) => {
 const addUserHandler = async(req, res) => {
     const { name, email, password } = req.body;
     try {
-        await addUser(name, email, password, Math.floor(Date.now() / 1000));
+        await addUser(name, email, password);
         res.json({ success: true });
     } catch (err) {
         console.error("Error adding user: ", err);

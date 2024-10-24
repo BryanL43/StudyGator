@@ -9,13 +9,13 @@ const getUser = async(email) => {
     return result;
 }
 
-const addUser = async(name, email, password, dateCreated) => {
+const addUser = async(name, email, password) => {
     const connection = await connectDB();
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
         const [results] = await connection.execute(
-            `INSERT INTO \`data-schema\`.REGISTEREDUSERS (name, email, password, date_created) VALUES (?, ?, ?, ?)`,
-            [name, email, hashedPassword, dateCreated]
+            `INSERT INTO \`data-schema\`.REGISTEREDUSERS (name, email, password) VALUES (?, ?, ?)`,
+            [name, email, hashedPassword]
         );
         console.log("New user successfully created: ", results.insertId);
         return results.insertId;
