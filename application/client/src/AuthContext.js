@@ -1,3 +1,14 @@
+/**************************************************************
+* Author(s): Bryan Lee
+* Last Updated: 10/25/2024
+*
+* File:: AuthContext.js
+*
+* Description:: This file handles the web app's frontend login/logout authentication.
+*               It stores new JWT token or cleans up expired ones.
+*
+**************************************************************/
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
 
