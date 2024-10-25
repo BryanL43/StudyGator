@@ -1,19 +1,27 @@
+/**************************************************************
+* Author(s): Bryan Lee
+* Last Updated: 10/25/2024
+*
+* File:: server.js
+*
+* Description:: The main backend entry point. Handles initializing
+*               env variables, expressJS, cors policy, and most importantly
+*               api redirect.
+*
+**************************************************************/
+
 const express = require("express");
 const bodyParser = require('body-parser');
 const cors = require("cors")
 const path = require("path")
-const multer = require('multer');
 const cookieParser = require('cookie-parser');
 const apiRouter = require('./routes/api');
 
-require('dotenv').config({ path: '../.env' });
+require('dotenv').config({ path: '../.env' }); // Acquire env variables
 
 const app = express();
 
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
-
-
+// Declare proper cors heading to prevent cross-origin policy issues
 app.use(cors({
     origin: ['http://localhost:3000', 'http://localhost:2000', 'https://eclipsesakura.online'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
@@ -21,18 +29,17 @@ app.use(cors({
     credentials: true,
 }));
 
-
-const PORT = process.env.SERVER_PORT || 2000;
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+// Loads api route distribution
 app.use("/api", apiRouter);
 
-// share images
+// Share images
 app.use('/imgs', express.static(path.join(__dirname, 'public/imgs')));
 
+const PORT = process.env.SERVER_PORT || 2000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });

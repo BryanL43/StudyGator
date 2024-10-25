@@ -35,7 +35,7 @@ const loginUserHandler = async(req, res) => {
         const user = await loginUser(email, password);
         if (user) {
             const expirationTime = rememberMe ? "30d" : "2h";
-            const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET, { expiresIn: expirationTime }); // 2 hrs sessions w/o remember me
+            const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: expirationTime }); // 2 hrs sessions w/o remember me
             res.json({ token });
         } else {
             res.status(401).json({ error: "Invalid credentials" });
