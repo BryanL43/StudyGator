@@ -7,14 +7,15 @@ import BASE_URL from "../utils/config";
 
 const SignupPage = () => {
     const navigate = useNavigate();
-    
+
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const name = "Bryan Lee" // Temp as we didnt add yet
+    const [error, setError] = useState('');
 
-    const handleSubmit = async(e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         try {
             const requestBody = {
                 name,
@@ -23,9 +24,10 @@ const SignupPage = () => {
             }
             await axios.put(`${BASE_URL}/api/register`, requestBody);
 
-            navigate("/");
+            navigate("/login");
         } catch (err) {
-            console.error("Error during signup: ", err.response ? err.response.data : err.message);
+            console.log(err);
+            setError(err.response ? err.message : err.message);
         }
     };
 
@@ -35,6 +37,23 @@ const SignupPage = () => {
                 <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6 text-center">Sign Up</h2>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
+                    <div>
+                        <label htmlFor="Name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Name
+                        </label>
+                        <div className="mt-1 flex items-center border border-gray-300 dark:border-gray-700 rounded-md shadow-sm">
+                            <input
+                                type="text"
+                                id="Name"
+                                name="Name"
+                                className="block w-full p-2 border-none focus:ring-transparent dark:bg-gray-700 dark:text-gray-200"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                required
+                            />
+                        </div>
+                    </div>
+
                     <div>
                         <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                             SFSU Email
@@ -70,6 +89,8 @@ const SignupPage = () => {
                             />
                         </div>
                     </div>
+
+                    {error && <p className='text-red-500 text-sm'>{error}</p>}
 
                     <button
                         type="submit"

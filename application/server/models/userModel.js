@@ -1,14 +1,6 @@
 const bcrypt = require('bcrypt');
 const connectDB = require("../config/db");
 
-const getUser = async(email) => {
-    const connection = await connectDB();
-    const [result] = await connection.query(
-        `SELECT * FROM \`data-schema\`.REGISTEREDUSERS WHERE email = ?`, [email]
-    );
-    return result;
-}
-
 const addUser = async(name, email, password) => {
     const connection = await connectDB();
     try {
@@ -50,7 +42,6 @@ const loginUser = async(email, password) => {
 }
 
 module.exports = {
-    getUser,
     addUser,
     loginUser
 }

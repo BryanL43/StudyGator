@@ -13,6 +13,7 @@ const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
+    const [error, setError] = useState('');
 
     const handleSubmit = async(e) => {
         e.preventDefault();
@@ -27,7 +28,7 @@ const LoginPage = () => {
 
             navigate("/");
         } catch (err) {
-            console.error('Error during login:', err.response ? err.response.data : err.message);
+            setError(err.response ? err.response.data : err.message);
         }
     };
 
@@ -72,6 +73,8 @@ const LoginPage = () => {
                             />
                         </div>
                     </div>
+
+                    {error && <p className='text-red-500 text-sm'>{error}</p>}
 
                     {/* Remember Me Checkbox */}
                     <div className="flex items-center">
