@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { addUserHandler } = require('../controller/userController');
+const { registerUserHandler } = require('../controller/userController');
 
-router.put("/", addUserHandler);
+router.put("/", registerUserHandler);
 
 module.exports = router;

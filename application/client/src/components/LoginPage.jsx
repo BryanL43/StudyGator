@@ -1,3 +1,13 @@
+/**************************************************************
+* Author(s): Bryan Lee & Min Ye Thway Khaing
+* Last Updated: 10/25/2024
+*
+* File:: LoginPage.jsx
+*
+* Description:: This file handles the login page.
+*
+**************************************************************/
+
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { MdLock, MdPerson } from 'react-icons/md';
@@ -27,8 +37,8 @@ const LoginPage = () => {
             login(response.data.token, rememberMe);
 
             navigate("/");
-        } catch (err) {
-            setError(err.response ? err.response.data : err.message);
+        } catch (error) {
+            setError(error.response ? error.response.data.message : "Fatal: network/server error");
         }
     };
 

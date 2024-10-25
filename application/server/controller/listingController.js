@@ -5,7 +5,7 @@
 * File:: listingController.js
 *
 * Description:: Tutor listing controller that handles communication between
-*               api endpoints and models that interact with the database.
+*               api endpoints and listing model to interact with the database.
 *               Offers the functionality of adding, searching, and deleting listing(s).
 *               The functions returns a status code and json message/data.
 *
@@ -27,7 +27,7 @@ const addListingHandler = async(req, res) => {
     const image = req.file ? req.file.buffer : null;
 
     if (!token || !image || !description || !subject || !pricing) {
-        res.status(400).json({ message: "Missing required fields." });
+        return res.status(400).json({ message: "Missing required fields." });
     }
 
     try {
@@ -36,15 +36,15 @@ const addListingHandler = async(req, res) => {
         const userId = decodedToken.id;
 
         await addListing(userId, image, description, subject, pricing);
-        res.status(201).json({ message: "Listing created successfully." });
+        return res.status(201).json({ message: "Listing created successfully." });
     } catch (error) {
         // Specific error for JWT unauthenticity
         if (error instanceof jwt.JsonWebTokenError) {
-            res.status(401).json({ message: "Invalid token" })
+            return res.status(401).json({ message: "Invalid token" })
         }
 
         // Internal server error
-        res.status(500).json({ message: "Failed to create listing" });
+        return res.status(500).json({ message: "Failed to create listing" });
     }
 }
 
@@ -61,12 +61,12 @@ const searchListingHandler = async(req, res) => {
     try {
         const listings = await searchListing(selectedSubject, searchTerm);
         if (listings.length > 0) {
-            res.status(200).json({ count: listings.length, results: listings});
+            return res.status(200).json({ count: listings.length, results: listings});
         } else {
-            res.status(200).json({ message: "temp. Add randomized selection later." });
+            return res.status(200).json({ message: "temp. Add randomized selection later." });
         }
     } catch (error) {
-        res.status(500).json({ message: "Failed to fetch listings" });
+        return res.status(500).json({ message: "Failed to fetch listings" });
     }
 }
 

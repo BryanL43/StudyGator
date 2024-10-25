@@ -1,3 +1,13 @@
+/**************************************************************
+* Author(s): Bryan Lee & Min Ye Thway Khaing
+* Last Updated: 10/25/2024
+*
+* File:: SignupPage.jsx
+*
+* Description:: This file handles the registeration page.
+*
+**************************************************************/
+
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { MdLock, MdPerson } from 'react-icons/md';
@@ -25,9 +35,8 @@ const SignupPage = () => {
             await axios.put(`${BASE_URL}/api/register`, requestBody);
 
             navigate("/login");
-        } catch (err) {
-            console.log(err);
-            setError(err.response ? err.message : err.message);
+        } catch (error) {
+            setError(error.response ? error.response.data.message : "Fatal: network/server error");
         }
     };
 
