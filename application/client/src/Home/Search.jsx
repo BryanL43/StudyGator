@@ -1,6 +1,14 @@
+/**************************************************************
+* Author(s): Kenneth Wen
+* Last Updated: 10/26/2024
+*
+* File:: Search.jsx
+*
+* Description:: This file handles the searching. 
+*
+**************************************************************/
 import React, { useState } from 'react';
 import {useNavigate} from 'react-router-dom';
-
 
 const Search = ({setListings}) => {
     const [subject, selectedSubject] = useState('');
@@ -21,14 +29,12 @@ const Search = ({setListings}) => {
                 <option value="science">Science</option>
                 <option value="geology">Geology</option>
             </select>
-
             <input
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Search items"
             />
-
             <button type="submit">Search</button>
         </form>
     </div>

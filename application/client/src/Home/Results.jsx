@@ -1,3 +1,14 @@
+/**************************************************************
+* Author(s): Kenneth Wen
+* Last Updated: 10/26/2024
+*
+* File:: Results.jsx
+*
+* Description:: This file handles the results page. The 
+*               results will display in a column separated 
+*               by a line.
+*
+**************************************************************/
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import BASE_URL from '../utils/config';
