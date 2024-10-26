@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Search from './Search';
 
 import BASE_URL from '../utils/config';
 
@@ -14,6 +15,7 @@ const Home = () => {
     const handleFileChange = (e) => {
         setSelectedFile(e.target.files[0]); // Set the selected file
     };
+
 
     const handleSubmit = async (e) => {
         e.preventDefault(); // Prevent default form submission
@@ -58,6 +60,12 @@ const Home = () => {
 
     return (
         <div>
+            <header style={{ textAlign: 'center', marginBottom: '20px' }}>
+                <h1>CSC 648-848 Software Engineering </h1>
+                <h2>Fall 2024</h2>
+                <h3>Team 8</h3>
+            </header>
+ 
             <form onSubmit={handleSubmit}>
                 <input type="file" onChange={handleFileChange} required />
                 <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Description" required />
@@ -65,24 +73,39 @@ const Home = () => {
                 <input type="text" value={pricing} onChange={(e) => setPricing(e.target.value)} placeholder="Pricing" required />
                 <button type="submit">Upload</button>
             </form>
-
-            <h2>All Listings:</h2>
+            <br></br>
+            <Search setListings={setListings}/>
+            <br></br>
+            <h2>Showing {listings.length} listings:</h2>
             {listings.length > 0 ? (
-                listings.map((listing, index) => (
-                    <div key={index}>
-                        <p>Description: {listing.description}</p>
-                        <p>Subject: {listing.subject}</p>
-                        <p>Pricing: ${listing.pricing} per hour</p>
-                        {listing.image && (
-                            <img src={listing.image} alt="Listing" style={{ width: '100px', height: '100px' }} />
-                        )}
-                    </div>
-                ))
-            ) : (
-                <p>No listings available.</p>
-            )}
+                    listings.map((listing, index) => (
+                        <div key={index} style={{ textAlign: 'center' }}>
+                            <div style={{ 
+                                display: 'flex', 
+                                flexDirection: 'column', 
+                                alignItems: 'center', 
+                                marginBottom: '10px'
+                            }}>
+                            <p>Description: {listing.description}</p>
+                            <p>Subject: {listing.subject}</p>
+                            <p>Pricing: ${listing.pricing} per hour</p>
+                            {listing.image && (
+                                <img src={listing.image} alt="Listing" style={{ width: '100px', height: '100px' }} />
+                            )}
+                            </div>
+                            <br></br>
+                            <hr style={{
+                                color: '#000000',
+                                backgroundColor: '#000000',
+                                height: '2px',
+                                borderColor: '#000000',
+                            }} /> <br></br>
+                        </div>
+                    ))
+                ) : (
+                    <p>No listings available.</p>
+                )}
         </div>
     );
 };
-
 export default Home;

@@ -20,7 +20,7 @@ import Home from "./Home/Home.jsx";
 import About from "./about/AboutPage.jsx";
 import LoginPage from './components/LoginPage.jsx';
 import SignupPage from './components/SignupPage.jsx';
-
+import Results from './Home/Results.jsx';
 
 function App() {
 
@@ -38,6 +38,7 @@ function App() {
                             <Route path="/about/:name" element={<About />} />
                             <Route path="/login" element={<LoginPage />} />
                             <Route path="/signup" element={<SignupPage />} />
+                            <Route path="/results" element={<Results />} />
                         </Route>
                     </Routes>
                 </Router>
