@@ -13,7 +13,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 
-const Search = ({ setListings, initialSubject = '', initialSearchTerm = '' }) => {
+const Search = ({ initialSubject = '', initialSearchTerm = '' }) => {
     const navigate = useNavigate();
     const [subject, selectedSubject] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
@@ -38,7 +38,7 @@ const Search = ({ setListings, initialSubject = '', initialSearchTerm = '' }) =>
                 >
                     <option value="">Select Subject</option>
                     <option value="math">Math</option>
-                    <option value="science">Science</option>
+                    <option value="science">Computer Science</option>
                     <option value="geology">Geology</option>
                 </select>
                 <input
@@ -47,6 +47,7 @@ const Search = ({ setListings, initialSubject = '', initialSearchTerm = '' }) =>
                     onChange={(e) => setSearchTerm(e.target.value)}
                     placeholder="Search items"
                     className="border border-gray-300 rounded px-2 py-1"
+                    maxLength={100}
                 />
                 <button type="submit" className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600">
                     Search

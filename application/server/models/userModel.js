@@ -69,6 +69,8 @@ const loginUser = async(email, password) => {
     return result[0];
 }
 
+// Add a secure route to acquire user's email and name for dashboard later
+
 module.exports = {
     registerUser,
     loginUser

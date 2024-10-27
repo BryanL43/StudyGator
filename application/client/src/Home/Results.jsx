@@ -55,7 +55,7 @@ const Results = () => {
             </header>
 
             <br />
-            <Search setListings={setListings} initialSubject={selectedSubject} initialSearchTerm={searchTerm} />
+            <Search initialSubject={selectedSubject} initialSearchTerm={searchTerm} />
             <br />
 
             {/* Render listing count */}

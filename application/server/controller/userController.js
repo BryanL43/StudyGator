@@ -62,6 +62,8 @@ const loginUserHandler = async(req, res) => {
     }
 }
 
+// Add a secure route to acquire user's email and name for dashboard later
+
 module.exports = {
     registerUserHandler,
     loginUserHandler

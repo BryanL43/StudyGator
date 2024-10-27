@@ -117,7 +117,7 @@ const Home = () => {
                         placeholder="Pricing" 
                         required 
                     />
-                    <button type="submit" className="text-center border border-black p-2"> Upload </button>
+                    <button type="submit" className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600"> Upload </button>
                 </form>
             )}
 

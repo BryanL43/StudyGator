@@ -46,7 +46,7 @@ const searchListing = async(selectedSubject, searchTerm) => {
     const connection = await connectDB();
 
     try {
-        // Default query that acquires all listings
+        // Default query that acquires all approved listings
         let query = `
             SELECT TL.*, RU.name
             FROM \`data-schema\`.TUTORLISTINGS AS TL
