@@ -18,7 +18,7 @@ import { useAuth } from '../AuthContext.js';
 import BASE_URL from '../utils/config';
 
 const Home = () => {
-    const { user } = useAuth();
+    const { user } = useAuth(); // Retrieve user token. Critical for login infrastructure.
 
     const [selectedFile, setSelectedFile] = useState(null);
     const [description, setDescription] = useState('');
@@ -79,6 +79,7 @@ const Home = () => {
                     'Content-Type': 'multipart/form-data',
                 }
             });
+            window.location.reload(false);
             fetchListings();
         } catch (error) {
             console.error("Error uploading listing:", error);

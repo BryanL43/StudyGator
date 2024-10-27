@@ -19,6 +19,7 @@ import Search from './Search';
 const Results = () => {
     const location = useLocation();
     const [listings, setListings] = useState([]);
+    const [randomListing, setRandomListing] = useState(false);
 
     // Extract query information from URL
     const queryParams = new URLSearchParams(location.search);
@@ -34,7 +35,21 @@ const Results = () => {
                     searchTerm: searchTerm
                 }
             });
-            setListings(response.data.results);
+            
+            if (!response.data.random) {
+                setRandomListing(false);
+                setListings(response.data.results);
+            } else { // Randomly select listings if search query yields no possible desired result
+                const totalCount = response.data.count; // Total number of listings possible
+                const randomCount = Math.floor(Math.random() * totalCount) + 1;
+
+                // Shuffle the listings and take a random selection
+                const shuffledListings = response.data.results.sort(() => 0.5 - Math.random());
+                const randomListings = shuffledListings.slice(0, randomCount);
+                
+                setRandomListing(true);
+                setListings(randomListings);
+            }
         } catch (error) {
             console.error("Error fetching listings:", error);
         }
@@ -59,10 +74,14 @@ const Results = () => {
             <br />
 
             {/* Render listing count */}
-            {listings ? (
-                <h2 className="text-m font-semibold mt-4 ml-52"> Search Results: {listings.length} items found</h2>
+            {listings && !randomListing ? (
+                <h2 className="text-m font-semibold mt-4 ml-52">Search Results: {listings.length} items found</h2>
+            ) : listings && randomListing ? (
+                <h2 className="text-m font-semibold mt-4 ml-52">
+                    We couldn't find your desired tutor listing, but here is some tutors that might interest you. <br></br>Please refine your search or select a subject for a more precise result.
+                </h2>
             ) : (
-                <h2 className="text-m font-semibold mt-4 ml-52"> No listings found.</h2>
+                <h2 className="text-m font-semibold mt-4 ml-52">No listings currently exist.</h2>
             )}
 
             {/* Render listings from search results */}

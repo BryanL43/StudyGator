@@ -49,21 +49,32 @@ const addListingHandler = async(req, res) => {
 }
 
 /**
- * Communicates with api endpoint to handle listing search.
+ * Communicates with api endpoint to handle listing search. Random flag will tell frontend to select random selection.
  * 
  * @returns Response status: 200 (Success), 500 (Failed to fetch listings).
- *          Success response status has corresponding json message in form of { count: (int value), results: [array] }.
+ *          Success response status has corresponding json message in form of { count: (int value), results: [array], random: (boolean) }.
  *          Error response status has corresponding json message in form of { message: "status msg" }.
  */
 const searchListingHandler = async(req, res) => {
     const { selectedSubject, searchTerm } = req.query;
-    
+
     try {
         const listings = await searchListing(selectedSubject, searchTerm);
-        if (listings.length > 0) {
-            return res.status(200).json({ count: listings.length, results: listings});
-        } else {
-            return res.status(200).json({ message: "temp. Add randomized selection later." });
+        if (listings.length > 0) { // Has drop down down and search text query
+            return res.status(200).json({ count: listings.length, results: listings, random: false });
+        }
+
+        // No result found and have no drop down but have search text query. Throw all selections with random flag.
+        if (!selectedSubject && searchTerm) {
+            const allListings = await searchListing();
+            return res.status(200).json({ count: allListings.length, results: allListings, random: true});
+        }
+
+        // No result found but have selected subject and probably invalid search term query.
+        // Throw random selection with specified drop down selection.
+        if (selectedSubject && searchTerm) {
+            const dropDownListings = await searchListing(selectedSubject, false);
+            return res.status(200).json({ count: dropDownListings.length, results: dropDownListings, random: true});
         }
     } catch (error) {
         return res.status(500).json({ message: "Failed to fetch listings" });
