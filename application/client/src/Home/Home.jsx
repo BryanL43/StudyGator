@@ -140,10 +140,10 @@ const Home = () => {
             <br />
             
             {/* Render listing count */}
-            {listings ? (
+            {listings && listings.length > 0 ? (
                 <h2 className="text-m font-semibold mt-4 ml-52"> Showing {listings.length} listings:</h2>
             ) : (
-                <h2 className="text-m font-semibold mt-4 ml-52"> No listings found.</h2>
+                <h2 className="text-m font-semibold mt-4 ml-52"> No listings currently exist.</h2>
             )}
 
             {/* Default render all listings */}

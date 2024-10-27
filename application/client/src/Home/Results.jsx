@@ -74,9 +74,9 @@ const Results = () => {
             <br />
 
             {/* Render listing count */}
-            {listings && !randomListing ? (
+            {listings && listings.length > 0 && !randomListing ? (
                 <h2 className="text-m font-semibold mt-4 ml-52">Search Results: {listings.length} items found</h2>
-            ) : listings && randomListing ? (
+            ) : listings && listings.length > 0 && randomListing ? (
                 <h2 className="text-m font-semibold mt-4 ml-52">
                     We couldn't find your desired tutor listing, but here is some tutors that might interest you. <br></br>Please refine your search or select a subject for a more precise result.
                 </h2>
