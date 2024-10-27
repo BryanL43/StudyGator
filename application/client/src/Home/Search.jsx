@@ -4,40 +4,50 @@
 *
 * File:: Search.jsx
 *
-* Description:: This file handles the searching. 
+* Description:: This file handles the searching via redirect. It also
+*               renders the vertical prototype search bar.
 *
 **************************************************************/
-import React, { useState } from 'react';
-import {useNavigate} from 'react-router-dom';
 
-const Search = ({setListings}) => {
-    const [subject, selectedSubject] = useState('');
-    const [searchTerm, setSearchTerm] = useState('');
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+const Search = () => {
     const navigate = useNavigate();
 
-    const handleSearch = async (e) => {
+    const [subject, selectedSubject] = useState('');
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const handleSearch = async(e) => {
         e.preventDefault();
         navigate(`/results?selectedSubject=${subject}&searchTerm=${searchTerm}`);
     };
 
     return (
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-        <form onSubmit={handleSearch} style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-            <select value={subject} onChange={(e) => selectedSubject(e.target.value)}>
-                <option value="">Select Subject</option>
-                <option value="math">Math</option>
-                <option value="science">Science</option>
-                <option value="geology">Geology</option>
-            </select>
-            <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search items"
-            />
-            <button type="submit">Search</button>
-        </form>
-    </div>
+        <div className="flex justify-center mt-5">
+            <form onSubmit={handleSearch} className="flex gap-2 items-center">
+                <select 
+                    value={subject} 
+                    onChange={(e) => selectedSubject(e.target.value)}
+                    className="border border-gray-300 rounded px-2 py-1"
+                >
+                    <option value="">Select Subject</option>
+                    <option value="math">Math</option>
+                    <option value="science">Science</option>
+                    <option value="geology">Geology</option>
+                </select>
+                <input
+                    type="text"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    placeholder="Search items"
+                    className="border border-gray-300 rounded px-2 py-1"
+                />
+                <button type="submit" className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600">
+                    Search
+                </button>
+            </form>
+        </div>
     );
 };
 

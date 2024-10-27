@@ -14,11 +14,13 @@ import { jwtDecode } from 'jwt-decode';
 
 const AuthContext = createContext();
 
+// Returns access to AuthContext file
 export const useAuth = () => {
     return useContext(AuthContext);
 };
 
 export const AuthProvider = ({ children }) => {
+    // Store authToken in localStorage
     const [authToken, setAuthToken] = useState(() => {
         const storedData = localStorage.getItem('authToken');
         if (storedData) {
@@ -27,8 +29,10 @@ export const AuthProvider = ({ children }) => {
         return null;
     });
 
+    // Context to determine whether user is logged in or not
     const [user, setUser] = useState(null);
 
+    // Checks expiration status on token upon token changes/interactions
     useEffect(() => {
         if (authToken) {
             const decodedToken = jwtDecode(authToken);
@@ -43,11 +47,13 @@ export const AuthProvider = ({ children }) => {
         }
     }, [authToken]);
 
+    // Properly allocate token returned from log in api
     const login = (token) => {
         setAuthToken(token);
         localStorage.setItem("authToken", token);
     };
 
+    // Properly handle sign out via removing token
     const logout = () => {
         setAuthToken(null);
         localStorage.removeItem("authToken");
