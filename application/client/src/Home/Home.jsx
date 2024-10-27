@@ -126,9 +126,15 @@ const Home = () => {
             <Search/>
             <br />
             
-            {/* Render listings */}
-            <h2 className="text-m font-semibold mt-4 ml-52"> Showing {listings.length} listings:</h2>
-            {listings.length > 0 ? (
+            {/* Render listing count */}
+            {listings ? (
+                <h2 className="text-m font-semibold mt-4 ml-52"> Showing {listings.length} listings:</h2>
+            ) : (
+                <h2 className="text-m font-semibold mt-4 ml-52"> No listings found.</h2>
+            )}
+
+            {/* Render tutor listings */}
+            {listings ? (
                 listings.map((listing, index) => (
                     <div key={index} className="text-center">
                         <div className="flex flex-col items-center mb-3">
@@ -143,7 +149,7 @@ const Home = () => {
                     </div>
                 ))
             ) : (
-                <p>No listings available.</p>
+                <p className="text-center">No listings available.</p>
             )}
         </div>
     );

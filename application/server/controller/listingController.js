@@ -66,6 +66,7 @@ const searchListingHandler = async(req, res) => {
             return res.status(200).json({ message: "temp. Add randomized selection later." });
         }
     } catch (error) {
+        console.log(error);
         return res.status(500).json({ message: "Failed to fetch listings" });
     }
 }

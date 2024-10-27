@@ -20,10 +20,12 @@ const Results = () => {
     const location = useLocation();
     const [listings, setListings] = useState([]);
 
+    // Extract query information from URL
     const queryParams = new URLSearchParams(location.search);
     const selectedSubject = queryParams.get('selectedSubject') || '';
     const searchTerm = queryParams.get('searchTerm') || '';
     
+    // Fetch listing search results
     const fetchListings = useCallback(async() => {
         try {
             const response = await axios.get(`${BASE_URL}/api/search`, {
@@ -54,10 +56,17 @@ const Results = () => {
 
             <br />
             <Search setListings={setListings} />
-            <h2 className="text-m font-semibold mt-4 ml-52">Search Results: {listings.length} items found</h2>
-            
+            <br />
+
+            {/* Render listing count */}
+            {listings ? (
+                <h2 className="text-m font-semibold mt-4 ml-52"> Search Results: {listings.length} items found</h2>
+            ) : (
+                <h2 className="text-m font-semibold mt-4 ml-52"> No listings found.</h2>
+            )}
+
             {/* Render listings from search results */}
-            {listings.length > 0 ? (
+            {listings ? (
                 listings.map((listing, index) => (
                     <div key={index} className="text-center">
                         <div className="flex flex-col items-center mb-3">
@@ -77,7 +86,7 @@ const Results = () => {
                     </div>
                 ))
             ) : (
-                <p>No listings available.</p>
+                <p className="text-center">No listings available.</p>
             )}
         </div>
     );

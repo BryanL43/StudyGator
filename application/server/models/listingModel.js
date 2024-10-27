@@ -51,24 +51,19 @@ const searchListing = async(selectedSubject, searchTerm) => {
             SELECT TL.*, RU.name
             FROM \`data-schema\`.TUTORLISTINGS AS TL
             JOIN \`data-schema\`.REGISTEREDUSERS AS RU ON TL.associated_user_id = RU.id
+            WHERE TL.approved = 1
         `;
         const params = [];
 
-        if (selectedSubject && searchTerm) { // Both dropdown and search bar has search values
-            query += `
-                WHERE TL.subject = ?
-                AND REPLACE(CONCAT_WS('', TL.subject, TL.description, RU.name), ' ', '') LIKE ?
-            `;
-            params.push(selectedSubject, `%${searchTerm.replace(/\s/g, '')}%`);
-        } else if (selectedSubject) { // Only dropdown selected
-            query += `
-                WHERE TL.subject = ?
-            `;
+        // Append selected drop down
+        if (selectedSubject) {
+            query += ` AND TL.subject = ?`;
             params.push(selectedSubject);
-        } else if (searchTerm) { // Only search bar has value
-            query += `
-                WHERE REPLACE(CONCAT_WS('', TL.subject, TL.description, RU.name), ' ', '') LIKE ?
-            `;
+        }
+        
+        // Append search terms
+        if (searchTerm) {
+            query += ` AND REPLACE(CONCAT_WS('', TL.subject, TL.description, RU.name), ' ', '') LIKE ?`;
             params.push(`%${searchTerm.replace(/\s/g, '')}%`);
         }
 
@@ -80,7 +75,7 @@ const searchListing = async(selectedSubject, searchTerm) => {
             ...item,
             image: item.image ? `data:image/jpeg;base64,${item.image.toString('base64')}` : null
         }));
-
+        
         return listings;
     } catch (error) {
         throw error;
