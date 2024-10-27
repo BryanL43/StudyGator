@@ -9,8 +9,9 @@
 
 1. Server URL or IP: https://eclipsesakura.online/
 2. SSH username: ubuntu
-3. SSH password or key. Execute the following in terminal and within the correct directory: **ssh -i "csc648-team-08.pem" ubuntu@ec2-54-176-10-43.us-west-1.compute.amazonaws.com**
-5. Database URL or IP & port: csc648-team-08.c30mm4sa4ezq.us-west-1.rds.amazonaws.com & port 3306 (port 2000 for reverse proxy Nginx)
+3. SSH password or key. Navigate to where the downloaded **.pem** file is located and execute the following in Powershell (or any other command terminal):</br>
+```ssh -i "csc648-team-08.pem" ubuntu@ec2-54-176-10-43.us-west-1.compute.amazonaws.com```
+5. Database URL or IP & port: ```csc648-team-08.c30mm4sa4ezq.us-west-1.rds.amazonaws.com``` & port ```3306``` (port 2000 for reverse proxy Nginx)
 6. Database username: **admin**
 7. Database password: **q2lfkuUORuEvi5vzNpJs**
 8. Database name: **data-schema**
