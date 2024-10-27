@@ -11,13 +11,21 @@
 2. SSH username: ubuntu
 3. SSH password or key. Navigate to where the downloaded **.pem** file is located and execute the following in Powershell (or any other command terminal):</br>
 ```ssh -i "csc648-team-08.pem" ubuntu@ec2-54-176-10-43.us-west-1.compute.amazonaws.com```
-5. Database URL or IP & port: ```csc648-team-08.c30mm4sa4ezq.us-west-1.rds.amazonaws.com``` & port ```3306``` (port 2000 for reverse proxy Nginx)
-6. Database username: **admin**
-7. Database password: **q2lfkuUORuEvi5vzNpJs**
-8. Database name: **data-schema**
-9. Instructions on how to use the above information: <br>
-[Insert video links here]
+4. Database URL or IP & port: ```csc648-team-08.c30mm4sa4ezq.us-west-1.rds.amazonaws.com``` & port ```3306``` (port 2000 for reverse proxy Nginx)
+5. Database username: **admin**
+6. Database password: **q2lfkuUORuEvi5vzNpJs**
+7. Database name: **data-schema**
+8. Instructions on how to use the above information: <br/>
+#### Accessing EC2 instance video guide:
+https://drive.google.com/file/d/1D4-oZ-_tHVFaECOflHlswmfQO6uSlZyZ/view?usp=sharing
+#### Accessing database guide:
+https://drive.google.com/file/d/1m1BZJ2BB5vBWfMk0qYIQ7dpuCbS9M0pU/view?usp=sharing</br>
+</br>
+[+] "Connection Name" should be ```csc648-team-08```</br>
+[+] Ensure you have the correct MySQL Workbench (the installer for my version):</br>
+https://drive.google.com/file/d/1fA7WWk-6qkbBf7hsCbGVKYMn73sOeMjk/view?usp=sharing
 
+</br></br></br>
 # Most important things to Remember
 ## These values need to kept update to date throughout the semester. <br>
 ## <strong>Failure to do so will result it points be deducted from milestone submissions.</strong><br>
