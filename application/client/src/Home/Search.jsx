@@ -10,16 +10,22 @@
 **************************************************************/
 
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import BASE_URL from '../utils/config';
 
 const Search = ({ initialSubject = '', initialSearchTerm = '' }) => {
     const navigate = useNavigate();
+    const location = useLocation();
     const [subject, selectedSubject] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
 
     const [subjectList, setSubjectList] = useState([]);
+
+    // Extract query information from URL
+    const queryParams = new URLSearchParams(location.search);
+    const urlSelectedSubject = queryParams.get('selectedSubject') || '';
+    const urlSearchTerm = queryParams.get('searchTerm') || '';
 
     useEffect(() => {
         selectedSubject(initialSubject);
@@ -43,7 +49,12 @@ const Search = ({ initialSubject = '', initialSearchTerm = '' }) => {
 
     const handleSearch = async(e) => {
         e.preventDefault();
-        navigate(`/results?selectedSubject=${subject}&searchTerm=${searchTerm}`);
+        console.log(urlSelectedSubject, urlSearchTerm);
+        if (urlSelectedSubject === subject && urlSearchTerm === searchTerm) {
+            window.location.reload();
+        } else {
+            navigate(`/results?selectedSubject=${subject}&searchTerm=${searchTerm}`);
+        }
     };
 
     return (
