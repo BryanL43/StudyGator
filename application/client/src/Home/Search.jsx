@@ -9,14 +9,19 @@
 *
 **************************************************************/
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const Search = () => {
-    const navigate = useNavigate();
 
+const Search = ({ setListings, initialSubject = '', initialSearchTerm = '' }) => {
+    const navigate = useNavigate();
     const [subject, selectedSubject] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
+
+    useEffect(() => {
+        selectedSubject(initialSubject);
+        setSearchTerm(initialSearchTerm);
+    }, [initialSubject, initialSearchTerm]);
 
     const handleSearch = async(e) => {
         e.preventDefault();
