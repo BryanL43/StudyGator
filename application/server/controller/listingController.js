@@ -23,10 +23,10 @@ const { addListing, searchListing } = require("../models/listingModel");
 const addListingHandler = async(req, res) => {
     // Acquire jwt token and data
     const token = req.headers.authorization;
-    const { description, subject, pricing } = req.body;
+    const { description, subjectId, pricing } = req.body;
     const image = req.file ? req.file.buffer : null;
 
-    if (!token || !image || !description || !subject || !pricing) {
+    if (!token || !image || !description || !subjectId || !pricing) {
         return res.status(400).json({ message: "Missing required fields." });
     }
 
@@ -35,7 +35,7 @@ const addListingHandler = async(req, res) => {
         const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
         const userId = decodedToken.id;
 
-        await addListing(userId, image, description, subject, pricing);
+        await addListing(userId, image, description, subjectId, pricing);
         return res.status(201).json({ message: "Listing created successfully." });
     } catch (error) {
         // Specific error for JWT unauthenticity

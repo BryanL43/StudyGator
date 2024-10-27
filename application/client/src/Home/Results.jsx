@@ -70,9 +70,9 @@ const Results = () => {
                 listings.map((listing, index) => (
                     <div key={index} className="text-center">
                         <div className="flex flex-col items-center mb-3">
-                            <p>Name: {listing.name}</p>
+                            <p>Name: {listing.tutorName}</p>
                             <p>Description: {listing.description}</p>
-                            <p>Subject: {listing.subject}</p>
+                            <p>Subject: {listing.subjectName}</p>
                             <p>Pricing: ${listing.pricing} per hour</p>
                             {listing.image && (
                                 <img 

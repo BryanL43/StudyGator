@@ -18,17 +18,17 @@ const connectDB = require("../config/db");
  * @param {string} userId The listing's owner user ID. Should be acquired from jwt token.
  * @param {Buffer} image Buffer of the tutor's image. Buffering handled by npm multer package.
  * @param {string} description The description text (string) that the tutor want to display on their listing.
- * @param {string} subject The specified subject as a string (max 255 characters).
+ * @param {string} subjectId The specified subject id.
  * @param {int} pricing The specified pricing per hour.
  * @return void, otherwise throws an error.
  */
-const addListing = async(userId, image, description, subject, pricing) => {
+const addListing = async(userId, image, description, subjectId, pricing) => {
     const connection = await connectDB();
 
     try {
         await connection.execute(
-            `INSERT INTO \`data-schema\`.TUTORLISTINGS (associated_user_id, image, description, subject, pricing) VALUES (?, ?, ?, ?, ?)`,
-            [userId, image, description, subject, pricing]
+            `INSERT INTO \`data-schema\`.TUTORLISTINGS (associated_user_id, image, description, subject_id, pricing) VALUES (?, ?, ?, ?, ?)`,
+            [userId, image, description, subjectId, pricing]
         );
     } catch (error) {
         throw error;
@@ -48,22 +48,23 @@ const searchListing = async(selectedSubject, searchTerm) => {
     try {
         // Default query that acquires all approved listings
         let query = `
-            SELECT TL.*, RU.name
+            SELECT TL.*, RU.name AS tutorName, S.name AS subjectName
             FROM \`data-schema\`.TUTORLISTINGS AS TL
             JOIN \`data-schema\`.REGISTEREDUSERS AS RU ON TL.associated_user_id = RU.id
+            JOIN \`data-schema\`.SUBJECTS AS S ON TL.subject_id = S.id
             WHERE TL.approved = 1
         `;
         const params = [];
 
         // Append selected drop down
         if (selectedSubject) {
-            query += ` AND TL.subject = ?`;
+            query += ` AND S.name = ?`;
             params.push(selectedSubject);
         }
         
         // Append search terms
         if (searchTerm) {
-            query += ` AND REPLACE(CONCAT_WS('', TL.subject, TL.description, RU.name), ' ', '') LIKE ?`;
+            query += ` AND REPLACE(CONCAT_WS('', S.name, TL.description, RU.name), ' ', '') LIKE ?`;
             params.push(`%${searchTerm.replace(/\s/g, '')}%`);
         }
 

@@ -11,17 +11,35 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import axios from 'axios';
+import BASE_URL from '../utils/config';
 
 const Search = ({ initialSubject = '', initialSearchTerm = '' }) => {
     const navigate = useNavigate();
     const [subject, selectedSubject] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
 
+    const [subjectList, setSubjectList] = useState([]);
+
     useEffect(() => {
         selectedSubject(initialSubject);
         setSearchTerm(initialSearchTerm);
     }, [initialSubject, initialSearchTerm]);
+
+    // Load search bar drop down subjects
+    const fetchSubjects = async() => {
+        try {
+            const response = await axios.get(`${BASE_URL}/api/subject`);
+            setSubjectList(response.data);
+        } catch (error) {
+            console.error("Error fetching subjects:", error);
+        }
+    }
+
+    // Render subject drop down on mount
+    useEffect(() => {
+        fetchSubjects();
+    }, []);
 
     const handleSearch = async(e) => {
         e.preventDefault();
@@ -37,9 +55,11 @@ const Search = ({ initialSubject = '', initialSearchTerm = '' }) => {
                     className="border border-gray-300 rounded px-2 py-1"
                 >
                     <option value="">Select Subject</option>
-                    <option value="math">Math</option>
-                    <option value="science">Computer Science</option>
-                    <option value="geology">Geology</option>
+                    {subjectList.map((subjectItem) => (
+                        <option key={subjectItem.id} value={subjectItem.name}>
+                            {subjectItem.name}
+                        </option>
+                    ))}
                 </select>
                 <input
                     type="text"
