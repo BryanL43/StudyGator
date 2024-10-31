@@ -68,15 +68,48 @@ const Navbar = () => {
                             <span className="self-center text-2xl font-semibold whitespace-nowrap text-white">StudyGator</span>
                         </a>
 
-                        {/* Search Bar */}
-                        <div className="relative hidden lg:block flex-1 pr-2">
-                            <input type="text" id="search-navbar" value={searchInput} onChange={handleSearchChange} pattern="[A-Za-z\s]*" maxLength="40" className="w-full block p-2 pl-3 pe-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="Search..." />
-                            <div className="absolute right-[20px] top-1/2 -translate-y-1/2  flex items-center pointer-events-none">
-                                <svg className="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                        {/* Search Bar with Subject Dropdown for Desktop Version */}
+                        <div className="relative hidden lg:flex items-center flex-1 pr-2">
+                            
+                            {/* Subject Dropdown */}
+                            <select
+                                className="h-10 px-3 p-2 pr-1 text-sm text-gray-900 border border-gray-300 rounded-l-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                                onChange={(e) => {
+                                    const selectedText = e.target.options[e.target.selectedIndex].text;
+                                    const minDefaultWidth = 80;
+                                    const calculatedWidth = Math.max(minDefaultWidth, selectedText.length * 8 + 40);
+                                    e.target.style.width = `${calculatedWidth}px`;
+                                }}
+                                defaultValue="All"
+                                style={{ width: '80px' }} // default width
+                            >
+                                <option value="">All</option>
+                                <option value="math">Math</option>
+                                <option value="science">Medicine</option>
+                                <option value="science">Science</option>
+                                <option value="science">Humanities</option>
+                                <option value="english">Chinese Literature & Linguistics</option>
+                            </select>
+                            
+                            {/* Search Input */}
+                            <input
+                                type="text"
+                                id="search-navbar"
+                                value={searchInput}
+                                onChange={handleSearchChange}
+                                pattern="[A-Za-z\s]*"
+                                maxLength="40"
+                                className="h-10 px-3 w-full block p-2 text-sm text-gray-900 border-t border-b border-gray-300 bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="Search For Tutors"
+                            />
+
+                            {/* Search Button with SVG Icon */}
+                            <button type="submit" className="h-10 px-3 p-2 border border-l-0 border-gray-300 rounded-r-lg bg-gray-50 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" >
+                                <svg className="w-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20" >
                                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
                                 </svg>
-                                <span className="sr-only">Search icon</span>
-                            </div>
+                                <span className="sr-only">Search</span>
+                            </button>
                         </div>
 
                     </div>
