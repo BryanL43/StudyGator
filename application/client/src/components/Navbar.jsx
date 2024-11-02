@@ -73,7 +73,7 @@ const Navbar = () => {
 
     return (
         <nav className="bg-[#231161] border-gray-20">
-            <div className="max-w-screen-xl flex flex-wrap items-center justify-center mx-auto p-4 gap-4">
+            <div className="max-w-screen-xl flex flex-wrap items-center justify-center mx-auto p-4 sm:gap-4">
                 <div className="flex flex-grow flex-row items-center space-x-3 rtl:space-x-reverse mr-8">
                     {/* Logo */}
                     <a href="/" className="flex w-fit items-center space-x-3 rtl:space-x-reverse">
@@ -132,13 +132,13 @@ const Navbar = () => {
                     <div ref={dropdownRef} className={`relative ${user ? '' : 'hidden'}`}>
                         <button
                             type="button"
-                            className="flex text-sm overflow-hidden bg-[#FFDC70] rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 md:ml-4"
+                            className="flex text-sm overflow-hidden bg-white rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 md:ml-4"
                             id="user-menu-button"
                             aria-expanded={isDropdownOpen}
                             onClick={toggleDropdown}
                         >
                             <span className="sr-only">Open user menu</span>
-                            <img className="w-8 h-8 rounded-full" src="" alt="Open user menu" />
+                            <img className="w-8 h-8 rounded-full" src="/pfp.png" alt="Open user menu" />
                         </button>
 
                         {/* User Dropdown */}
@@ -154,12 +154,6 @@ const Navbar = () => {
                                 <ul className="py-3" aria-labelledby="user-menu-button">
                                     <li>
                                         <Link to="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dashboard</Link>
-                                    </li>
-                                    <li>
-                                        <Link to="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</Link>
-                                    </li>
-                                    <li>
-                                        <Link to="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Earnings</Link>
                                     </li>
                                     <li>
                                         <Link to="#" onClick={logout} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sign out</Link>
