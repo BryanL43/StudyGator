@@ -40,6 +40,7 @@ const Home = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [buttonHeight, setButtonHeight] = useState(0);
     const [overlayState, setOverlayState] = useState(false);
+    const [isLocked, setIsLocked] = useState(false);
     const imageRef = useRef(null);
 
     // Update button sizes based on image size for very small screen
@@ -61,7 +62,10 @@ const Home = () => {
 
     // Function to go to the next slide
     const nextSlide = () => {
+        if (isLocked) return;
+
         setOverlayState(true);
+        setIsLocked(true);
 
         setTimeout(() => {
             setCurrentSlide((prevSlide) => {
@@ -71,6 +75,11 @@ const Home = () => {
                 return prevSlide + 1;
             });
             setOverlayState(false);
+
+            // Lock buttons for 1.5 seconds
+            setTimeout(() => {
+                setIsLocked(false);
+            }, 1500);
         }, 400);
     };
 
@@ -78,7 +87,10 @@ const Home = () => {
 
     // Function to go to the previous slide
     const prevSlide = () => {
+        if (isLocked) return;
+
         setOverlayState(true);
+        setIsLocked(true);
 
         setTimeout(() => {
             setCurrentSlide((prevSlide) => {
@@ -89,17 +101,29 @@ const Home = () => {
             });
             setOverlayState(false);
             resetTimer();
+
+            // Lock buttons for 1.5 seconds
+            setTimeout(() => {
+                setIsLocked(false);
+            }, 1500);
         }, 400);
     };
 
     // Direct slide jump
     const setSlide = (slideNum) => {
+        if (isLocked) return;
         setOverlayState(true);
+        setIsLocked(true);
 
         setTimeout(() => {
             setCurrentSlide(slideNum);
             setOverlayState(false);
             resetTimer();
+
+            // Lock buttons for 1.5 seconds
+            setTimeout(() => {
+                setIsLocked(false);
+            }, 1500);
         }, 400);
     }
 
