@@ -63,10 +63,9 @@ const Navbar = () => {
                 <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                     <div className="flex flex-grow items-center space-x-3 rtl:space-x-reverse mr-16">
                         {/* Logo */}
-                        <a href="/" className="flex w-fit items-center space-x-3 rtl:space-x-reverse">
-                            {/* <img src="https://www.sfsu.edu/profiles/custom/sfstatedrupal/themes/custom/sfstatetemplate/patternlab/public/images/SFState_logo_color.jpg" className="h-8" alt="SFSU Logo" /> */}
-                            <span className="self-center text-2xl font-semibold whitespace-nowrap text-white">StudyGator</span>
-                        </a>
+                        <Link to="/" className="flex w-fit items-center space-x-3 rtl:space-x-reverse">
+                            <img src="/StudyGatorLogo.png" className="h-8" alt="StudyGator Logo" />
+                        </Link>
 
                         {/* Search Bar */}
                         <div className="relative hidden lg:block flex-1 pr-2">
