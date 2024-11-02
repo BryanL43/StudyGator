@@ -76,9 +76,9 @@ const Navbar = () => {
             <div className="max-w-screen-xl flex flex-wrap items-center justify-center mx-auto p-4 sm:gap-4">
                 <div className="flex flex-grow flex-row items-center space-x-3 rtl:space-x-reverse mr-8">
                     {/* Logo */}
-                    <a href="/" className="flex w-fit items-center space-x-3 rtl:space-x-reverse">
-                        <span className="self-center text-2xl font-semibold whitespace-nowrap text-white">StudyGator</span>
-                    </a>
+                    <Link to="/" className="flex w-fit items-center space-x-3 rtl:space-x-reverse">
+                        <img src="/StudyGatorLogo.png" className="h-8" alt="StudyGator Logo" />
+                    </Link>
 
                     {/* Search Bar with Subject Dropdown for Desktop Version */}
                     <div className={`relative hidden md:flex items-center flex-1 ${isSearchActive ? "ring-2 ring-yellow-500 rounded-lg" : ""}`}>
