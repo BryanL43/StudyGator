@@ -63,7 +63,7 @@ const Navbar = () => {
     const [selectedSubject, setSelectedSubject] = useState("All");
     const handleSubjectChange = (event) => {
         setSelectedSubject(event.target.value);
-
+        
         // Update dropdown width based on selection
         const selectedText = event.target.options[event.target.selectedIndex].text;
         const minDefaultWidth = 80;
@@ -73,16 +73,16 @@ const Navbar = () => {
 
     return (
         <nav className="bg-[#231161] border-gray-20">
-            <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-                <div className="flex flex-grow items-center space-x-3 rtl:space-x-reverse mr-16">
+            <div className="max-w-screen-xl flex flex-wrap items-center justify-center mx-auto p-4 sm:gap-4">
+                <div className="flex flex-grow flex-row items-center space-x-3 rtl:space-x-reverse mr-8">
                     {/* Logo */}
-                    <Link to="/" className="flex w-fit items-center space-x-3 rtl:space-x-reverse">
-                        <img src="/StudyGatorLogo.png" className="h-8" alt="StudyGator Logo" />
-                    </Link>
+                    <a href="/" className="flex w-fit items-center space-x-3 rtl:space-x-reverse">
+                        <span className="self-center text-2xl font-semibold whitespace-nowrap text-white">StudyGator</span>
+                    </a>
 
                     {/* Search Bar with Subject Dropdown for Desktop Version */}
                     <div className={`relative hidden md:flex items-center flex-1 ${isSearchActive ? "ring-2 ring-yellow-500 rounded-lg" : ""}`}>
-
+                        
                         {/* Subject Dropdown */}
                         <select
                             className="h-10 px-3 p-2 pr-1 bg-[#e6e6e6] text-sm border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-r-yellow-500 focus:z-10"
@@ -98,7 +98,7 @@ const Navbar = () => {
                             <option value="humanities" className="bg-white">Humanities</option>
                             <option value="chinese literature & linguistics" className="bg-white">Chinese Literature & Linguistics</option>
                         </select>
-
+                        
                         {/* Search Input */}
                         <input
                             type="text"
@@ -176,7 +176,7 @@ const Navbar = () => {
 
                     {/* Search Bar mobile version */}
                     <div className={`relative md:hidden mt-4 md:mt-0 flex items-center flex-row ${isSearchActive ? "ring-2 ring-yellow-500 rounded-lg" : ""}`}>
-
+                        
                         {/* Subject Dropdown */}
                         <select
                             className="h-10 px-3 p-2 pr-1 bg-[#e6e6e6] text-sm border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-r-yellow-500 focus:z-10"
@@ -192,7 +192,7 @@ const Navbar = () => {
                             <option value="humanities" className="bg-white">Humanities</option>
                             <option value="chinese literature & linguistics" className="bg-white">Chinese Literature & Linguistics</option>
                         </select>
-
+                        
                         {/* Search Input */}
                         <input
                             type="text"
