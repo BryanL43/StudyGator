@@ -1,6 +1,6 @@
 /**************************************************************
 * Author(s): Bryan Lee & Kenneth Wen
-* Last Updated: 10/26/2024
+* Last Updated: 11/2/2024
 *
 * File:: Home.jsx
 *
@@ -11,6 +11,8 @@
 
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import imageIcon from './ImageIcon.svg'; // Special image icon
+
+import TutorListingCard from '../components/TutorListingCard';
 
 // Timer logic for handling manual interruption to automatic image rotation
 const useTimer = (callback, delay) => {
@@ -43,7 +45,7 @@ const Home = () => {
     // Update button sizes based on image size for very small screen
     const updateButtonHeight = () => {
         const img = imageRef.current;
-        if (img ) {
+        if (img) {
             setButtonHeight(img.clientHeight);
         }
     };
@@ -107,31 +109,31 @@ const Home = () => {
             <div id="default-carousel" className="relative w-full" data-carousel="slide">
                 <div className="relative h-[70vh] overflow-hidden">
                     <div className={`duration-700 ease-in-out z-10 ${currentSlide === 0 ? 'block' : 'hidden'}`} data-carousel-item>
-                        <img 
-                            src="/SFSU-img-1.jpg" 
-                            ref={imageRef} 
-                            className="absolute w-full h-full object-cover -translate-x-1/2 sm:-translate-y-1/2 sm:top-1/2 left-1/2" 
-                            alt="SFSU library" 
+                        <img
+                            src="/SFSU-img-1.jpg"
+                            ref={imageRef}
+                            className="absolute w-full h-full object-cover -translate-x-1/2 sm:-translate-y-1/2 sm:top-1/2 left-1/2"
+                            alt="SFSU library"
                         />
                     </div>
                     <div className={`duration-700 ease-in-out z-10 ${currentSlide === 1 ? 'block' : 'hidden'}`} data-carousel-item>
-                        <img 
-                            src="/SFSU-img-2.jpg" 
-                            className="absolute w-full h-full object-cover -translate-x-1/2 sm:-translate-y-1/2 sm:top-1/2 left-1/2" 
-                            alt="Night time SFSU library" 
+                        <img
+                            src="/SFSU-img-2.jpg"
+                            className="absolute w-full h-full object-cover -translate-x-1/2 sm:-translate-y-1/2 sm:top-1/2 left-1/2"
+                            alt="Night time SFSU library"
                         />
                     </div>
                     <div className={`duration-700 ease-in-out z-10 ${currentSlide === 2 ? 'block' : 'hidden'}`} data-carousel-item>
-                        <img 
-                            src="/SFSU-img-3.jpg" 
-                            className="absolute w-full h-full object-cover -translate-x-1/2 sm:-translate-y-1/2 sm:top-1/2 left-1/2" 
-                            alt="SFSU entrance" 
+                        <img
+                            src="/SFSU-img-3.jpg"
+                            className="absolute w-full h-full object-cover -translate-x-1/2 sm:-translate-y-1/2 sm:top-1/2 left-1/2"
+                            alt="SFSU entrance"
                         />
                     </div>
                 </div>
 
                 {/* Overlay header */}
-                <div className="absolute z-40 w-[70%] left-[17.5%] sm:left-[22.5%] top-[45%] transform -translate-y-1/2">
+                <div className="absolute z-40 w-[70%] left-[17.5%] sm:left-[25.5%] md:left-[22.5%] top-[45%] transform -translate-y-1/2">
                     <h1 className="text-[48px] text-white font-bold drop-shadow-lg">
                         Find Your SFSU Tutor at<br></br>StudyGator
                     </h1>
@@ -179,6 +181,43 @@ const Home = () => {
                     </span>
                 </button>
             </div>
+            
+            {/* Recent Listings */}
+            <section className="bg-gray-50 py-8 antialiased md:py-12">
+                <div className="mx-auto max-w-screen-xl px-4 2xl:px-0">
+                    <div className="mb-4 flex items-end justify-center space-y-4 sm:space-y-0 md:mb-8">
+                        <h2 className="mt-3 text-[28px] font-bold text-gray-900">Recent Tutor Listings</h2>
+                    </div>
+
+                    {/* Grid layout with 4 columns for the listing cards*/}
+                    <div className="mb-4 grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 justify-center">
+
+                        <TutorListingCard
+                            name="Bryan Lee"
+                            description="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec."
+                            price="1,699"
+                            imgSrc="/sillydogpfp.webp"
+                        />
+                        <TutorListingCard
+                            name="Bryan Lee"
+                            description="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec."
+                            price="1,699"
+                            imgSrc="/sillydogpfp.webp"
+                        />
+                        <TutorListingCard
+                            name="Bryan Lee"
+                            description="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec."
+                            price="1,699"
+                            imgSrc="/sillydogpfp.webp"
+                        />
+
+                    </div>
+
+                    <div className="w-full text-center">
+                        <button type="button" className="rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100">Browse more</button>
+                    </div>
+                </div>
+            </section>
 
         </div>
     );
