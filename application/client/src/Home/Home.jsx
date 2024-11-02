@@ -46,7 +46,7 @@ const Home = () => {
     // Update button sizes based on image size for very small screen
     const updateButtonHeight = () => {
         const img = imageRef.current;
-        if (img) {
+        if (img && img.clientHeight !== 0) {
             setButtonHeight(img.clientHeight);
         }
     };
@@ -63,7 +63,6 @@ const Home = () => {
     // Function to go to the next slide
     const nextSlide = () => {
         if (isLocked) return;
-
         setOverlayState(true);
         setIsLocked(true);
 
@@ -79,8 +78,10 @@ const Home = () => {
             // Lock buttons for 1.5 seconds
             setTimeout(() => {
                 setIsLocked(false);
+                updateButtonHeight();
             }, 1500);
         }, 400);
+        updateButtonHeight();
     };
 
     const { resetTimer } = useTimer(nextSlide, 6000);
@@ -88,7 +89,6 @@ const Home = () => {
     // Function to go to the previous slide
     const prevSlide = () => {
         if (isLocked) return;
-
         setOverlayState(true);
         setIsLocked(true);
 
@@ -107,6 +107,7 @@ const Home = () => {
                 setIsLocked(false);
             }, 1500);
         }, 400);
+        updateButtonHeight();
     };
 
     // Direct slide jump
@@ -125,6 +126,7 @@ const Home = () => {
                 setIsLocked(false);
             }, 1500);
         }, 400);
+        updateButtonHeight();
     }
 
     return (

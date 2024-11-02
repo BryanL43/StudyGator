@@ -42,9 +42,7 @@ const SignupPage = () => {
 
     return (
         <div className="top-0 flex items-center justify-center sm:min-h-screen bg-gray-100">
-            <div className="absolute inset-0 sm:top-[72px] h-full bg-black opacity-20 z-20 sm:block hidden" />
-            <img src="/SFSU-img-4.png" className="absolute w-full h-full object-cover z-10 sm:block hidden" alt="Bird eye view of SFSU" />
-
+            <img src="/SFSU-img-4.png" className="absolute w-full h-full object-cover z-10 filter brightness-[0.8] sm:block hidden" alt="Bird eye view of SFSU" />
             <div className="w-full sm:max-w-md bg-white p-8 sm:rounded-lg sm:shadow-md z-30">
                 <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Sign Up</h2>
 

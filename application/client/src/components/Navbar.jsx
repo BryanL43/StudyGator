@@ -88,7 +88,6 @@ const Navbar = () => {
                             className="h-10 px-3 p-2 pr-1 bg-[#e6e6e6] text-sm border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-r-yellow-500 focus:z-10"
                             value={selectedSubject}
                             onChange={handleSubjectChange}
-                            defaultValue="All"
                             style={{ width: '80px' }} // default width
                         >
                             <option value="all" className="bg-white">All</option>
@@ -182,7 +181,6 @@ const Navbar = () => {
                             className="h-10 px-3 p-2 pr-1 bg-[#e6e6e6] text-sm border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-r-yellow-500 focus:z-10"
                             value={selectedSubject}
                             onChange={handleSubjectChange}
-                            defaultValue="All"
                             style={{ width: '80px' }} // default width
                         >
                             <option value="all" className="bg-white">All</option>
