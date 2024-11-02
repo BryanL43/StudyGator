@@ -18,6 +18,8 @@ const Navbar = () => {
     const navigate = useNavigate();
     const { user, logout } = useAuth();
 
+    const [isSearchActive, setSearchActive] = useState(false);
+
     // Handle Hamburger dropdown button
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const toggleMenu = () => {
@@ -57,11 +59,23 @@ const Navbar = () => {
         setSearchInput(event.target.value);
     };
 
+    // State for managing search subject drop down value
+    const [selectedSubject, setSelectedSubject] = useState("All");
+    const handleSubjectChange = (event) => {
+        setSelectedSubject(event.target.value);
+        
+        // Update dropdown width based on selection
+        const selectedText = event.target.options[event.target.selectedIndex].text;
+        const minDefaultWidth = 80;
+        const calculatedWidth = Math.max(minDefaultWidth, selectedText.length * 8 + 40);
+        event.target.style.width = `${calculatedWidth}px`;
+    };
+
     return (
         <div className="App">
             <nav className="bg-[#231161] border-gray-20">
                 <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-                    <div className="flex flex-grow items-center space-x-3 rtl:space-x-reverse mr-16">
+                    <div className="flex flex-grow flex-row items-center space-x-3 rtl:space-x-reverse mr-16">
                         {/* Logo */}
                         <a href="/" className="flex w-fit items-center space-x-3 rtl:space-x-reverse">
                             {/* <img src="https://www.sfsu.edu/profiles/custom/sfstatedrupal/themes/custom/sfstatetemplate/patternlab/public/images/SFState_logo_color.jpg" className="h-8" alt="SFSU Logo" /> */}
@@ -69,26 +83,22 @@ const Navbar = () => {
                         </a>
 
                         {/* Search Bar with Subject Dropdown for Desktop Version */}
-                        <div className="relative hidden lg:flex items-center flex-1 pr-2">
+                        <div className={`relative hidden lg:flex items-center flex-1 ${isSearchActive ? "ring-2 ring-yellow-500 rounded-lg" : ""}`}>
                             
                             {/* Subject Dropdown */}
                             <select
-                                className="h-10 px-3 p-2 pr-1 text-sm text-gray-900 border border-gray-300 rounded-l-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-                                onChange={(e) => {
-                                    const selectedText = e.target.options[e.target.selectedIndex].text;
-                                    const minDefaultWidth = 80;
-                                    const calculatedWidth = Math.max(minDefaultWidth, selectedText.length * 8 + 40);
-                                    e.target.style.width = `${calculatedWidth}px`;
-                                }}
+                                className="h-10 px-3 p-2 pr-1 bg-[#e6e6e6] text-sm border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-r-yellow-500 focus:z-10"
+                                value={selectedSubject}
+                                onChange={handleSubjectChange}
                                 defaultValue="All"
                                 style={{ width: '80px' }} // default width
                             >
-                                <option value="">All</option>
-                                <option value="math">Math</option>
-                                <option value="science">Medicine</option>
-                                <option value="science">Science</option>
-                                <option value="science">Humanities</option>
-                                <option value="english">Chinese Literature & Linguistics</option>
+                                <option value="all" className="bg-white">All</option>
+                                <option value="math" className="bg-white">Math</option>
+                                <option value="medicine" className="bg-white">Medicine</option>
+                                <option value="science" className="bg-white">Science</option>
+                                <option value="humanities" className="bg-white">Humanities</option>
+                                <option value="chinese literature & linguistics" className="bg-white">Chinese Literature & Linguistics</option>
                             </select>
                             
                             {/* Search Input */}
@@ -97,15 +107,17 @@ const Navbar = () => {
                                 id="search-navbar"
                                 value={searchInput}
                                 onChange={handleSearchChange}
+                                onFocus={() => setSearchActive(true)}
+                                onBlur={() => setSearchActive(false)}
                                 pattern="[A-Za-z\s]*"
                                 maxLength="40"
-                                className="h-10 px-3 w-full block p-2 text-sm text-gray-900 border-t border-b border-gray-300 bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                                className="h-10 px-3 w-full block p-2 text-sm border-t border-b border-gray-300 bg-gray-50 focus:outline-none"
                                 placeholder="Search For Tutors"
                             />
 
                             {/* Search Button with SVG Icon */}
-                            <button type="submit" className="h-10 px-3 p-2 border border-l-0 border-gray-300 rounded-r-lg bg-gray-50 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" >
-                                <svg className="w-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20" >
+                            <button type="submit" className="h-10 px-3 p-2 bg-[#FFDC70] border border-l-0 border-gray-300 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-yellow-500" >
+                                <svg className="w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20" >
                                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
                                 </svg>
                                 <span className="sr-only">Search</span>
@@ -179,14 +191,45 @@ const Navbar = () => {
                     <div className={`items-center justify-between w-full lg:flex lg:w-auto lg:order-1 ${isMenuOpen ? '' : 'hidden'}`} id="navbar-user">
 
                         {/* Search Bar mobile version */}
-                        <div className="relative lg:hidden">
-                            <input type="text" id="search-navbar" value={searchInput} onChange={handleSearchChange} pattern="[A-Za-z\s]*" maxLength="40" className="block mt-4 lg:mt-0 w-full p-2 pl-3 pe-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="Search..." />
-                            <div className="absolute inset-y-0 end-0 flex items-center pe-3 pointer-events-none">
-                                <svg className="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                        <div className={`relative lg:hidden mt-4 lg:mt-0 flex items-center flex-row ${isSearchActive ? "ring-2 ring-yellow-500 rounded-lg" : ""}`}>
+                            
+                            {/* Subject Dropdown */}
+                            <select
+                                className="h-10 px-3 p-2 pr-1 bg-[#e6e6e6] text-sm border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-r-yellow-500 focus:z-10"
+                                value={selectedSubject}
+                                onChange={handleSubjectChange}
+                                defaultValue="All"
+                                style={{ width: '80px' }} // default width
+                            >
+                                <option value="all" className="bg-white">All</option>
+                                <option value="math" className="bg-white">Math</option>
+                                <option value="medicine" className="bg-white">Medicine</option>
+                                <option value="science" className="bg-white">Science</option>
+                                <option value="humanities" className="bg-white">Humanities</option>
+                                <option value="chinese literature & linguistics" className="bg-white">Chinese Literature & Linguistics</option>
+                            </select>
+                            
+                            {/* Search Input */}
+                            <input
+                                type="text"
+                                id="search-navbar"
+                                value={searchInput}
+                                onChange={handleSearchChange}
+                                onFocus={() => setSearchActive(true)}
+                                onBlur={() => setSearchActive(false)}
+                                pattern="[A-Za-z\s]*"
+                                maxLength="40"
+                                className="h-10 px-3 w-full text-sm border-t border-b border-gray-300 bg-gray-50 focus:outline-none"
+                                placeholder="Search For Tutors"
+                            />
+
+                            {/* Search Button with SVG Icon */}
+                            <button type="submit" className="h-10 px-3 p-2 bg-[#FFDC70] border border-l-0 border-gray-300 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-yellow-500" >
+                                <svg className="w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20" >
                                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
                                 </svg>
-                                <span className="sr-only">Search icon</span>
-                            </div>
+                                <span className="sr-only">Search</span>
+                            </button>
                         </div>
 
                         {/* Buttons mobile version */}
