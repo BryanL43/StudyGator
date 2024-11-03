@@ -11,8 +11,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom'
 import emailIcon from './EmailIcon.svg'; // Special image icon
+import trashCanIcon from '../Dashboard/TrashCanIcon.svg';
 
-const TutorListingCard = ({ name, description, price, imgSrc }) => {
+const TutorListingCard = ({ name, description, price, imgSrc, isDashboard }) => {
     return (
         <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow">
             <Link to="/">
@@ -41,10 +42,16 @@ const TutorListingCard = ({ name, description, price, imgSrc }) => {
                     <p className="ms-1 text-sm font-medium text-gray-500 dark:text-gray-400">4.95 out of 5</p>
                 </div>
 
-                {/* Message button */}
-                <button type="button" className="mr-5 px-3 py-3 text-base font-medium text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                    <img src={emailIcon} className="w-10 h-4 filter invert brightness-200" alt="" />
-                </button>
+                {/* Message/Delete button */}
+                {isDashboard === "false" ? (
+                    <button type="button" className="mr-5 px-3 py-3 text-base font-medium text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                        <img src={emailIcon} className="w-10 h-4 filter invert brightness-200" alt="" />
+                    </button>
+                ) : (
+                    <button type="button" className="mr-5 px-3 py-3 text-base font-medium text-white inline-flex items-center bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 rounded-lg text-center">
+                        <img src={trashCanIcon} className="w-10 h-4 filter invert hue-rotate-180" alt="" />
+                    </button>
+                )}
             </div>
 
             {/* Main content */}
