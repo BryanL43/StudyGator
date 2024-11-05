@@ -12,7 +12,7 @@
 **************************************************************/
 
 const jwt = require('jsonwebtoken');
-const { addListing, searchListing } = require("../models/listingModel");
+const { addListing, searchListing, getRecentListings } = require("../models/listingModel");
 
 /**
  * Communicates with api endpoint to verify credential and create a tutor listing.
@@ -83,9 +83,19 @@ const searchListingHandler = async(req, res) => {
     }
 }
 
+const getRecentListingsHandler = async(req, res) => {
+    try {
+        const listings = await getRecentListings();
+        return res.status(200).json({ count: listings.length, results: listings });
+    } catch (error) {
+        return res.status(500).json({ message: "Failed to fetch recent listings" });
+    }
+}
+
 // Add delete listing here later
 
 module.exports = {
     addListingHandler,
-    searchListingHandler
+    searchListingHandler,
+    getRecentListingsHandler
 }

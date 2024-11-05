@@ -101,9 +101,41 @@ const searchListing = async(selectedSubject, searchTerm) => {
     }
 }
 
+const getRecentListings = async () => {
+    const connection = await connectDB();
+
+    try {
+        let query = `
+            SELECT TL.*, RU.name AS tutorName, S.name AS subjectName
+            FROM \`data-schema\`.TUTORLISTINGS AS TL
+            JOIN \`data-schema\`.REGISTEREDUSERS AS RU ON TL.associated_user_id = RU.id
+            JOIN \`data-schema\`.SUBJECTS AS S ON TL.subject_id = S.id
+            WHERE TL.approved = 1
+            ORDER BY TL.date_created DESC
+            LIMIT 3
+        `;
+
+        // Execute the query to fetch the 3 most recent listings
+        const [results] = await connection.execute(query);
+
+        // Convert the buffered images to renderable jpeg, pdf to renderable URL, & mp4 to renderable URL
+        const listings = results.map(item => ({
+            ...item,
+            image: item.image ? `data:image/jpeg;base64,${item.image.toString('base64')}` : null,
+            attachedFile: item.attached_file ? `data:application/pdf;base64,${item.attached_file.toString('base64')}` : null,
+            attachedVideo: item.attached_video ? `data:application/mp4;base64,${item.attached_video.toString('base64')}` : null
+        }));
+
+        return listings;
+    } catch (error) {
+        throw error;
+    }
+}
+
 // Add delete listing here later
 
 module.exports = {
     addListing,
-    searchListing
+    searchListing,
+    getRecentListings
 }

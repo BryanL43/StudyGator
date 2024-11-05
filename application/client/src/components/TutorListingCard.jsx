@@ -10,49 +10,56 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom'
-import emailIcon from '../icons/EmailIcon.svg'; // Special image icon
+import emailIcon from '../icons/EmailIcon.svg';
 import trashCanIcon from '../icons/TrashCanIcon.svg';
 
-const TutorListingCard = ({ name, description, price, imgSrc, isDashboard }) => {
+const TutorListingCard = React.memo(({ metadata, isDashboard }) => {
+    // Additional logic to pass metadata into description for CV, video, etc. (add later)
+
     return (
         <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow">
+            {/* Image render */}
             <Link to="/">
                 <div className="h-80 overflow-hidden"> {/* Fixed height for the image container */}
-                    <img className="rounded-t-lg object-cover w-full h-full" src={imgSrc} alt={`${name} profile`} />
+                    <img className="rounded-t-lg object-cover w-full h-full" src={metadata.image} alt={`${metadata.name} profile`} />
                 </div>
             </Link>
 
-            {/* Main content */}
+            {/* Main card content */}
             <div className="p-5 pt-2">
+                {/* Name and Message/Delete button container to prevent overflow and wrapping */}
                 <div className="flex items-center space-x-4 mt-4 mb-2 justify-between">
                     <Link to="/" className="flex-1 max-w-[75%]">
                         <h5 className="text-2xl font-bold tracking-tight text-gray-900 overflow-hidden truncate">
-                            {name}
+                            {metadata.name}
                         </h5>
                     </Link>
 
-                    {/* Rating and Message button container */}
-                    {isDashboard === "false" ? (
+                    {/* Message/Delete button */}
+                    {isDashboard === false ? (
                         <button
                             type="button"
                             className="px-3 py-3 min-w-[64px] min-h-[40px] text-base font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg"
                         >
-                            <img src={emailIcon} className="w-10 h-4 filter invert brightness-200" alt="" />
+                            <img src={emailIcon} className="w-10 h-4 filter invert brightness-200" alt="message tutor" />
                         </button>
                     ) : (
                         <button
                             type="button"
                             className="px-3 py-3 min-w-[64px] min-h-[40px] text-base font-medium text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 rounded-lg"
                         >
-                            <img src={trashCanIcon} className="w-10 h-4 filter invert hue-rotate-180" alt="" />
+                            <img src={trashCanIcon} className="w-10 h-4 filter invert hue-rotate-180" alt="delete listing" />
                         </button>
                     )}
                 </div>
+                
+                {/* Description content */}
+                <p className="mb-3 font-normal text-gray-700">{metadata.description}</p>
 
-                <p className="mb-3 font-normal text-gray-700">{description}</p>
+                {/* Bottom bar with pricing & More detail button */}
                 <div className="mt-4 flex items-center justify-between gap-4">
                     <div className="flex items-baseline gap-1">
-                        <p className="text-2xl font-extrabold leading-tight text-gray-900">${price}</p>
+                        <p className="text-2xl font-extrabold leading-tight text-gray-900">${metadata.pricing}</p>
                         <p className="text-gray-700 text-sm">/ hour</p>
                     </div>
 
@@ -66,6 +73,6 @@ const TutorListingCard = ({ name, description, price, imgSrc, isDashboard }) => 
             </div>
         </div>
     );
-};
+});
 
 export default TutorListingCard;

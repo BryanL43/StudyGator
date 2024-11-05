@@ -10,9 +10,11 @@
 **************************************************************/
 
 import React, { useEffect, useState, useRef, useCallback } from 'react';
+import axios from 'axios';
+import BASE_URL from '../utils/config';
 import { useNavigate } from 'react-router-dom';
 import imageIcon from '../icons/ImageIcon.svg';
-// import loadingIcon from '../icons/LoadingIcon.svg';
+import loadingIcon from '../icons/LoadingIcon.svg';
 
 import TutorListingCard from '../components/TutorListingCard';
 
@@ -44,7 +46,9 @@ const Home = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [overlayState, setOverlayState] = useState(false);
     const [isLocked, setIsLocked] = useState(false);
-    const imageRef = useRef(null);
+    const [loading, setLoading] = useState(true);
+
+    const [listings, setListings] = useState([]);
 
     // Function to switch to the next slide
     const nextSlide = () => {
@@ -70,7 +74,7 @@ const Home = () => {
 
     const { resetTimer } = useTimer(nextSlide, 6000);
 
-    // Direct slide jump
+    // Direct slide jump to specified image & resets timer
     const setSlide = (slideNum) => {
         if (isLocked) return;
         setOverlayState(true);
@@ -86,7 +90,22 @@ const Home = () => {
                 setIsLocked(false);
             }, 1500);
         }, 400);
-    }
+    };
+
+    // Fetch recent listings only on mount
+    useEffect(() => {
+        const fetchRecentListings = async() => {
+            try {
+                const response = await axios.get(`${BASE_URL}/api/recent`);
+                setListings(response.data.results);
+                setLoading(false);
+            } catch (error) {
+                console.error("Error fetching recent listings:", error);
+            };
+        }
+
+        fetchRecentListings();
+    }, []);
 
     return (
         <div>
@@ -96,7 +115,6 @@ const Home = () => {
                     <div className={`duration-700 ease-in-out z-10 ${currentSlide === 0 ? 'block' : 'hidden'}`} data-carousel-item>
                         <img
                             src="/SFSU-img-1.jpg"
-                            ref={imageRef}
                             className="absolute w-full h-full object-cover -translate-x-1/2 sm:-translate-y-1/2 sm:top-1/2 left-1/2"
                             alt="SFSU library"
                         />
@@ -158,34 +176,22 @@ const Home = () => {
                     </div>
 
                     {/* Loading icon */}
-                    {/* <div className="hidden flex items-center justify-center">
-                        <img src={loadingIcon} className="w-20 h-20" alt="Loading..." />
-                    </div> */}
+                    {loading &&
+                        <div className="flex items-center justify-center mb-16">
+                            <img src={loadingIcon} className="w-20 h-20" alt="Loading..." />
+                        </div>
+                    }
 
-                    {/* Grid layout with 4 columns for the listing cards*/}
-                    <div className="mb-4 grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 justify-center justify-items-center">
+                    {/* Grid layout with 3 columns for the listing cards*/}
+                    <div className={`${loading ? "hidden" : ""} mb-4 grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 justify-center justify-items-center`}>
 
-                        <TutorListingCard
-                            name="Bryan Lee"
-                            description="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec."
-                            price="1,699"
-                            imgSrc="/sillydogpfp.webp"
-                            isDashboard="false"
-                        />
-                        <TutorListingCard
-                            name="Bryan Lee"
-                            description="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec."
-                            price="1,699"
-                            imgSrc="/sillydogpfp.webp"
-                            isDashboard="false"
-                        />
-                        <TutorListingCard
-                            name="Bryan Lee"
-                            description="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec."
-                            price="1,699"
-                            imgSrc="/sillydogpfp.webp"
-                            isDashboard="false"
-                        />
+                        {listings.map((listing) => (
+                            <TutorListingCard
+                                key={listing.id}
+                                metadata={listing}
+                                isDashboard={false}
+                            />
+                        ))}
 
                     </div>
 

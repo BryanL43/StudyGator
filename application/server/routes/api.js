@@ -15,11 +15,13 @@ const loginRoute = require("./login.js");
 const applyRoute = require("./applyRoute.js");
 const getListingRoute = require("./searchListingRoute.js");
 const getSubjectRoute = require("./subjectRoute.js");
+const recentListingRoute = require("./recentListingRoute.js");
 
 router.use("/register", registerRoute);
 router.use("/login", loginRoute);
 router.use("/apply", applyRoute);
 router.use("/search", getListingRoute);
 router.use("/subject", getSubjectRoute);
+router.use("/recent", recentListingRoute);
 
 module.exports = router;
