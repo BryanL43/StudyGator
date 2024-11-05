@@ -22,7 +22,7 @@ const connectDB = require("../config/db");
  * @param {int} pricing The specified pricing per hour.
  * @return void, otherwise throws an error.
  */
-const addListing = async(userId, image, description, subjectId, pricing, attachedFile) => {
+const addListing = async(userId, image, description, subjectId, pricing, attachedFile, attachedVideo) => {
     const connection = await connectDB();
     //Hard-code subjectID until I hook it up:
     subjectId = "96b5b5f0-941b-11ef-9e70-02fff31b5977";
@@ -30,13 +30,18 @@ const addListing = async(userId, image, description, subjectId, pricing, attache
     try {
         let sql = `INSERT INTO \`data-schema\`.TUTORLISTINGS (associated_user_id, image, description, subject_id, pricing` +
             (attachedFile ? ', attached_file' : '') + 
+            (attachedVideo ? ', attached_video' : '') +
             `) VALUES (?, ?, ?, ?, ?` +
-            (attachedFile ? ', ?' : '') + 
+            (attachedFile ? ', ?' : '') +
+            (attachedVideo ? ', ?' : '') +
             `)`;
 
         const values = [userId, image, description, subjectId, pricing];
         if (attachedFile) {
             values.push(attachedFile); // Add attached file if available
+        }
+        if (attachedVideo) {
+            values.push(attachedVideo); // Add attached video if available
         }
 
         // Execute the query to add the listing
@@ -82,11 +87,12 @@ const searchListing = async(selectedSubject, searchTerm) => {
         // Execute database search with the concatenated queries & params
         const [results] = await connection.execute(query, params);
         
-        // Convert the buffered images to renderable jpeg
+        // Convert the buffered images to renderable jpeg, pdf to renderable url, & mp4 to renderable url
         const listings = results.map(item => ({
             ...item,
             image: item.image ? `data:image/jpeg;base64,${item.image.toString('base64')}` : null,
-            attachedFile: item.attached_file ? `data:application/pdf;base64,${item.attached_file.toString('base64')}` : null
+            attachedFile: item.attached_file ? `data:application/pdf;base64,${item.attached_file.toString('base64')}` : null,
+            attachedVideo: item.attached_video ? `data:application/mp4;base64,${item.attached_video.toString('base64')}` : null
         }));
         
         return listings;

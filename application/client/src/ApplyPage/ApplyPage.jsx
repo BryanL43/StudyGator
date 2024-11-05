@@ -20,6 +20,7 @@ const ApplyPage = () => {
     const [pricing, setPricing] = useState('');
     const [selectedImage, setSelectedImage] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
+    const [selectedVideo, setSelectedVideo] = useState(null);
     const [message, setMessage] = useState('');
 
     // Handle form submission for tutor application
@@ -37,6 +38,7 @@ const ApplyPage = () => {
         formData.append('pricing', pricing);
         formData.append('image', selectedImage);
         formData.append('attached_file', selectedFile);
+        formData.append('attached_video', selectedVideo);
 
         try {
             await axios.put(`${BASE_URL}/api/apply`, formData, {
@@ -50,16 +52,6 @@ const ApplyPage = () => {
             console.error("Error uploading listing:", error);
             setMessage("There was an error submitting your application. Please try again.");
         }
-    };
-
-    // Handle file selection for the tutor listing picture
-    const handleImageChange = (e) => {
-        setSelectedImage(e.target.files[0]);
-    };
-
-    // Handle file selection for the resume/CV
-    const handleFileChange = (e) => {
-        setSelectedFile(e.target.files[0]);
     };
 
     return (
@@ -101,7 +93,7 @@ const ApplyPage = () => {
                         id="image"
                         type="file"
                         accept=".png,.jpg"
-                        onChange={handleImageChange}
+                        onChange={(e) => setSelectedImage(e.target.files[0])}
                     />
                     <p className="mb-3 text-xs text-gray-500">
                         PNG OR JPG (MAX. 800x400px).
@@ -113,10 +105,22 @@ const ApplyPage = () => {
                         id="resume"
                         type="file"
                         accept=".pdf"
-                        onChange={handleFileChange}
+                        onChange={(e) => setSelectedFile(e.target.files[0])}
                     />
                     <p className="mb-3 text-xs text-gray-500">
                         PDF (MAX. 20MB).
+                    </p>
+                    {/* Upload Video */}
+                    <label htmlFor="video" className="block mb-1 text-sm font-medium text-gray-900">Upload Video</label>
+                    <input
+                        className="block text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:ring focus:ring-blue-500"
+                        id="resume"
+                        type="file"
+                        accept=".mp4"
+                        onChange={(e) => setSelectedVideo(e.target.files[0])}
+                    />
+                    <p className="mb-3 text-xs text-gray-500">
+                        MP4 (MAX. 250MB).
                     </p>
                 </div>
                 <div className="text-xs pb-2">

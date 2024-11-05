@@ -21,6 +21,7 @@ const Results = () => {
     const [listings, setListings] = useState([]);
     const [randomListing, setRandomListing] = useState(false);
     const [pdfUrl, setPdfUrl] = useState(null);
+    const [videoUrl, setVideoUrl] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     // Extract query information from URL
@@ -62,19 +63,37 @@ const Results = () => {
     }, [fetchListings]);
 
     // Function to handle PDF rendering
-    const handleImageClick = async(attachedFile) => {
-        if (attachedFile) {
+    // const handleImageClick = async(attachedFile) => {
+    //     if (attachedFile) {
+    //         try {
+    //             const response = await axios.get(attachedFile, {
+    //                 responseType: 'blob',
+    //             });
+                
+    //             // Create a URL for the blob and update state
+    //             const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));
+    //             setPdfUrl(url);
+    //             setIsModalOpen(true);
+    //         } catch (error) {
+    //             console.error("Error fetching PDF:", error);
+    //         }
+    //     }
+    // };
+    
+    // Function to handle video rendering
+    const handleImageClick = async(attachedVideo) => {
+        if (attachedVideo) {
             try {
-                const response = await axios.get(attachedFile, {
+                const response = await axios.get(attachedVideo, {
                     responseType: 'blob',
                 });
                 
                 // Create a URL for the blob and update state
-                const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));
-                setPdfUrl(url);
+                const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/mp4' }));
+                setVideoUrl(url);
                 setIsModalOpen(true);
             } catch (error) {
-                console.error("Error fetching PDF:", error);
+                console.error("Error fetching MP4:", error);
             }
         }
     };
@@ -82,7 +101,18 @@ const Results = () => {
     const closeModal = () => {
         setIsModalOpen(false);
         setPdfUrl(null);
+        setVideoUrl(null);
     };
+
+    // Resource clean up when video is closed
+    useEffect(() => {
+        return () => {
+            if (videoUrl) {
+                URL.revokeObjectURL(videoUrl);
+            }
+        };
+    }, [videoUrl]);
+    
 
     return (
         <div>
@@ -110,7 +140,7 @@ const Results = () => {
             )}
 
             {/* Test pdf pop up render */}
-            {isModalOpen && (
+            {/* {isModalOpen && (
                 <div id="static-modal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true" class="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                     <div class="relative p-4 w-full max-w-2xl max-h-full">
                         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -125,7 +155,6 @@ const Results = () => {
                                     <span class="sr-only">Close modal</span>
                                 </button>
                             </div>
-                            {/* Render pdf on pop up */}
                             <div className="p-4 md:p-5 space-y-4">
                                 {pdfUrl ? (
                                     <iframe 
@@ -135,6 +164,38 @@ const Results = () => {
                                     />
                                 ) : (
                                     <p>Loading PDF...</p>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )} */}
+
+            {isModalOpen && (
+                <div id="static-modal" data-modal-backdrop="static" tabIndex="-1" className="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                    <div className="relative p-4 w-full max-w-2xl max-h-full">
+                        <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                            <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                                    Video Modal
+                                </h3>
+                                <button 
+                                    type="button" 
+                                    onClick={() => closeModal()} 
+                                    className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" 
+                                    data-modal-hide="static-modal"
+                                >
+                                    <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                    </svg>
+                                    <span className="sr-only">Close modal</span>
+                                </button>
+                            </div>
+                            <div className="p-4 md:p-5 space-y-4">
+                                {videoUrl ? (
+                                    <video controls src={videoUrl} className="w-full h-[500px]" />
+                                ) : (
+                                    <p>Loading video...</p>
                                 )}
                             </div>
                         </div>
@@ -156,7 +217,8 @@ const Results = () => {
                                     src={listing.image} 
                                     alt="Listing" 
                                     className="w-24 h-24 cursor-pointer"
-                                    onClick={() => handleImageClick(listing.attachedFile)} // Add onClick handler
+                                    // onClick={() => handleImageClick(listing.attachedFile)} // pdf renderer
+                                    onClick={() => handleImageClick(listing.attachedVideo)} // video renderer
                                 />
                             )}
                         </div>

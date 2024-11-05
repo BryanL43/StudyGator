@@ -21,12 +21,12 @@ const { addListing, searchListing } = require("../models/listingModel");
  *          Response status has corresponding json message in form of { message: "status msg" }
  */
 const addListingHandler = async(req, res) => {
-    // Acquire jwt token and data
+    // Acquire jwt token and process data
     const token = req.headers.authorization;
     const { description, subjectId, pricing } = req.body;
-    const image = req.files['image'] ? req.files['image'][0].buffer : null;
-    const attachedFile = req.files['attached_file'] ? req.files['attached_file'][0].buffer : null;
-    
+    const image = req.files["image"] ? req.files["image"][0].buffer : null;
+    const attachedFile = req.files["attached_file"] ? req.files["attached_file"][0].buffer : null;
+    const attachedVideo = req.files["attached_video"] ? req.files["attached_video"][0].buffer : null;
 
     if (!token || !image || !description || !subjectId || !pricing) {
         return res.status(400).json({ message: "Missing required fields." });
@@ -37,7 +37,7 @@ const addListingHandler = async(req, res) => {
         const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
         const userId = decodedToken.id;
 
-        await addListing(userId, image, description, subjectId, pricing, attachedFile);
+        await addListing(userId, image, description, subjectId, pricing, attachedFile, attachedVideo);
         return res.status(201).json({ message: "Listing created successfully." });
     } catch (error) {
         // Specific error for JWT unauthenticity
