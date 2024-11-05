@@ -26,7 +26,7 @@ const ApplyPage = () => {
     const handleSubmit = async(e) => {
         e.preventDefault();
 
-        if (!selectedFile || !description || !subjectId || !pricing) {
+        if (!selectedImage || !description || !subjectId || !pricing) {
             setMessage("Please fill all required fields.");
             return;
         }

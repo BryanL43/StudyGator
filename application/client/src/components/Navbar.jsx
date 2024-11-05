@@ -140,7 +140,7 @@ const Navbar = () => {
                         </button>
 
                         {/* User Dropdown */}
-                        {isDropdownOpen && (
+                        {isDropdownOpen && user && (
                             <div
                                 className="absolute -right-4 z-50 mt-5 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow"
                                 id="user-dropdown"
