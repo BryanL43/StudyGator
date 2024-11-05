@@ -13,6 +13,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { MdLock, MdPerson } from 'react-icons/md';
 import { useAuth } from '../AuthContext';
 
+import loadingIcon from '../icons/LoadingIcon.svg';
+
 import axios from 'axios';
 import BASE_URL from "../utils/config";
 
@@ -23,10 +25,13 @@ const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
     const handleSubmit = async(e) => {
         e.preventDefault();
+        setLoading(true);
+        setError('');
         
         try {
             const response = await axios.post(`${BASE_URL}/api/login`, {
@@ -35,7 +40,7 @@ const LoginPage = () => {
             });
             
             login(response.data.token, rememberMe);
-
+            setLoading(false);
             navigate("/");
         } catch (error) {
             setError(error.response ? error.response.data.message : "Fatal: network/server error");
@@ -46,6 +51,7 @@ const LoginPage = () => {
         <div className="top-0 flex items-center justify-center sm:min-h-screen bg-gray-100">
             <img src="/SFSU-img-4.png" className="absolute w-full h-full object-cover z-10 filter brightness-[0.8] sm:block hidden" alt="Bird eye view of SFSU" />
             <div className="w-full sm:max-w-md bg-white p-8 sm:rounded-lg sm:shadow-md z-30">
+
                 <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Login</h2>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -86,6 +92,13 @@ const LoginPage = () => {
                     </div>
 
                     {error && <p className='text-red-500 text-sm'>{error}</p>}
+
+                    {/* Loading icon */}
+                    {loading && !error &&
+                        <div className="flex items-center justify-center">
+                            <img src={loadingIcon} className="w-20 h-20" alt="Loading..." />
+                        </div>
+                    }
 
                     {/* Remember Me Checkbox */}
                     <div className="flex items-center">

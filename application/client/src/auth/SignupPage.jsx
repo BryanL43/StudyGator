@@ -12,6 +12,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { MdLock, MdPerson } from 'react-icons/md';
 
+import loadingIcon from '../icons/LoadingIcon.svg';
+
 import axios from 'axios';
 import BASE_URL from "../utils/config";
 
@@ -21,10 +23,13 @@ const SignupPage = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
+        setError('');
 
         try {
             const requestBody = {
@@ -33,7 +38,7 @@ const SignupPage = () => {
                 password
             }
             await axios.put(`${BASE_URL}/api/register`, requestBody);
-
+            setLoading(false);
             navigate("/login");
         } catch (error) {
             setError(error.response ? error.response.data.message : "Fatal: network/server error");
@@ -101,6 +106,13 @@ const SignupPage = () => {
                     </div>
 
                     {error && <p className='text-red-500 text-sm'>{error}</p>}
+
+                    {/* Loading icon */}
+                    {loading && !error &&
+                        <div className="flex items-center justify-center">
+                            <img src={loadingIcon} className="w-20 h-20" alt="Loading..." />
+                        </div>
+                    }
 
                     {/* ToS Checkbox */}
                     <div className="flex items-center">

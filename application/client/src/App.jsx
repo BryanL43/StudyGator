@@ -18,8 +18,8 @@ import DefaultLayout from './layouts/DefaultLayout.jsx';
 // Import the subpages
 import Home from "./Home/Home.jsx";
 import About from "./about/AboutPage.jsx";
-import LoginPage from './components/LoginPage.jsx';
-import SignupPage from './components/SignupPage.jsx';
+import LoginPage from './auth/LoginPage.jsx';
+import SignupPage from './auth/SignupPage.jsx';
 import Results from './Home/Results.jsx';
 import Dashboard from './Dashboard/Dashboard.jsx';
 
