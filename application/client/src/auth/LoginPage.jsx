@@ -8,7 +8,7 @@
 *
 **************************************************************/
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { MdLock, MdPerson } from 'react-icons/md';
 import { useAuth } from '../AuthContext';
@@ -20,13 +20,19 @@ import BASE_URL from "../utils/config";
 
 const LoginPage = () => {
     const navigate = useNavigate();
-    const { login } = useAuth();
+    const { user, login } = useAuth();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+
+    useEffect(() => {
+        if (user) {
+            navigate("/search"); // Redirect to search all later (browsing pg)
+        }
+    })
 
     const handleSubmit = async(e) => {
         e.preventDefault();

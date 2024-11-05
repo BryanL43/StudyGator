@@ -10,6 +10,7 @@
 **************************************************************/
 
 import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import imageIcon from '../icons/ImageIcon.svg';
 // import loadingIcon from '../icons/LoadingIcon.svg';
 
@@ -38,6 +39,8 @@ const useTimer = (callback, delay) => {
 };
 
 const Home = () => {
+    const navigate = useNavigate();
+
     const [currentSlide, setCurrentSlide] = useState(0);
     const [overlayState, setOverlayState] = useState(false);
     const [isLocked, setIsLocked] = useState(false);
@@ -187,7 +190,7 @@ const Home = () => {
                     </div>
 
                     <div className="w-full text-center">
-                        <button type="button" className="rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100">Browse more</button>
+                        <button type="button" onClick={() => { navigate("/search"); window.scrollTo({ top: 0 }); }} className="rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100">Browse more</button>
                     </div>
                 </div>
             </section>

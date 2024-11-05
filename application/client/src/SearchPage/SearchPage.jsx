@@ -147,36 +147,42 @@ const ListingPage = () => {
                     description="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec."
                     price="1,699"
                     imgSrc="/sillydogpfp.webp"
+                    isDashboard="false"
                 />
                 <TutorListingCard
                     name="Bryan Lee"
                     description="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec."
                     price="1,699"
                     imgSrc="pfp.png"
+                    isDashboard="false"
                 />
                 <TutorListingCard
                     name="Bryan Lee"
                     description="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec."
                     price="1,699"
                     imgSrc="sfsu-img-4.png"
+                    isDashboard="false"
                 />
                 <TutorListingCard
                     name="Bryan Lee"
                     description="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec."
                     price="1,699"
                     imgSrc="/sillydogpfp.webp"
+                    isDashboard="false"
                 />
                 <TutorListingCard
                     name="Bryan Lee"
                     description="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec."
                     price="100"
                     imgSrc="sfsu-img-3.jpg"
+                    isDashboard="false"
                 />
                 <TutorListingCard
                     name="Bryan Lee"
                     description="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec."
                     price="1,699"
                     imgSrc="sfsu-img-4.png"
+                    isDashboard="false"
                 />
             </div>
         </div>

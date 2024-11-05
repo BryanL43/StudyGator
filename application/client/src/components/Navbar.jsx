@@ -142,19 +142,18 @@ const Navbar = () => {
                         {/* User Dropdown */}
                         {isDropdownOpen && (
                             <div
-                                className="absolute -right-4 z-10 mt-5 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow"
+                                className="absolute -right-4 z-50 mt-5 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow"
                                 id="user-dropdown"
                             >
                                 <div className="px-4 py-3">
-                                    <span className="block text-sm text-gray-900">Bryan Lee</span>
-                                    <span className="block text-sm text-gray-500 truncate">bryan@sfsu.edu</span>
+                                    <span className="block text-sm text-gray-900 overflow-hidden whitespace-normal break-words">Hello, {user.name ? user.name : ""}</span>
                                 </div>
                                 <ul className="py-3" aria-labelledby="user-menu-button">
                                     <li>
-                                        <Link to="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dashboard</Link>
+                                        <Link to="/dashboard" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dashboard</Link>
                                     </li>
                                     <li>
-                                        <Link to="#" onClick={logout} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sign out</Link>
+                                        <Link to="/" onClick={logout} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sign out</Link>
                                     </li>
                                 </ul>
                             </div>

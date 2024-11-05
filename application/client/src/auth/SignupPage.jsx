@@ -8,9 +8,10 @@
 *
 **************************************************************/
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { MdLock, MdPerson } from 'react-icons/md';
+import { useAuth } from '../AuthContext';
 
 import loadingIcon from '../icons/LoadingIcon.svg';
 
@@ -19,12 +20,19 @@ import BASE_URL from "../utils/config";
 
 const SignupPage = () => {
     const navigate = useNavigate();
+    const { user } = useAuth();
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+
+    useEffect(() => {
+        if (user) {
+            navigate("/search"); // Redirect to search all later (browsing pg)
+        }
+    })
 
     const handleSubmit = async (e) => {
         e.preventDefault();
