@@ -10,8 +10,8 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom'
-import emailIcon from './EmailIcon.svg'; // Special image icon
-import trashCanIcon from '../Dashboard/TrashCanIcon.svg';
+import emailIcon from '../icons/EmailIcon.svg'; // Special image icon
+import trashCanIcon from '../icons/TrashCanIcon.svg';
 
 const TutorListingCard = ({ name, description, price, imgSrc, isDashboard }) => {
     return (

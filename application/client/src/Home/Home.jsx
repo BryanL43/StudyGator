@@ -10,8 +10,8 @@
 **************************************************************/
 
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import imageIcon from './ImageIcon.svg';
-import loadingIcon from './LoadingIcon.svg';
+import imageIcon from '../icons/ImageIcon.svg';
+// import loadingIcon from '../icons/LoadingIcon.svg';
 
 import TutorListingCard from '../components/TutorListingCard';
 
@@ -128,17 +128,17 @@ const Home = () => {
                 <div className="absolute hidden sm:block left-[20%] top-1/2 transform -translate-y-1/2 z-40">
                     <ol className="border-s-[2px] border-white">
                         <li className="mb-10 ms-6 h-16 flex items-center" onClick={() => setSlide(0)} >
-                            <span className={`absolute flex items-center justify-center w-8 h-8 ${(currentSlide === 0) ? 'ring-[#231161] bg-[#ffdc70]' : 'ring-white bg-gray-100 hover:ring-gray-50 hover:bg-gray-300'} rounded-full -start-4 ring-4 ring-white cursor-pointer`}>
+                        <span className={`absolute flex items-center justify-center w-8 h-8 ${(currentSlide === 0) ? 'ring-[#231161] bg-[#ffdc70]' : 'ring-white bg-gray-100 hover:ring-gray-50 hover:bg-gray-300'} rounded-full -start-4 ring-4 cursor-pointer`}>
                                 <img src={imageIcon} className="w-3.5 h-3.5" alt="" />
                             </span>
                         </li>
                         <li className="mb-10 ms-6 h-16 flex items-center" onClick={() => setSlide(1)}>
-                            <span className={`absolute flex items-center justify-center w-8 h-8 ${(currentSlide === 1) ? 'ring-[#231161] bg-[#ffdc70]' : 'ring-white bg-gray-100 hover:ring-gray-50 hover:bg-gray-300'} rounded-full -start-4 ring-4 ring-white cursor-pointer`}>
+                            <span className={`absolute flex items-center justify-center w-8 h-8 ${(currentSlide === 1) ? 'ring-[#231161] bg-[#ffdc70]' : 'ring-white bg-gray-100 hover:ring-gray-50 hover:bg-gray-300'} rounded-full -start-4 ring-4 cursor-pointer`}>
                                 <img src={imageIcon} className="w-3.5 h-3.5" alt="" />
                             </span>
                         </li>
                         <li className="mb-10 ms-6 h-16 flex items-center" onClick={() => setSlide(2)}>
-                        <span className={`absolute flex items-center justify-center w-8 h-8 ${(currentSlide === 2) ? 'ring-[#231161] bg-[#ffdc70]' : 'ring-white bg-gray-100 hover:ring-gray-50 hover:bg-gray-300'} rounded-full -start-4 ring-4 ring-white cursor-pointer`}>
+                        <span className={`absolute flex items-center justify-center w-8 h-8 ${(currentSlide === 2) ? 'ring-[#231161] bg-[#ffdc70]' : 'ring-white bg-gray-100 hover:ring-gray-50 hover:bg-gray-300'} rounded-full -start-4 ring-4 cursor-pointer`}>
                                 <img src={imageIcon} className="w-3.5 h-3.5" alt="" />
                             </span>
                         </li>
@@ -155,9 +155,9 @@ const Home = () => {
                     </div>
 
                     {/* Loading icon */}
-                    <div className="hidden flex items-center justify-center">
+                    {/* <div className="hidden flex items-center justify-center">
                         <img src={loadingIcon} className="w-20 h-20" alt="Loading..." />
-                    </div>
+                    </div> */}
 
                     {/* Grid layout with 4 columns for the listing cards*/}
                     <div className="mb-4 grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 justify-center justify-items-center">

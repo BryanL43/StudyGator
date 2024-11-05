@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 
 import TutorListingCard from '../components/TutorListingCard';
 import Message from '../components/Message';
-import emailIcon from '../components/EmailIcon.svg';
-import clipboardIcon from './ClipboardIcon.svg';
-import starIcon from './StarIcon.svg';
-import trashCanIcon from './TrashCanIcon.svg';
+import emailIcon from '../icons/EmailIcon.svg';
+import clipboardIcon from '../icons/ClipboardIcon.svg';
+import starIcon from '../icons/StarIcon.svg';
+import trashCanIcon from '../icons/TrashCanIcon.svg';
 
 const Dashboard = () => {
     const [deleteWarning, setDeleteWarning] = useState(false);
