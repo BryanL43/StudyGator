@@ -60,9 +60,20 @@ const Results = () => {
     }, [fetchListings]);
 
     // Function to handle PDF rendering
-    const handleImageClick = (attachedFile) => {
+    const handleImageClick = async (attachedFile) => {
         if (attachedFile) {
-            window.open(attachedFile, '_blank');
+            try {
+                // Fetch the PDF to ensure it's available and render it
+                const response = await axios.get(attachedFile, {
+                    responseType: 'blob' // Ensure we get the file as a blob
+                });
+                
+                // Create a URL for the blob and open it in a new tab
+                const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));
+                window.open(url, '_blank');
+            } catch (error) {
+                console.error("Error fetching PDF:", error);
+            }
         }
     };
 
