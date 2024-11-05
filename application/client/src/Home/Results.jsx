@@ -59,6 +59,13 @@ const Results = () => {
         fetchListings();
     }, [fetchListings]);
 
+    // Function to handle PDF rendering
+    const handleImageClick = (attachedFile) => {
+        if (attachedFile) {
+            window.open(attachedFile, '_blank');
+        }
+    };
+
     return (
         <div>
             {/* Vertical prototype header */}
@@ -97,7 +104,8 @@ const Results = () => {
                                 <img 
                                     src={listing.image} 
                                     alt="Listing" 
-                                    className="w-24 h-24"
+                                    className="w-24 h-24 cursor-pointer"
+                                    onClick={() => handleImageClick(listing.attachedFile)} // Add onClick handler
                                 />
                             )}
                         </div>

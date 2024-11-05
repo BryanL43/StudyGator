@@ -16,6 +16,6 @@ const multer = require('multer');
 const upload = multer({ storage: multer.memoryStorage() });
 const { addListingHandler } = require('../controller/listingController');
 
-router.put("/", upload.single("image"), addListingHandler);
+router.put("/", upload.fields([{ name: 'image', maxCount: 1 }, { name: 'attached_file', maxCount: 1 }]), addListingHandler);
 
 module.exports = router;
