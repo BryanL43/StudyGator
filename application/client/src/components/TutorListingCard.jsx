@@ -17,7 +17,9 @@ const TutorListingCard = ({ name, description, price, imgSrc, isDashboard }) => 
     return (
         <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow">
             <Link to="/">
-                <img className="rounded-t-lg w-full" src={imgSrc} alt={`${name} profile`} />
+                <div className="h-80 overflow-hidden"> {/* Fixed height for the image container */}
+                    <img className="rounded-t-lg object-cover w-full h-full" src={imgSrc} alt={`${name} profile`} />
+                </div>
             </Link>
 
             {/* Rating and Message button container */}

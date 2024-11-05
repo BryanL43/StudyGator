@@ -22,6 +22,8 @@ import LoginPage from './auth/LoginPage.jsx';
 import SignupPage from './auth/SignupPage.jsx';
 import Results from './Home/Results.jsx';
 import Dashboard from './Dashboard/Dashboard.jsx';
+import SearchPage from './SearchPage/SearchPage.jsx'; 
+import ApplyPage from './ApplyPage/ApplyPage.jsx';  
 
 function App() {
 
@@ -41,6 +43,8 @@ function App() {
                             <Route path="/signup" element={<SignupPage />} />
                             <Route path="/results" element={<Results />} />
                             <Route path="/dashboard" element={<Dashboard />} />
+                            <Route path="/search" element={<SearchPage />} />
+                            <Route path="/apply" element={<ApplyPage />} />
                         </Route>
                     </Routes>
                 </Router>
