@@ -106,6 +106,11 @@ const Navbar = () => {
                             onChange={handleSearchChange}
                             onFocus={() => setSearchActive(true)}
                             onBlur={() => setSearchActive(false)}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                    console.log(selectedSubject, searchInput);
+                                }
+                            }}
                             pattern="[A-Za-z\s]*"
                             maxLength="40"
                             className="h-10 px-3 w-full block p-2 text-sm border-t border-b border-gray-300 bg-gray-50 focus:outline-none"
