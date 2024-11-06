@@ -135,7 +135,7 @@ const Navbar = () => {
                                 }
                             }}
                             pattern="[A-Za-z\s]*"
-                            maxLength="40"
+                            maxLength={40}
                             className="h-10 px-3 w-full block p-2 text-sm border-t border-b border-gray-300 bg-gray-50 focus:outline-none"
                             placeholder="Search For Tutors"
                         />
@@ -233,7 +233,7 @@ const Navbar = () => {
                                 }
                             }}
                             pattern="[A-Za-z\s]*"
-                            maxLength="40"
+                            maxLength={40}
                             className="h-10 px-3 w-full text-sm border-t border-b border-gray-300 bg-gray-50 focus:outline-none"
                             placeholder="Search For Tutors"
                         />

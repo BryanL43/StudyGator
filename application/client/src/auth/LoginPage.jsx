@@ -11,6 +11,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { MdLock, MdPerson } from 'react-icons/md';
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { useAuth } from '../AuthContext';
 
 import loadingIcon from '../icons/LoadingIcon.svg';
@@ -24,6 +25,7 @@ const LoginPage = () => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [pwdVis, setPwdVis] = useState(false);
     const [rememberMe, setRememberMe] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -69,11 +71,11 @@ const LoginPage = () => {
                             <MdPerson className="ml-2 mr-2 text-gray-400" size={30} />
                             <input
                                 type="text"
-                                id="email"
-                                name="email"
+                                placeholder="SFSU Email"
                                 className="block w-full p-2 border-none focus:ring-transparent"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
+                                maxLength={255}
                                 required
                             />
                         </div>
@@ -86,14 +88,21 @@ const LoginPage = () => {
                         <div className="mt-1 flex items-center border border-gray-300rounded-md shadow-sm">
                             <MdLock className="ml-2 mr-2 text-gray-400" size={30} />
                             <input
-                                type="password"
-                                id="password"
-                                name="password"
+                                type={pwdVis ? "text" : "password"}
+                                placeholder="Password"
                                 className="block w-full p-2 border-none focus:ring-transparent"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
+                                maxLength={255}
                                 required
                             />
+                            <button id="passwordVis" type="button" onClick={() => {setPwdVis(prevVisible => !prevVisible)}}>
+                                {pwdVis ? (
+                                    <FaRegEyeSlash className="ml-2 mr-2 text-gray-400 hover:text-gray-500" size={25} />
+                                ) : (
+                                    <FaRegEye className="ml-2 mr-2 text-gray-400 hover:text-gray-500" size={25} />
+                                )}
+                            </button>
                         </div>
                     </div>
 
@@ -110,7 +119,6 @@ const LoginPage = () => {
                     <div className="flex items-center">
                         <input
                             type="checkbox"
-                            id="rememberMe"
                             className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                             checked={rememberMe}
                             onChange={(e) => setRememberMe(e.target.checked)}

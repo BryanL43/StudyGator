@@ -11,6 +11,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { MdLock, MdPerson } from 'react-icons/md';
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { useAuth } from '../AuthContext';
 
 import loadingIcon from '../icons/LoadingIcon.svg';
@@ -25,6 +26,8 @@ const SignupPage = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [pwdVis, setPwdVis] = useState(false);
+    const [passwordStrength, setPasswordStrength] = useState('no password');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
@@ -34,22 +37,87 @@ const SignupPage = () => {
         }
     })
 
+    const handlePasswordChange = (event) => {
+        const newPassword = event.target.value;
+        setPassword(newPassword);
+        updatePWDStrength(newPassword);
+    };
+
+    const updatePWDStrength = (password) => {
+        let hasUpperCase = /[A-Z]/.test(password);
+        let hasLowerCase = /[a-z]/.test(password);
+        let hasNumber = /\d/.test(password);
+        let hasSpecialChar = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password);
+        let hasLength = password.length >= 8;
+
+        let strength = 0;
+        if (hasUpperCase) strength++;
+        if (hasLowerCase) strength++;
+        if (hasNumber) strength++;
+        if (hasSpecialChar) strength++;
+        if (hasLength) strength++;
+
+        if (strength === 0) {
+            setPasswordStrength('no password');
+        } else if (strength >= 1 && strength <= 3) {
+            setPasswordStrength('weak password');
+        } else if (strength === 4) {
+            setPasswordStrength('medium password');
+        } else {
+            setPasswordStrength('strong password');
+        }
+    };
+
+    const validateRegistrationForm = () => {
+        if (!name || !email || !password) {
+            setError("Please fill in all fields.");
+            return false;
+        }
+
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@sfsu\.edu$/;
+        if (!emailRegex.test(email)) {
+            setError("Email must end with @sfsu.edu");
+            return false;
+        }
+
+        if (password.includes(" ")) {
+            setError("Password cannot contain spaces.");
+            return false;
+        }
+
+        const hasUpperCase = /[A-Z]/.test(password);
+        const hasLowerCase = /[a-z]/.test(password);
+        const hasNumber = /\d/.test(password);
+        const hasSpecialChar = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password);
+        const hasLength = password.length >= 8;
+
+        if (!(hasUpperCase && hasLowerCase && hasNumber && hasSpecialChar && hasLength)) {
+            setError("Passwords must be at least 8 characters in length and contain 1 upper case letter, 1 lower case letter, 1 number, and 1 special character.");
+            return false;
+        }
+
+        return true;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setLoading(true);
-        setError('');
+        if (validateRegistrationForm()) {
+            setLoading(true);
+            setError('');
 
-        try {
-            const requestBody = {
-                name,
-                email,
-                password
+            try {
+                const requestBody = {
+                    name,
+                    email,
+                    password
+                }
+                await axios.put(`${BASE_URL}/api/register`, requestBody);
+                setLoading(false);
+                setPasswordStrength("no password");
+                navigate("/login");
+            } catch (error) {
+                setError(error.response ? error.response.data.message : "Fatal: network/server error");
             }
-            await axios.put(`${BASE_URL}/api/register`, requestBody);
-            setLoading(false);
-            navigate("/login");
-        } catch (error) {
-            setError(error.response ? error.response.data.message : "Fatal: network/server error");
         }
     };
 
@@ -67,11 +135,10 @@ const SignupPage = () => {
                         <div className="mt-1 flex items-center border border-gray-300 rounded-md shadow-sm">
                             <input
                                 type="text"
-                                id="Name"
-                                name="Name"
                                 className="block w-full p-2 border-none focus:ring-transparent"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
+                                maxLength={255}
                                 required
                             />
                         </div>
@@ -85,11 +152,10 @@ const SignupPage = () => {
                             <MdPerson className="ml-2 mr-2 text-gray-400" size={30} />
                             <input
                                 type="text"
-                                id="email"
-                                name="email"
                                 className="block w-full p-2 border-none focus:ring-transparent0"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
+                                maxLength={255}
                                 required
                             />
                         </div>
@@ -102,15 +168,34 @@ const SignupPage = () => {
                         <div className="mt-1 flex items-center border border-gray-300 rounded-md shadow-sm">
                             <MdLock className="ml-2 mr-2 text-gray-400" size={30} />
                             <input
-                                type="password"
-                                id="password"
-                                name="password"
+                                type={pwdVis ? "text" : "password"}
                                 className="block w-full p-2 border-none focus:ring-transparent"
                                 value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                onChange={handlePasswordChange}
+                                maxLength={255}
                                 required
                             />
+                            <button id="passwordVis" type="button" onClick={() => {setPwdVis(prevVisible => !prevVisible)}}>
+                                {pwdVis ? (
+                                    <FaRegEyeSlash className="ml-2 mr-2 text-gray-400 hover:text-gray-500" size={25} />
+                                ) : (
+                                    <FaRegEye className="ml-2 mr-2 text-gray-400 hover:text-gray-500" size={25} />
+                                )}
+                            </button>
                         </div>
+                    </div>
+
+                    <div className={`h-2 w-full flex items-center justify-start ${passwordStrength === "no password" ? "hidden" : ""}`}>
+                        <div className={`h-full w-2/12 bg-red-600 border border-gray-400 ${passwordStrength === "weak password" || "medium password" ? "" : "hidden"}`}></div>
+                        <div className={`h-full w-2/12 bg-yellow-500 border border-gray-400 ${passwordStrength === "medium password" || passwordStrength === "strong password" ? "" : "hidden"}`}></div>
+                        <div className={`h-full w-2/12 bg-green-600 border border-gray-400 ${passwordStrength === "strong password" ? "" : "hidden"}`}></div>
+                        {passwordStrength && (
+                            <p className="h-2 ml-[10px] text-[14px] mb-3 text-gray-900">
+                                {passwordStrength === "weak password" ? "Weak password" :
+                                passwordStrength === "medium password" ? "Medium password" :
+                                passwordStrength === "strong password" ? "Strong password" : ""}
+                            </p>
+                        )}
                     </div>
 
                     {error && <p className='text-red-500 text-sm'>{error}</p>}

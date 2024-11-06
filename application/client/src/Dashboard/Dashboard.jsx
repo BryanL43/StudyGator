@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 
-import TutorListingCard from '../components/TutorListingCard';
+// import TutorListingCard from '../components/TutorListingCard';
 import Message from '../components/Message';
 import emailIcon from '../icons/EmailIcon.svg';
 import clipboardIcon from '../icons/ClipboardIcon.svg';
-import starIcon from '../icons/StarIcon.svg';
 import trashCanIcon from '../icons/TrashCanIcon.svg';
 
 const Dashboard = () => {
@@ -49,23 +48,10 @@ const Dashboard = () => {
                                         </div>
                                     </div>
                                 </div>
-
-                                <div className="w-full px-6 mt-6 sm:w-1/2 xl:w-1/3 xl:mt-0 cursor-pointer">
-                                    <div className="flex items-center px-5 py-6 bg-white rounded-md shadow-sm">
-                                        <div className="p-3 bg-pink-600 bg-opacity-75 rounded-full">
-                                            <img src={starIcon} className="w-10 h-10 filter invert brightness-200" alt="" />
-                                        </div>
-
-                                        <div className="mx-5">
-                                            <h4 className="text-2xl font-semibold text-gray-700">My Ratings</h4>
-                                            <div className="text-gray-500">View your ratings</div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
 
-                        <section className="bg-gray-50 py-8 antialiased md:py-12 hidden">
+                        {/* <section className="bg-gray-50 py-8 antialiased md:py-12 hidden">
                             <div className="mx-auto max-w-screen-xl px-4 2xl:px-0">
                                 <div className="mb-4 flex items-end justify-center space-y-4 sm:space-y-0 md:mb-8">
                                     <h2 className="mt-3 text-[28px] font-bold text-gray-900">Manage Tutor Listings</h2>
@@ -97,7 +83,7 @@ const Dashboard = () => {
 
                                 </div>
                             </div>
-                        </section>
+                        </section> */}
 
                         <div className="flex flex-col mt-8">
                             <div className="py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
@@ -151,6 +137,7 @@ const Dashboard = () => {
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </main>
             </div >
