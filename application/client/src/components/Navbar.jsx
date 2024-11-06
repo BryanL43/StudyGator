@@ -13,6 +13,8 @@
 import { useEffect, useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../AuthContext.js';
+import axios from 'axios';
+import BASE_URL from '../utils/config';
 
 const Navbar = () => {
     const navigate = useNavigate();
@@ -59,8 +61,8 @@ const Navbar = () => {
         setSearchInput(event.target.value);
     };
 
-    // State for managing search subject drop down value
-    const [selectedSubject, setSelectedSubject] = useState("All");
+    // State for managing search subject drop down value and text field resize
+    const [selectedSubject, setSelectedSubject] = useState("");
     const handleSubjectChange = (event) => {
         setSelectedSubject(event.target.value);
         
@@ -69,6 +71,26 @@ const Navbar = () => {
         const minDefaultWidth = 80;
         const calculatedWidth = Math.max(minDefaultWidth, selectedText.length * 8 + 40);
         event.target.style.width = `${calculatedWidth}px`;
+    };
+
+    // Load search bar drop down subjects
+    const [subjectList, setSubjectList] = useState([]);
+    const fetchSubjects = async() => {
+        try {
+            const response = await axios.get(`${BASE_URL}/api/subject`);
+            setSubjectList(response.data);
+        } catch (error) {
+            console.error("Error fetching subjects:", error);
+        }
+    }
+
+    // Render subject drop down on mount
+    useEffect(() => {
+        fetchSubjects();
+    }, []);
+
+    const handleSearch = async() => {
+        navigate(`/search?selectedSubject=${selectedSubject}&searchTerm=${searchInput}`);
     };
 
     return (
@@ -90,12 +112,13 @@ const Navbar = () => {
                             onChange={handleSubjectChange}
                             style={{ width: '80px' }} // default width
                         >
-                            <option value="all" className="bg-white">All</option>
-                            <option value="math" className="bg-white">Math</option>
-                            <option value="medicine" className="bg-white">Medicine</option>
-                            <option value="science" className="bg-white">Science</option>
-                            <option value="humanities" className="bg-white">Humanities</option>
-                            <option value="chinese literature & linguistics" className="bg-white">Chinese Literature & Linguistics</option>
+                            <option value="">All</option>
+
+                            {subjectList.map((subjectItem) => (
+                                <option key={subjectItem.id} value={subjectItem.name}>
+                                    {subjectItem.name}
+                                </option>
+                            ))}
                         </select>
                         
                         {/* Search Input */}
@@ -108,7 +131,7 @@ const Navbar = () => {
                             onBlur={() => setSearchActive(false)}
                             onKeyDown={(e) => {
                                 if (e.key === 'Enter') {
-                                    console.log(selectedSubject, searchInput);
+                                    handleSearch();
                                 }
                             }}
                             pattern="[A-Za-z\s]*"
@@ -118,7 +141,7 @@ const Navbar = () => {
                         />
 
                         {/* Search Button with SVG Icon */}
-                        <button type="submit" className="h-10 px-3 p-2 bg-[#FFDC70] border border-l-0 border-gray-300 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-yellow-500" >
+                        <button type="submit" onClick={handleSearch} className="h-10 px-3 p-2 bg-[#FFDC70] border border-l-0 border-gray-300 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-yellow-500" >
                             <svg className="w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20" >
                                 <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
                             </svg>
@@ -187,12 +210,13 @@ const Navbar = () => {
                             onChange={handleSubjectChange}
                             style={{ width: '80px' }} // default width
                         >
-                            <option value="all" className="bg-white">All</option>
-                            <option value="math" className="bg-white">Math</option>
-                            <option value="medicine" className="bg-white">Medicine</option>
-                            <option value="science" className="bg-white">Science</option>
-                            <option value="humanities" className="bg-white">Humanities</option>
-                            <option value="chinese literature & linguistics" className="bg-white">Chinese Literature & Linguistics</option>
+                            <option value="">All</option>
+
+                            {subjectList.map((subjectItem) => (
+                                <option key={subjectItem.id} value={subjectItem.name}>
+                                    {subjectItem.name}
+                                </option>
+                            ))}
                         </select>
                         
                         {/* Search Input */}
@@ -203,6 +227,11 @@ const Navbar = () => {
                             onChange={handleSearchChange}
                             onFocus={() => setSearchActive(true)}
                             onBlur={() => setSearchActive(false)}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                    handleSearch();
+                                }
+                            }}
                             pattern="[A-Za-z\s]*"
                             maxLength="40"
                             className="h-10 px-3 w-full text-sm border-t border-b border-gray-300 bg-gray-50 focus:outline-none"
@@ -210,7 +239,7 @@ const Navbar = () => {
                         />
 
                         {/* Search Button with SVG Icon */}
-                        <button type="submit" className="h-10 px-3 p-2 bg-[#FFDC70] border border-l-0 border-gray-300 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-yellow-500" >
+                        <button type="submit" onClick={handleSearch} className="h-10 px-3 p-2 bg-[#FFDC70] border border-l-0 border-gray-300 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-yellow-500" >
                             <svg className="w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20" >
                                 <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
                             </svg>
@@ -221,7 +250,7 @@ const Navbar = () => {
                     {/* Buttons mobile version */}
                     <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-transparent">
                         <li className={`${user ? '' : 'md:flex items-center justify-center'}`}>
-                            <Link to="/search" className="block py-2 px-3 text-black md:text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#FFDC70] md:p-0">
+                            <Link to="/search?selectedSubject=&searchTerm=" className="block py-2 px-3 text-black md:text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#FFDC70] md:p-0">
                                 Explore
                             </Link>
                         </li>

@@ -20,7 +20,7 @@ const Results = () => {
     const location = useLocation();
     const [listings, setListings] = useState([]);
     const [randomListing, setRandomListing] = useState(false);
-    const [pdfUrl, setPdfUrl] = useState(null);
+    // const [pdfUrl, setPdfUrl] = useState(null);
     const [videoUrl, setVideoUrl] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -100,7 +100,7 @@ const Results = () => {
 
     const closeModal = () => {
         setIsModalOpen(false);
-        setPdfUrl(null);
+        // setPdfUrl(null);
         setVideoUrl(null);
     };
 
