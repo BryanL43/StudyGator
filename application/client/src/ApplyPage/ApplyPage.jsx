@@ -2,37 +2,89 @@
 * Author(s): Kenneth Wen
 * Last Updated: 11/2/2024
 *
-* File:: TutorListingForm.jsx
+* File:: ApplyPage.jsx
 *
 * Description:: 
 *
 **************************************************************/
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useAuth } from '../AuthContext';
+import loadingIcon from '../icons/LoadingIcon.svg';
 
 import BASE_URL from '../utils/config';
 
 const ApplyPage = () => {
+    const navigate = useNavigate();
+    const { user } = useAuth();
 
+    const [salesPitch, setSalesPitch] = useState('');
     const [description, setDescription] = useState('');
     const [subjectId, setSubjectId] = useState('');
     const [pricing, setPricing] = useState('');
     const [selectedImage, setSelectedImage] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
     const [selectedVideo, setSelectedVideo] = useState(null);
-    const [message, setMessage] = useState('');
+
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        if (!user) {
+            navigate("/login"); // Redirect to log in if user is in unregistered mode
+        }
+    })
+
+    const handleImageUpload = (e) => {
+        const image = e.target.files[0];
+        const maxSize = 5 * 1024 * 1024; // 5 MB max size
+
+        if (image && image.size > maxSize) {
+            alert("Image size exceeds 5MB. Please upload a smaller image.");
+            setSelectedImage(null);
+        } else {
+            setSelectedImage(image);
+        }
+    }
+
+    const handleFileUpload = (e) => {
+        const file = e.target.files[0];
+        const maxSize = 10 * 1024 * 1024; // 10 MB max size
+
+        if (file && file.size > maxSize) {
+            alert("File size exceeds 10MB. Please upload a smaller file.");
+            setSelectedFile(null);
+        } else {
+            setSelectedFile(file);
+        }
+    }
+
+    const handleVideoUpload = (e) => {
+        const video = e.target.files[0];
+        const maxSize = 250 * 1024 * 1024; // 250 MB max size
+
+        if (video && video.size > maxSize) {
+            alert("File size exceeds 10MB. Please upload a smaller file.");
+            setSelectedVideo(null);
+        } else {
+            setSelectedVideo(video);
+        }
+    }
 
     // Handle form submission for tutor application
     const handleSubmit = async(e) => {
         e.preventDefault();
+        setLoading(true);
 
-        if (!selectedImage || !description || !subjectId || !pricing) {
-            setMessage("Please fill all required fields.");
+        if (!selectedImage || !salesPitch || !description || !subjectId || !pricing) {
+            alert("Please fill out all required fields.");
+            setLoading(false);
             return;
         }
 
         const formData = new FormData();
+        formData.append('salesPitch', salesPitch);
         formData.append('description', description);
         formData.append('subjectId', subjectId);
         formData.append('pricing', pricing);
@@ -47,85 +99,257 @@ const ApplyPage = () => {
                     'Content-Type': 'multipart/form-data',
                 }
             });
-            setMessage("Application submitted successfully!");
+            setLoading(false);
+            navigate("/dashboard");
+            alert("Application submitted successfully!");
         } catch (error) {
+            setLoading(false);
             console.error("Error uploading listing:", error);
-            setMessage("There was an error submitting your application. Please try again.");
+            alert("There was an error submitting your application. Please try again.");
         }
     };
 
+    // Load search bar drop down subjects
+    const [subjectList, setSubjectList] = useState([]);
+    const fetchSubjects = async() => {
+        try {
+            const response = await axios.get(`${BASE_URL}/api/subject`);
+            setSubjectList(response.data);
+        } catch (error) {
+            console.error("Error fetching subjects:", error);
+        }
+    }
+
+    // Render subject drop down on mount
+    useEffect(() => {
+        fetchSubjects();
+    }, []);
+
     return (
-        <div className="top-0 flex items-center justify-center sm:min-h-screen bg-gray-100 bg-fixed" style={{ backgroundImage: "url('/SFSU-img-4.png')" }}>
-            <form action="#" onSubmit={handleSubmit} className="w-full sm:max-w-md relative z-20 max-w-2xl mx-auto p-6 bg-white rounded-lg shadow max-h-[650px] overflow-y-auto">
+        <div className="top-0 flex items-center justify-center sm:min-h-screen bg-gray-100 bg-fixed" style={{ backgroundImage: "url('/SFSU-img-4.png')", backgroundRepeat: "no-repeat", backgroundSize: "cover" }}>
+            <form action="#" onSubmit={handleSubmit} className="sm:max-w-lg lg:max-h-fit relative z-20 mx-auto p-6 bg-white sm:rounded-lg shadow overflow-y-auto">
                 <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Apply As Tutor Form</h2>
-                {message && <p className="text-red-500 mb-4 text-center">{message}</p>} {/* Display message */}
-                <div className="flex flex-col gap-4 mb-4 ">
-                    <div>
-                        <label htmlFor="price" className="block mb-2 text-sm font-medium text-gray-900">Price $/hr *</label>
-                        <input type="number" name="price" id="price" onChange={(e) => setPricing(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Enter price per hour" required />
+                
+                {/* Loading icon */}
+                {loading &&
+                    <div className="flex items-center justify-center my-16">
+                        <img src={loadingIcon} className="w-20 h-20" alt="Loading..." />
                     </div>
+                }
+
+                <div className={`${loading ? "hidden" : "flex"} flex-col gap-4 mb-4`}>
+
+                    {/* Name Input Field*/}
                     <div>
-                        <label htmlFor="category" className="block mb-2 text-sm font-medium text-gray-900">Which Subject Are You Tutoring? *</label>
-                        <select id="category" value={subjectId} onChange={(e) => setSubjectId(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" required>
+                        <label htmlFor="name-icon" className="block mb-2 text-sm font-semibold text-gray-900">Name</label>
+                        <div className="relative">
+                            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none -ml-1">
+                                <svg className="w-6 h-6 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                    <path fillRule="evenodd" d="M12 20a7.966 7.966 0 0 1-5.002-1.756l.002.001v-.683c0-1.794 1.492-3.25 3.333-3.25h3.334c1.84 0 3.333 1.456 3.333 3.25v.683A7.966 7.966 0 0 1 12 20ZM2 12C2 6.477 6.477 2 12 2s10 4.477 10 10c0 5.5-4.44 9.963-9.932 10h-.138C6.438 21.962 2 17.5 2 12Zm10-5c-1.84 0-3.333 1.455-3.333 3.25S10.159 13.5 12 13.5c1.84 0 3.333-1.455 3.333-3.25S13.841 7 12 7Z" clipRule="evenodd" />
+                                </svg>
+                            </div>
+                            <input
+                                type="text"
+                                name="name"
+                                id="name-icon"
+                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full pl-10 p-2.5"
+                                placeholder="Type your full name"
+                                value={user?.name || ""}
+                                disabled
+                            />
+                        </div>
+                    </div>
+
+                    {/* Email Input Field*/}
+                    <div>
+                        <label htmlFor="email-address-icon" className="block mb-2 text-sm font-semibold text-gray-900">SFSU Email</label>
+                        <div className="relative">
+                            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                <svg className="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
+                                    <path d="m10.036 8.278 9.258-7.79A1.979 1.979 0 0 0 18 0H2A1.987 1.987 0 0 0 .641.541l9.395 7.737Z" />
+                                    <path d="M11.241 9.817c-.36.275-.801.425-1.255.427-.428 0-.845-.138-1.187-.395L0 2.6V14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2.5l-8.759 7.317Z" />
+                                </svg>
+                            </div>
+                            <input
+                                type="text"
+                                name="email"
+                                id="email-address-icon"
+                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full pl-10 p-2.5"
+                                placeholder="Type SFSU email"
+                                value={user?.email || ""}
+                                disabled
+                            />
+                        </div>
+                    </div>
+
+                    {/* Price Input Field*/}
+                    <div>
+                        <label htmlFor="price" className="block mb-2 text-sm font-semibold text-gray-900">Price $/hr <label className="text-red-600">*</label></label>
+                        <input type="number" onChange={(e) => setPricing(e.target.value)} min="1" step="1" name="price" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Enter price per hour" required />
+                    </div>
+
+                    {/* Subject Dropdown Field*/}
+                    <div>
+                        <label htmlFor="category" className="block mb-2 text-sm font-semibold text-gray-900">Which Subject Are You Tutoring? <label className="text-red-600">*</label></label>
+                        <select id="category" onChange={(e) => setSubjectId(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" required>
                             <option value="">---</option>
-                            <option value="English">English</option>
-                            <option value="Math">Math</option>
-                            <option value="Science">Science</option>
-                            <option value="Medicine">Medicine</option>
-                            <option value="Humanities">Humanities</option>
+
+                            {subjectList.map((subjectItem) => (
+                                <option key={subjectItem.id} value={subjectItem.id}>
+                                    {subjectItem.name}
+                                </option>
+                            ))}
+
                         </select>
                     </div>
+
+                    {/* Pitch Input Field*/}
                     <div className="sm:col-span-1">
-                        <label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-900">Short pitch for listing *</label>
-                        <textarea id="description" rows="5" value={description} onChange={(e) => setDescription(e.target.value)} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-600 focus:border-primary-600 " placeholder="Advertise yourself here in 100 words!" required></textarea>
+                        <label htmlFor="description" className="block mb-2 text-sm font-semibold text-gray-900">Short pitch for listing <label className="text-red-600">*</label></label>
+                        <textarea id="description" rows="5" maxLength={300} onChange={(e) => setSalesPitch(e.target.value)} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-600 focus:border-primary-600 " placeholder="Advertise yourself here! (300 characters max)" required></textarea>
                     </div>
+
+                    {/* Tutor bio Input Field*/}
                     <div className="sm:col-span-2">
-                        <label htmlFor="aboutMe" className="block mb-2 text-sm font-medium text-gray-900">About Me *</label>
-                        <textarea id="aboutMe" rows="8" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-600 focus:border-primary-600 " placeholder="Write your tutor bio here" required></textarea>
+                        <label htmlFor="description" className="block mb-2 text-sm font-semibold text-gray-900">About Me <label className="text-red-600">*</label></label>
+                        <textarea id="description" rows="8" onChange={(e) => setDescription(e.target.value)} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-600 focus:border-primary-600 " placeholder="Write your tutor bio here" required></textarea>
                     </div>
                 </div>
-                {/* Upload Picture*/}
-                <div className="pb-2">
-                    <label htmlFor="image" className="block mb-1 text-sm font-medium text-gray-900">Upload Tutor Listing Picture</label>
-                    <input
-                        className="block text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:ring focus:ring-blue-500"
-                        id="image"
-                        type="file"
-                        accept=".png,.jpg"
-                        onChange={(e) => setSelectedImage(e.target.files[0])}
-                    />
-                    <p className="mb-3 text-xs text-gray-500">
-                        PNG OR JPG (MAX. 800x400px).
-                    </p>
-                    {/* Upload Resume/CV*/}
-                    <label htmlFor="resume" className="block mb-1 text-sm font-medium text-gray-900">Upload Resume/CV</label>
-                    <input
-                        className="block text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:ring focus:ring-blue-500"
-                        id="resume"
-                        type="file"
-                        accept=".pdf"
-                        onChange={(e) => setSelectedFile(e.target.files[0])}
-                    />
-                    <p className="mb-3 text-xs text-gray-500">
-                        PDF (MAX. 20MB).
-                    </p>
-                    {/* Upload Video */}
-                    <label htmlFor="video" className="block mb-1 text-sm font-medium text-gray-900">Upload Video</label>
-                    <input
-                        className="block text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:ring focus:ring-blue-500"
-                        id="resume"
-                        type="file"
-                        accept=".mp4"
-                        onChange={(e) => setSelectedVideo(e.target.files[0])}
-                    />
-                    <p className="mb-3 text-xs text-gray-500">
-                        MP4 (MAX. 250MB).
-                    </p>
+
+                {/* Upload Image */}
+                <div className={`${loading ? "hidden" : "flex"} w-full py-1`}>
+                    <label className="block mb-1 text-sm font-semibold text-gray-900">
+                        Upload Tutor Listing Picture: <span className="text-red-600">*</span>&emsp;&emsp; <u>{selectedImage ? selectedImage.name : 'No file selected'}</u>
+                    </label>
                 </div>
-                <div className="text-xs pb-2">
+                <div className={`${loading ? "hidden" : "flex"} items-center justify-center w-full py-2 pb-6`}>
+                    <label
+                        htmlFor="dropzone-file"
+                        className="flex flex-col items-center justify-center w-full h-32  border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 relative"
+                    >
+                        <div className="flex flex-col items-center justify-center pt-5 pb-6 pointer-events-none">
+                            <svg
+                                className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+                                aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 20 16"
+                            >
+                                <path
+                                    stroke="currentColor"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                                />
+                            </svg>
+                            <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                                <span className="font-semibold">Click to upload</span> or drag and drop
+                            </p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, or JPGF (MAX. 5MB)</p>
+                        </div>
+                        <input
+                            type="file"
+                            id="dropzone-file"
+                            className="absolute opacity-0 cursor-pointer"
+                            style={{ width: '100%', height: '100%', top: 0, left: 0 }}
+                            accept=".svg,.png,.jpg"
+                            onChange={handleImageUpload}
+                            required
+                        />
+                    </label>
+                </div>
+
+                {/* Upload Resume/CV*/}
+                <div className={`${loading ? "hidden" : "flex"} w-full py-1`}>
+                    <label className="block mb-1 text-sm font-semibold text-gray-900">
+                        Upload Resume/CV (optional):&emsp;&emsp; <u>{selectedFile ? selectedFile.name : 'No file selected'}</u>
+                    </label>
+                </div>
+                <div className={`${loading ? "hidden" : "flex"} items-center justify-center w-full py-2 pb-6`}>
+                    <label
+                        htmlFor="dropzone-file"
+                        className="flex flex-col items-center justify-center w-full h-32  border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 relative"
+                    >
+                        <div className="flex flex-col items-center justify-center pt-5 pb-6 pointer-events-none">
+                            <svg
+                                className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+                                aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 20 16"
+                            >
+                                <path
+                                    stroke="currentColor"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                                />
+                            </svg>
+                            <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                                <span className="font-semibold">Click to upload</span> or drag and drop
+                            </p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">PDF or DOCX (MAX. 10MB)</p>
+                        </div>
+                        <input
+                            type="file"
+                            id="dropzone-file"
+                            className="absolute opacity-0 cursor-pointer"
+                            style={{ width: '100%', height: '100%', top: 0, left: 0 }}
+                            accept=".pdf, .docx"
+                            onChange={handleFileUpload}
+                        />
+                    </label>
+                </div>
+
+                {/* Upload Video*/}
+                <div className={`${loading ? "hidden" : "flex"} w-full py-1`}>
+                    <label className="block mb-1 text-sm font-semibold text-gray-900">
+                        Upload Video (optional):&emsp;&emsp; <u>{selectedVideo ? selectedVideo.name : 'No file selected'}</u>
+                    </label>
+                </div>
+                <div className={`${loading ? "hidden" : "flex"} items-center justify-center w-full py-2 pb-6`}>
+                    <label
+                        htmlFor="dropzone-file"
+                        className="flex flex-col items-center justify-center w-full h-32  border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 relative"
+                    >
+                        <div className="flex flex-col items-center justify-center pt-5 pb-6 pointer-events-none">
+                            <svg
+                                className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+                                aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 20 16"
+                            >
+                                <path
+                                    stroke="currentColor"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                                />
+                            </svg>
+                            <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                                <span className="font-semibold">Click to upload</span> or drag and drop
+                            </p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">MP4, MOV, or WebM (MAX. 250MB)</p>
+                        </div>
+                        <input
+                            type="file"
+                            id="dropzone-file"
+                            className="absolute opacity-0 cursor-pointer"
+                            style={{ width: '100%', height: '100%', top: 0, left: 0 }}
+                            accept=".mp4,.mov,.webm"
+                            onChange={handleVideoUpload}
+                        />
+                    </label>
+                </div>
+
+                <div className="text-sm pt-4 pb-2">
                     <p>Listing may take up to 24 to 48 hours to be approved by an admin before going public.</p>
                 </div>
-                <button type="submit" className="text-white inline-flex items-center bg-purple-950 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 ">
+                <button type="submit" className={`${loading ? "hidden" : "flex"} text-white inline-flex items-center bg-[#231161] hover:bg-[#1f0e55] focus:ring-[#231161] focus:ring-offset-2 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5`}>
                     Submit Form
                 </button>
             </form>
