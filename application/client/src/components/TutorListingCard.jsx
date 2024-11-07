@@ -15,7 +15,7 @@ import trashCanIcon from '../icons/TrashCanIcon.svg';
 
 const TutorListingCard = React.memo(({ metadata, isDashboard }) => {
     // Additional logic to pass metadata into description for CV, video, etc. (add later)
-    console.log(metadata)
+    // console.log(metadata)
 
     return (
         <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow">

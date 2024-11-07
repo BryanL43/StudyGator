@@ -55,8 +55,7 @@ const ApplyPage = () => {
     };
 
     return (
-        <div className="top-0 flex items-center justify-center sm:min-h-screen bg-gray-100">
-            <img src="/SFSU-img-4.png" className="absolute w-full h-full object-cover z-10 filter brightness-[0.8] sm:block hidden" alt="Bird eye view of SFSU" />
+        <div className="top-0 flex items-center justify-center sm:min-h-screen bg-gray-100 bg-fixed" style={{ backgroundImage: "url('/SFSU-img-4.png')" }}>
             <form action="#" onSubmit={handleSubmit} className="w-full sm:max-w-md relative z-20 max-w-2xl mx-auto p-6 bg-white rounded-lg shadow max-h-[650px] overflow-y-auto">
                 <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Apply As Tutor Form</h2>
                 {message && <p className="text-red-500 mb-4 text-center">{message}</p>} {/* Display message */}

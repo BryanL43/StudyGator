@@ -70,15 +70,34 @@ const ListingPage = () => {
     }, [fetchListings]);
 
     return (
-        <div className="flex flex-col items-center p-8 bg-gray-50">
+        <div className="flex flex-col items-center p-8 bg-gray-50 min-h-[60%]">
             <h1 className="text-2xl font-bold mb-6">Browse Tutor Listings</h1>
-            <div className="flex justify-center w-full max-w-screen-lg mb-4 space-x-4">
 
-                <div className="relative inline-block">
+            {/* Container for search result text and filter button */}
+            <div className="flex items-center justify-between w-full max-w-5xl mb-6 px-4 sm:px-6 lg:px-8">
+                {/* Render listing count */}
+                {!loading && (
+                    <>
+                        {listings && listings.length > 0 && !randomListing ? (
+                            <h2 className="text-m font-semibold">Search Results: {listings.length} items found</h2>
+                        ) : listings && listings.length > 0 && randomListing ? (
+                            <h2 className="text-m font-semibold">
+                                We couldn't find your desired tutor listing, but here are some tutors that might interest you.
+                                <br />
+                                Please refine your search or select a subject for a more precise result.
+                            </h2>
+                        ) : (
+                            <h2 className="text-m font-semibold">No listings currently exist.</h2>
+                        )}
+                    </>
+                )}
+
+                {/* Price Filter Button */}
+                <div className="relative">
                     <button
                         id="priceDropdown"
                         onClick={() => setIsPriceDropdownOpen(!isPriceDropdownOpen)}
-                        className="border border-gray-300 text-gray-800 bg-white hover:bg-purple-100 focus:ring-2 focus:ring-purple-400 rounded-lg text-lg px-5 py-2.5 flex items-center"
+                        className="border border-gray-300 text-gray-800 bg-white hover:bg-purple-100 focus:ring-2 focus:ring-purple-400 rounded-md px-3 py-1 flex items-center"
                     >
                         Price
                         <svg className="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
@@ -86,7 +105,7 @@ const ListingPage = () => {
                         </svg>
                     </button>
                     {isPriceDropdownOpen && (
-                        <div className="absolute z-10 border bg-white divide-y divide-gray-200 rounded-lg shadow-md w-full sm:w-48 md:w-64 max-w-xs mt-1 p-4 left-0 right-0 mx-auto">
+                        <div className="absolute z-10 border bg-white divide-y divide-gray-200 rounded-lg shadow-md w-48 mt-1 p-4">
                             <label className="text-sm font-semibold mb-2">Price Range:</label>
                             <div className="flex flex-col py-3">
                                 <input
@@ -116,30 +135,15 @@ const ListingPage = () => {
                 </div>
             </div>
 
-            {/* Render listing count */}
-            {!loading && (
-                <>
-                    {listings && listings.length > 0 && !randomListing ? (
-                        <h2 className="text-m font-semibold mt-4 ml-52">Search Results: {listings.length} items found</h2>
-                    ) : listings && listings.length > 0 && randomListing ? (
-                        <h2 className="text-m font-semibold mt-4 ml-52">
-                            We couldn't find your desired tutor listing, but here is some tutors that might interest you. <br></br>Please refine your search or select a subject for a more precise result.
-                        </h2>
-                    ) : (
-                        <h2 className="text-m font-semibold mt-4 h-screen">No listings currently exist.</h2>
-                    )}
-                </>
-            )}
-
             {/* Loading icon */}
-            {loading &&
+            {loading && (
                 <div className="flex items-center justify-center mb-[50vh]">
                     <img src={loadingIcon} className="w-20 h-20" alt="Loading..." />
                 </div>
-            }
+            )}
 
-            {/* Grid layout with 3 columns for the listing cards*/}
-            <div className="mb-4 grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 justify-center">
+            {/* Grid layout with 3 columns for the listing cards */}
+            <div className="grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 w-full max-w-5xl">
                 
                 {/* Render listings from search results */}
                 {listings ? (
@@ -158,4 +162,5 @@ const ListingPage = () => {
         </div>
     );
 };
+
 export default ListingPage;
