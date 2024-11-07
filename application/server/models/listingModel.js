@@ -182,5 +182,6 @@ const fetchListingById = async (listingId) => {
 module.exports = {
     addListing,
     searchListing,
-    getRecentListings
+    getRecentListings,
+    fetchListingbyId
 }
