@@ -13,7 +13,8 @@
 
 const jwt = require('jsonwebtoken');
 const { addListing, searchListing, getRecentListings } = require("../models/listingModel");
-
+// fetch user id from models
+const { fetchListingById } = require("../models/listingModel");
 /**
  * Communicates with api endpoint to verify credential and create a tutor listing.
  * 
@@ -91,11 +92,44 @@ const getRecentListingsHandler = async(req, res) => {
         return res.status(500).json({ message: "Failed to fetch recent listings" });
     }
 }
+//
+
+
+/**
+ * Fetches a tutor listing by its specific ID, ensuring the associated user is registered.
+ * 
+ * @param {Object} req The request object, with listing ID in the URL parameters.
+ * @param {Object} res The response object, for sending back the result or error message.
+ * @returns Response status: 200 (Success), 404 (Listing/User not found), 500 (Internal server error).
+ */
+const getListingByIdHandler = async (req, res) => {
+    const { listingId } = req.params;
+
+    try {
+        // Fetch the listing data by ID, verifying the associated user
+        const listing = await fetchListingById(listingId);
+
+        // Check if the listing or associated user is found
+        if (!listing) {
+            return res.status(404).json({ message: "Listing or associated user not found." });
+        }
+
+        // Return the listing data if found
+        return res.status(200).json({ listing });
+    } catch (error) {
+        console.error("Error fetching listing by ID:", error);
+        return res.status(500).json({ message: "Failed to fetch listing." });
+    }
+};
+
+
+
 
 // Add delete listing here later
 
 module.exports = {
     addListingHandler,
     searchListingHandler,
-    getRecentListingsHandler
+    getRecentListingsHandler,
+    getListingByIdHandler
 }
