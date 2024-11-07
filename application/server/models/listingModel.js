@@ -136,6 +136,47 @@ const getRecentListings = async () => {
     }
 }
 
+//fetching tutor listing data code 
+/**
+ * Fetch a specific tutor listing by its ID and verify the associated user is registered.
+ * 
+ * @param {string} listingId The ID of the tutor listing.
+ * @returns {object|null} The tutor listing details if found and the user is registered; otherwise, returns null.
+ */
+const fetchListingById = async (listingId) => {
+    const connection = await connectDB();
+
+    try {
+        const query = `
+            SELECT TL.*, RU.name AS tutorName, RU.email AS tutorEmail, S.name AS subjectName
+            FROM \`data-schema\`.TUTORLISTINGS AS TL
+            JOIN \`data-schema\`.REGISTEREDUSERS AS RU ON TL.associated_user_id = RU.id
+            JOIN \`data-schema\`.SUBJECTS AS S ON TL.subject_id = S.id
+            WHERE TL.id = ? AND TL.approved = 1 AND RU.id IS NOT NULL
+        `;
+
+        const [results] = await connection.execute(query, [listingId]);
+
+        // If no listing or user is found, return null
+        if (results.length === 0) {
+            return null;
+        }
+
+        const item = results[0];
+
+        // Convert any blob data to renderable formats
+        return {
+            ...item,
+            image: item.image ? `data:image/jpeg;base64,${item.image.toString('base64')}` : null,
+            attachedFile: item.attached_file ? `data:application/pdf;base64,${item.attached_file.toString('base64')}` : null,
+            attachedVideo: item.attached_video ? `data:application/mp4;base64,${item.attached_video.toString('base64')}` : null
+        };
+    } catch (error) {
+        throw error;
+    }
+};
+
+
 // Add delete listing here later
 
 module.exports = {
