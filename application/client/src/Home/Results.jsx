@@ -218,7 +218,7 @@ const Results = () => {
                                     alt="Listing" 
                                     className="w-24 h-24 cursor-pointer"
                                     // onClick={() => handleImageClick(listing.attachedFile)} // pdf renderer
-                                    onClick={() => handleImageClick(listing.attachedVideo)} // video renderer
+                                    onClick={() => handleImageClick(listing.attached_video)} // video renderer
                                 />
                             )}
                         </div>

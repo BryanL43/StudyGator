@@ -270,7 +270,7 @@ const Navbar = () => {
                                 <li className={`${user ? '' : 'md:flex items-center justify-center'}`}>
                                     <Link to="/login" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#FFDC70] md:text-white md:p-0">Log In</Link>
                                 </li>
-                                <button type="button" onClick={() => navigate("/signup")} className=" text-black md:text-center bg-[#FFDC70] hover:bg-[#fc3] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-left font-16" style={{ fontSize: "16px" }}>Sign Up</button>
+                                <button type="button" onClick={() => navigate("/signup")} className=" text-black md:text-center bg-[#FFDC70] hover:bg-[#fc3] focus:ring-4 focus:outline-none focus:ring-yellow-500 font-medium rounded-lg text-sm px-4 py-2 text-left font-16" style={{ fontSize: "16px" }}>Sign Up</button>
                             </>
                         )}
                     </ul>

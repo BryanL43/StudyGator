@@ -22,21 +22,19 @@ const connectDB = require("../config/db");
  * @param {int} pricing The specified pricing per hour.
  * @return void, otherwise throws an error.
  */
-const addListing = async(userId, image, description, subjectId, pricing, attachedFile, attachedVideo) => {
+const addListing = async(userId, image, salesPitch, description, subjectId, pricing, attachedFile, attachedVideo) => {
     const connection = await connectDB();
-    //Hard-code subjectID until I hook it up:
-    subjectId = "96b5b5f0-941b-11ef-9e70-02fff31b5977";
 
     try {
-        let sql = `INSERT INTO \`data-schema\`.TUTORLISTINGS (associated_user_id, image, description, subject_id, pricing` +
+        let sql = `INSERT INTO \`data-schema\`.TUTORLISTINGS (associated_user_id, image, sales_pitch, description, subject_id, pricing` +
             (attachedFile ? ', attached_file' : '') + 
             (attachedVideo ? ', attached_video' : '') +
-            `) VALUES (?, ?, ?, ?, ?` +
+            `) VALUES (?, ?, ?, ?, ?, ?` +
             (attachedFile ? ', ?' : '') +
             (attachedVideo ? ', ?' : '') +
             `)`;
 
-        const values = [userId, image, description, subjectId, pricing];
+        const values = [userId, image, salesPitch, description, subjectId, pricing];
         if (attachedFile) {
             values.push(attachedFile); // Add attached file if available
         }
@@ -80,20 +78,26 @@ const searchListing = async(selectedSubject, searchTerm) => {
         
         // Append search terms
         if (searchTerm) {
-            query += ` AND REPLACE(CONCAT_WS('', S.name, TL.description, RU.name), ' ', '') LIKE ?`;
+            query += ` AND REPLACE(CONCAT_WS('', S.name, TL.sales_pitch, TL.description, RU.name), ' ', '') LIKE ?`;
             params.push(`%${searchTerm.replace(/\s/g, '')}%`);
         }
 
         // Execute database search with the concatenated queries & params
         const [results] = await connection.execute(query, params);
         
-        // Convert the buffered images to renderable jpeg, pdf to renderable url, & mp4 to renderable url
-        const listings = results.map(item => ({
-            ...item,
-            image: item.image ? `data:image/jpeg;base64,${item.image.toString('base64')}` : null,
-            attachedFile: item.attached_file ? `data:application/pdf;base64,${item.attached_file.toString('base64')}` : null,
-            attachedVideo: item.attached_video ? `data:application/mp4;base64,${item.attached_video.toString('base64')}` : null
-        }));
+        // Convert the buffered blob images to renderable jpeg, pdf to renderable url, & mp4 to renderable url
+        const listings = results.map(item => {
+            if (item.image) {
+                item.image = `data:image/jpeg;base64,${item.image.toString('base64')}`;
+            }
+            if (item.attached_file) {
+                item.attached_file = `data:application/pdf;base64,${item.attached_file.toString('base64')}`;
+            }
+            if (item.attached_video) {
+                item.attached_video = `data:application/mp4;base64,${item.attached_video.toString('base64')}`;
+            }
+            return item;
+        });        
         
         return listings;
     } catch (error) {

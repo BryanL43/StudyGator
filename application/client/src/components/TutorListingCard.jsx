@@ -15,6 +15,7 @@ import trashCanIcon from '../icons/TrashCanIcon.svg';
 
 const TutorListingCard = React.memo(({ metadata, isDashboard }) => {
     // Additional logic to pass metadata into description for CV, video, etc. (add later)
+    console.log(metadata)
 
     return (
         <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow">
@@ -54,7 +55,7 @@ const TutorListingCard = React.memo(({ metadata, isDashboard }) => {
                 </div>
                 
                 {/* Description content */}
-                <p className="mb-3 font-normal text-gray-700">{metadata.description}</p>
+                <p className="mb-3 font-normal text-gray-700">{metadata.sales_pitch}</p>
 
                 {/* Bottom bar with pricing & More detail button */}
                 <div className="mt-4 flex items-center justify-between gap-4">
