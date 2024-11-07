@@ -27,7 +27,7 @@ router.use("/search", getListingRoute);
 router.use("/subject", getSubjectRoute);
 router.use("/recent", recentListingRoute);
 
-// Route for fetching a tutor listing by ID
+// Route for fetching a tutor listing by ID- check for updates
 router.get("/listings/:listingId", getListingByIdHandler);
 
 module.exports = router;
