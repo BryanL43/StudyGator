@@ -1,10 +1,13 @@
 /**************************************************************
 * Author(s): Kenneth Wen
-* Last Updated: 11/2/2024
+* Last Updated: 11/8/2024
 *
 * File:: ApplyPage.jsx
 *
-* Description:: 
+* Description:: This file handles the apply page for users to 
+*               apply for tutor listings. Name and SFSU email 
+*               are prefilled from user's backend information.
+*               Users can upload images, pdfs, and videos.
 *
 **************************************************************/
 
@@ -73,7 +76,7 @@ const ApplyPage = () => {
     }
 
     // Handle form submission for tutor application
-    const handleSubmit = async(e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
 
@@ -111,7 +114,7 @@ const ApplyPage = () => {
 
     // Load search bar drop down subjects
     const [subjectList, setSubjectList] = useState([]);
-    const fetchSubjects = async() => {
+    const fetchSubjects = async () => {
         try {
             const response = await axios.get(`${BASE_URL}/api/subject`);
             setSubjectList(response.data);
@@ -126,10 +129,22 @@ const ApplyPage = () => {
     }, []);
 
     return (
-        <div className="top-0 flex items-center justify-center sm:min-h-screen bg-gray-100 bg-fixed" style={{ backgroundImage: "url('/SFSU-img-4.png')", backgroundRepeat: "no-repeat", backgroundSize: "cover" }}>
-            <form action="#" onSubmit={handleSubmit} className="sm:max-w-lg lg:max-h-fit relative z-20 mx-auto p-6 bg-white sm:rounded-lg shadow overflow-y-auto">
+        <div
+            className="top-0 flex items-center justify-center sm:min-h-screen bg-gray-100 bg-fixed relative"
+            style={{
+                backgroundImage: "url('/SFSU-img-4.png')",
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "cover",
+            }}
+        >
+            {/* Background Overlay */}
+            <div className="absolute inset-0 bg-black opacity-30 z-10 pointer-events-none"></div>
+            
+            {/* Form Container */}
+            <form action="#" onSubmit={handleSubmit}
+                className="sm:max-w-lg lg:max-h-fit relative z-20 mx-auto p-6 bg-white sm:rounded-lg shadow overflow-y-auto">
                 <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Apply As Tutor Form</h2>
-                
+
                 {/* Loading icon */}
                 {loading &&
                     <div className="flex items-center justify-center my-16">
@@ -185,8 +200,25 @@ const ApplyPage = () => {
                     {/* Price Input Field*/}
                     <div>
                         <label htmlFor="price" className="block mb-2 text-sm font-semibold text-gray-900">Price $/hr <label className="text-red-600">*</label></label>
-                        <input type="number" onChange={(e) => setPricing(e.target.value)} min="1" step="1" name="price" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Enter price per hour" required />
+                        <div className="relative">
+                            <svg
+                                className="w-5 h-5 text-gray-600 absolute left-2 top-1/2 transform -translate-y-1/2 pointer-events-none"
+                                aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke="currentColor"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M8 17.345a4.76 4.76 0 0 0 2.558 1.618c2.274.589 4.512-.446 4.999-2.31.487-1.866-1.273-3.9-3.546-4.49-2.273-.59-4.034-2.623-3.547-4.488.486-1.865 2.724-2.899 4.998-2.31.982.236 1.87.793 2.538 1.592m-3.879 12.171V21m0-18v2.2"
+                                />
+                            </svg>
+                        <input type="number" onChange={(e) => setPricing(e.target.value)} min="1" step="1" name="price" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full pl-10 p-2.5" placeholder="Enter price per hour" required />
                     </div>
+                </div>
 
                     {/* Subject Dropdown Field*/}
                     <div>

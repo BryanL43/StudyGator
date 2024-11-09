@@ -1,11 +1,11 @@
 /**************************************************************
 * Author(s): Kenneth Wen
-* Last Updated: 11/2/2024
+* Last Updated: 11/8/2024
 *
-* File:: ListingPage.jsx
+* File:: SearchPage.jsx
 *
-* Description:: The listing page that shows the tutor listings o
-*               tutors on the site.
+* Description:: The search page shows the tutor listings
+*               by generating tutor cards from the database.
 *
 **************************************************************/
 import React, { useEffect, useState, useCallback } from 'react';
@@ -70,7 +70,15 @@ const ListingPage = () => {
     }, [fetchListings]);
 
     return (
-        <div className="flex flex-col items-center p-8 bg-gray-50 min-h-[60%]">
+        <div
+            className="top-0 flex items-center justify-center sm:min-h-screen bg-gray-100 bg-fixed relative"
+            style={{
+                backgroundImage: "url('/GatorSearchBackground.png')",
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "cover",
+            }}
+        >
+        <div className="flex flex-col items-center p-8 bg-gray-50 min-h-screen">
             <h1 className="text-2xl font-bold mb-6">Browse Tutor Listings</h1>
 
             {/* Container for search result text and filter button */}
@@ -93,7 +101,7 @@ const ListingPage = () => {
                 )}
 
                 {/* Price Filter Button */}
-                <div className="relative">
+                <div className="relative overflow-visible">
                     <button
                         id="priceDropdown"
                         onClick={() => setIsPriceDropdownOpen(!isPriceDropdownOpen)}
@@ -105,7 +113,7 @@ const ListingPage = () => {
                         </svg>
                     </button>
                     {isPriceDropdownOpen && (
-                        <div className="absolute z-10 border bg-white divide-y divide-gray-200 rounded-lg shadow-md w-48 mt-1 p-4">
+                        <div className="absolute z-10 border bg-white divide-y divide-gray-200 rounded-lg shadow-md w-48 mt-1 p-4 right-0">
                             <label className="text-sm font-semibold mb-2">Price Range:</label>
                             <div className="flex flex-col py-3">
                                 <input
@@ -143,7 +151,7 @@ const ListingPage = () => {
             )}
 
             {/* Grid layout with 3 columns for the listing cards */}
-            <div className="grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 w-full max-w-5xl">
+            <div className="grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 w-full max-w-5xl justify-center">
                 
                 {/* Render listings from search results */}
                 {listings ? (
@@ -160,6 +168,7 @@ const ListingPage = () => {
 
             </div>
         </div>
+    </div>
     );
 };
 
