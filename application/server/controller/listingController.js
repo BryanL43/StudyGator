@@ -121,6 +121,24 @@ const getListingByIdHandler = async (req, res) => {
         return res.status(500).json({ message: "Failed to fetch listing." });
     }
 };
+// delete listing 
+const deleteListingHandler = async (req, res) => {
+    const { listingId } = req.params;
+
+    if (!listingId) {
+        return res.status(400).json({ message: "Listing ID is required." });
+    }
+
+    try {
+        await deleteListing(listingId);#checkidagainfromdb
+        return res.status(200).json({ message: "Listing deleted successfully." });
+    } catch (error) {
+        if (error.code === 'ER_ROW_IS_REFERENCED') {
+            return res.status(404).json({ message: "Listing not found or cannot be deleted." });
+        }
+        return res.status(500).json({ message: "Failed to delete listing" });
+    }
+};
 
 
 
@@ -131,5 +149,6 @@ module.exports = {
     addListingHandler,
     searchListingHandler,
     getRecentListingsHandler,
-    getListingByIdHandler
+    getListingByIdHandler,
+    deleteListingHandler
 }
