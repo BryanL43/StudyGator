@@ -84,7 +84,7 @@ const searchListingHandler = async(req, res) => {
     }
 }
 
-const getRecentListingsHandler = async(req, res) => {
+/*const getRecentListingsHandler = async(req, res) => {
     try {
         const listings = await getRecentListings();
         return res.status(200).json({ count: listings.length, results: listings });
@@ -92,6 +92,7 @@ const getRecentListingsHandler = async(req, res) => {
         return res.status(500).json({ message: "Failed to fetch recent listings" });
     }
 }
+
 //
 
 
