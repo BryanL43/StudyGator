@@ -1,48 +1,68 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';  // You can use fetch or any other library to make API calls
 
 const Dashboard = () => {
-  const [tutorListings, setTutorListings] = useState([]);
+    const [tutorListings, setTutorListings] = useState([]); // State to store tutor listings
+    const [loading, setLoading] = useState(true); // State to handle loading state
 
-  // Fetch tutor listings when the component mounts
-  useEffect(() => {
-    fetch('/api/tutor-listings') // Make sure the URL matches your backend endpoint
-      .then(response => response.json())
-      .then(data => {
-        console.log('Fetched tutor listings:', data);  // Log the data for debugging
-        setTutorListings(data);  // Store the data in the state
-      })
-      .catch(error => console.error('Error fetching tutor listings:', error));
-  }, []);
+    useEffect(() => {
+        // Fetch data from your backend
+        axios.get('/api/tutor-listings')  // Your API endpoint for tutor listings
+            .then((response) => {
+                setTutorListings(response.data);  // Update the state with fetched data
+                setLoading(false);  // Set loading to false once data is fetched
+            })
+            .catch((error) => {
+                console.error('Error fetching tutor listings:', error);
+                setLoading(false);  // Set loading to false if there's an error
+            });
+    }, []); // Empty array means this effect runs only once, when the component mounts
 
-  return (
-    <div>
-      <h1>Tutor Listings</h1>
-      <div>
-        {/* If no listings are available, display a message */}
-        {tutorListings.length === 0 ? (
-          <p>No tutor listings available.</p>
-        ) : (
-          // Loop through each listing and display it
-          tutorListings.map((listing, index) => (
-            <div key={index} className="tutor-listing" style={{ padding: '10px', border: '1px solid #ccc', margin: '10px 0' }}>
-              <p><strong>ID:</strong> {listing.id}</p>
-              <p><strong>Sales Pitch:</strong> {listing.sales_pitch}</p>
-              <p><strong>Description:</strong> {listing.description}</p>
-              <p><strong>Pricing:</strong> {listing.pricing}</p>
-              {/* Show the image if it exists */}
-              <p><strong>Image:</strong> <img src={listing.image} alt="Tutor" style={{ maxWidth: '100px', height: 'auto' }} /></p>
-              {/* If there is an attached video, provide a link to it */}
-              <p><strong>Video:</strong> {listing.attached_video ? <a href={listing.attached_video} target="_blank" rel="noopener noreferrer">View Video</a> : 'No video attached'}</p>
-              {/* If there is an attached file, provide a download link */}
-              <p><strong>File:</strong> {listing.attached_file ? <a href={listing.attached_file} target="_blank" rel="noopener noreferrer">Download File</a> : 'No file attached'}</p>
-              {/* Format the date */}
-              <p><strong>Date Created:</strong> {new Date(listing.date_created).toLocaleString()}</p>
-            </div>
-          ))
-        )}
-      </div>
-    </div>
-  );
+    if (loading) {
+        return <div>Loading...</div>;  // Show a loading state while fetching
+    }
+
+    return (
+        <div className="dashboard">
+            <h2>Recent Tutor Listings</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sales Pitch</th>
+                        <th>Description</th>
+                        <th>Pricing</th>
+                        <th>Image</th>
+                        <th>Video</th>
+                        <th>File</th>
+                        <th>Date Created</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {tutorListings.map((listing) => (
+                        <tr key={listing.id}> {/* Use a unique key like id */}
+                            <td>{listing.sales_pitch}</td>
+                            <td>{listing.description}</td>
+                            <td>{listing.pricing}</td>
+                            <td>
+                                {listing.image ? <img src={listing.image} alt="Listing" width="100" /> : 'No image'}
+                            </td>
+                            <td>
+                                {listing.attached_video ? (
+                                    <a href={listing.attached_video} target="_blank" rel="noopener noreferrer">View Video</a>
+                                ) : 'No video'}
+                            </td>
+                            <td>
+                                {listing.attached_file ? (
+                                    <a href={listing.attached_file} target="_blank" rel="noopener noreferrer">Download File</a>
+                                ) : 'No file'}
+                            </td>
+                            <td>{new Date(listing.date_created).toLocaleString()}</td> {/* Format the date */}
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    );
 };
 
 export default Dashboard;
