@@ -24,7 +24,7 @@ import Results from './Home/Results.jsx';
 import Dashboard from './Dashboard/Dashboard.jsx';
 import SearchPage from './SearchPage/SearchPage.jsx'; 
 import ApplyPage from './ApplyPage/ApplyPage.jsx';  
-
+import Detail from './DetailPage/Detail.jsx'
 function App() {
 
     document.title = "CSC648";
@@ -45,6 +45,9 @@ function App() {
                             <Route path="/dashboard" element={<Dashboard />} />
                             <Route path="/search" element={<SearchPage />} />
                             <Route path="/apply" element={<ApplyPage />} />
+                            <Route path="/listing" element={<ApplyPage />} />
+                            <Route path="/detail" element={<Detail />} />
+                            
                         </Route>
                     </Routes>
                 </Router>

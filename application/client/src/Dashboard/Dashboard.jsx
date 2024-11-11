@@ -115,7 +115,20 @@ const Dashboard = () => {
                                                 name="Bryan Lee"
                                                 email="blee@sfsu.edu"
                                                 subject="Seeking computer science tutor"
-                                                content="I need help with CSC648..."
+                                                content="I need help with CSC648 and 
+                                                
+                                                afafawfea 
+                                                afawfawf
+                                                awfawfawf
+                                                afawfawfwa
+                                                fawf
+                                                awf
+                                                awfaw
+                                                faw
+                                                dawdwa
+                                                awdawdwdadwad
+                                                awddawdawdawd
+                                                awdwdawdawdwdwadawdwadwdawdawdwadwdwad..."
                                                 date="November 2, 2024, 13:46:55"
                                             />
                                             <Message
