@@ -17,9 +17,11 @@ const connectDB = require("../config/db");
  * 
  * @param {string} userId The listing's owner user ID. Should be acquired from jwt token.
  * @param {Buffer} image Buffer of the tutor's image. Buffering handled by npm multer package.
- * @param {string} description The description text (string) that the tutor want to display on their listing.
+ * @param {string} description The description text (string) that the tutor wants to display on their listing.
  * @param {string} subjectId The specified subject id.
  * @param {int} pricing The specified pricing per hour.
+ * @param {Buffer} attachedFile Optional attached file (e.g., PDF).
+ * @param {Buffer} attachedVideo Optional attached video (e.g., MP4).
  * @return void, otherwise throws an error.
  */
 const addListing = async(userId, image, salesPitch, description, subjectId, pricing, attachedFile, attachedVideo) => {
@@ -44,6 +46,47 @@ const addListing = async(userId, image, salesPitch, description, subjectId, pric
 
         // Execute the query to add the listing
         await connection.execute(sql, values);
+    } catch (error) {
+        throw error;
+    }
+};
+
+/**
+ * Fetch all tutor listings with basic details like name, sales pitch, description, and pricing.
+ * 
+ * @returns array of tutor listings, otherwise throws an error.
+ */
+const getAllTutorListings = async () => {
+    const connection = await connectDB();
+
+    try {
+        // Query to fetch all tutor listings along with tutor name and subject
+        let query = `
+            SELECT TL.*, RU.name AS tutorName, S.name AS subjectName
+            FROM \`data-schema\`.TUTORLISTINGS AS TL
+            JOIN \`data-schema\`.REGISTEREDUSERS AS RU ON TL.associated_user_id = RU.id
+            JOIN \`data-schema\`.SUBJECTS AS S ON TL.subject_id = S.id
+            WHERE TL.approved = 1
+        `;
+
+        // Execute the query to fetch the tutor listings
+        const [results] = await connection.execute(query);
+
+        // Convert the buffered image, attached file, and video to renderable formats
+        const listings = results.map(item => {
+            if (item.image) {
+                item.image = `data:image/jpeg;base64,${item.image.toString('base64')}`;
+            }
+            if (item.attached_file) {
+                item.attached_file = `data:application/pdf;base64,${item.attached_file.toString('base64')}`;
+            }
+            if (item.attached_video) {
+                item.attached_video = `data:application/mp4;base64,${item.attached_video.toString('base64')}`;
+            }
+            return item;
+        });
+
+        return listings;
     } catch (error) {
         throw error;
     }
@@ -97,13 +140,13 @@ const searchListing = async(selectedSubject, searchTerm) => {
                 item.attached_video = `data:application/mp4;base64,${item.attached_video.toString('base64')}`;
             }
             return item;
-        });        
-        
+        });
+
         return listings;
     } catch (error) {
         throw error;
     }
-}
+};
 
 const getRecentListings = async () => {
     const connection = await connectDB();
@@ -136,52 +179,9 @@ const getRecentListings = async () => {
     }
 }
 
-//fetching tutor listing data code 
-/**
- * Fetch a specific tutor listing by its ID and verify the associated user is registered.
- * 
- * @param {string} listingId The ID of the tutor listing.
- * @returns {object|null} The tutor listing details if found and the user is registered; otherwise, returns null.
- */
-const fetchListingById = async (listingId) => {
-    const connection = await connectDB();
-
-    try {
-        const query = `
-            SELECT TL.*, RU.name AS tutorName, RU.email AS tutorEmail, S.name AS subjectName
-            FROM \`data-schema\`.TUTORLISTINGS AS TL
-            JOIN \`data-schema\`.REGISTEREDUSERS AS RU ON TL.associated_user_id = RU.id
-            JOIN \`data-schema\`.SUBJECTS AS S ON TL.subject_id = S.id
-            WHERE TL.id = ? AND TL.approved = 1 AND RU.id IS NOT NULL
-        `;
-
-        const [results] = await connection.execute(query, [listingId]);
-
-        // If no listing or user is found, return null
-        if (results.length === 0) {
-            return null;
-        }
-
-        const item = results[0];
-
-        // Convert any blob data to renderable formats
-        return {
-            ...item,
-            image: item.image ? `data:image/jpeg;base64,${item.image.toString('base64')}` : null,
-            attachedFile: item.attached_file ? `data:application/pdf;base64,${item.attached_file.toString('base64')}` : null,
-            attachedVideo: item.attached_video ? `data:application/mp4;base64,${item.attached_video.toString('base64')}` : null
-        };
-    } catch (error) {
-        throw error;
-    }
-};
-
-
-// Add delete listing here later
-
 module.exports = {
     addListing,
     searchListing,
     getRecentListings,
-    fetchListingbyId
-}
+    getAllTutorListings // Export the new function for fetching all tutor listings
+};
