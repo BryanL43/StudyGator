@@ -12,9 +12,8 @@
 **************************************************************/
 
 const jwt = require('jsonwebtoken');
-const { addListing, searchListing, getRecentListings } = require("../models/listingModel");
-// fetch user id from models
-const { fetchListingById } = require("../models/listingModel");
+const { addListing, searchListing, getRecentListings, getAllTutorListings } = require("../models/listingModel");
+
 /**
  * Communicates with api endpoint to verify credential and create a tutor listing.
  * 
@@ -63,28 +62,33 @@ const searchListingHandler = async(req, res) => {
 
     try {
         const listings = await searchListing(selectedSubject, searchTerm);
-        if (listings.length > 0) { // Has drop down down and search text query
+        if (listings.length > 0) { // Has drop down and search text query
             return res.status(200).json({ count: listings.length, results: listings, random: false });
         }
 
         // No result found and have no drop down but have search text query. Throw all selections with random flag.
         if (!selectedSubject && searchTerm) {
             const allListings = await searchListing();
-            return res.status(200).json({ count: allListings.length, results: allListings, random: true});
+            return res.status(200).json({ count: allListings.length, results: allListings, random: true });
         }
 
         // No result found but have selected subject and probably invalid search term query.
         // Throw random selection with specified drop down selection.
         if (selectedSubject && searchTerm) {
             const dropDownListings = await searchListing(selectedSubject, false);
-            return res.status(200).json({ count: dropDownListings.length, results: dropDownListings, random: true});
+            return res.status(200).json({ count: dropDownListings.length, results: dropDownListings, random: true });
         }
     } catch (error) {
         return res.status(500).json({ message: "Failed to fetch listings" });
     }
 }
 
-/*const getRecentListingsHandler = async(req, res) => {
+/**
+ * Fetches the most recent tutor listings and returns them to the frontend.
+ * 
+ * @returns Response status: 200 (Success), 500 (Failed to fetch recent listings).
+ */
+const getRecentListingsHandler = async(req, res) => {
     try {
         const listings = await getRecentListings();
         return res.status(200).json({ count: listings.length, results: listings });
@@ -93,56 +97,19 @@ const searchListingHandler = async(req, res) => {
     }
 }
 
-//
-
-
 /**
- * Fetches a tutor listing by its specific ID, ensuring the associated user is registered.
+ * Fetches all tutor listings to be displayed on the dashboard.
  * 
- * @param {Object} req The request object, with listing ID in the URL parameters.
- * @param {Object} res The response object, for sending back the result or error message.
- * @returns Response status: 200 (Success), 404 (Listing/User not found), 500 (Internal server error).
+ * @returns Response status: 200 (Success), 500 (Failed to fetch all tutor listings).
  */
-const getListingByIdHandler = async (req, res) => {
-    const { listingId } = req.params;
-
+const getAllTutorListingsHandler = async(req, res) => {
     try {
-        // Fetch the listing data by ID, verifying the associated user
-        const listing = await fetchListingById(listingId);
-
-        // Check if the listing or associated user is found
-        if (!listing) {
-            return res.status(404).json({ message: "Listing or associated user not found." });
-        }
-
-        // Return the listing data if found
-        return res.status(200).json({ listing });
+        const listings = await getAllTutorListings();
+        return res.status(200).json({ count: listings.length, results: listings });
     } catch (error) {
-        console.error("Error fetching listing by ID:", error);
-        return res.status(500).json({ message: "Failed to fetch listing." });
+        return res.status(500).json({ message: "Failed to fetch all tutor listings" });
     }
-};
-// delete listing 
-const deleteListingHandler = async (req, res) => {
-    const { listingId } = req.params;
-
-    if (!listingId) {
-        return res.status(400).json({ message: "Listing ID is required." });
-    }
-
-    try {
-        await deleteListing(listingId);#checkidagainfromdb
-        return res.status(200).json({ message: "Listing deleted successfully." });
-    } catch (error) {
-        if (error.code === 'ER_ROW_IS_REFERENCED') {
-            return res.status(404).json({ message: "Listing not found or cannot be deleted." });
-        }
-        return res.status(500).json({ message: "Failed to delete listing" });
-    }
-};
-
-
-
+}
 
 // Add delete listing here later
 
@@ -150,6 +117,5 @@ module.exports = {
     addListingHandler,
     searchListingHandler,
     getRecentListingsHandler,
-    getListingByIdHandler,
-    deleteListingHandler
+    getAllTutorListingsHandler // Added new handler for fetching all tutor listings
 }
