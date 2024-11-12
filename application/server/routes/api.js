@@ -18,6 +18,7 @@ const applyRoute = require("./applyRoute.js");
 const getListingRoute = require("./searchListingRoute.js");
 const getSubjectRoute = require("./subjectRoute.js");
 const recentListingRoute = require("./recentListingRoute.js");
+const tutorListingRoutes = require('./tutorlisting.js');
 //const tutorListingsRoute = require("./tutorListingsRoute.js");  // Add the tutor listings route
 
 // Use routes
@@ -27,10 +28,12 @@ router.use("/apply", applyRoute);
 router.use("/search", getListingRoute);
 router.use("/subject", getSubjectRoute);
 router.use("/recent", recentListingRoute);
+router.use("/tutor-listing", tutorListingRoutes);
+
 //router.use("/tutor-listings", tutorListingsRoute);  // Add this route to handle tutor listings
-const { getAllTutorListingsHandler } = require('../controller/listingController');
+//const { getAllTutorListingsHandler } = require('../controller/listingController');
 
 // Example of the route in your API router
-router.get("/tutor-listings", getAllTutorListingsHandler);
+//router.get("/tutor-listings", getAllTutorListingsHandler);
 
 module.exports = router;
