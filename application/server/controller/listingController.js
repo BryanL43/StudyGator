@@ -12,7 +12,7 @@
 **************************************************************/
 
 const jwt = require('jsonwebtoken');
-const { addListing, searchListing, getRecentListings, getAllTutorListings } = require("../models/listingModel");
+const { addListing, searchListing, getRecentListings, getAllTutorListings, getTutorListings } = require("../models/listingModel");
 
 /**
  * Communicates with api endpoint to verify credential and create a tutor listing.
@@ -102,14 +102,25 @@ const getRecentListingsHandler = async(req, res) => {
  * 
  * @returns Response status: 200 (Success), 500 (Failed to fetch all tutor listings).
  */
-const getAllTutorListingsHandler = async(req, res) => {
+
+//fetching tutor data
+const getTutorListingsByUserHandler = async (req, res) => {
+    const { userId } = req.params; // Extract userId from the URL
+
     try {
-        const listings = await getAllTutorListings();
+        const listings = await getTutorListings(userId);
+        
+        if (listings.length === 0) {
+            return res.status(404).json({ message: "No listings found for this user" });
+        }
+
         return res.status(200).json({ count: listings.length, results: listings });
     } catch (error) {
-        return res.status(500).json({ message: "Failed to fetch all tutor listings" });
+        console.error('Error fetching tutor listings by user ID:', error);
+        return res.status(500).json({ message: "Failed to fetch listings" });
     }
-}
+};
+
 
 // Add delete listing here later
 
@@ -117,5 +128,5 @@ module.exports = {
     addListingHandler,
     searchListingHandler,
     getRecentListingsHandler,
-    getAllTutorListingsHandler // Added new handler for fetching all tutor listings
+    getTutorListingsByUserHandler// Added new handler for fetching all tutor listings
 }
