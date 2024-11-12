@@ -12,7 +12,7 @@
 **************************************************************/
 
 const jwt = require('jsonwebtoken');
-const { addListing, searchListing, getRecentListings, getAllTutorListings, getTutorListings } = require("../models/listingModel");
+const { addListing, searchListing, getRecentListings, getListings } = require("../models/listingModel");
 
 /**
  * Communicates with api endpoint to verify credential and create a tutor listing.
@@ -97,27 +97,27 @@ const getRecentListingsHandler = async(req, res) => {
     }
 }
 
-/**
- * Fetches all tutor listings to be displayed on the dashboard.
- * 
- * @returns Response status: 200 (Success), 500 (Failed to fetch all tutor listings).
- */
-
-//fetching tutor data
-const getTutorListingsByUserHandler = async (req, res) => {
-    const { userId } = req.params; // Extract userId from the URL
+const getTutorListings = async(req, res) => {
+    const token = req.headers.authorization;
+    if (!token) {
+        return res.status(400).json({ message: "Missing authentication token." });
+    }
 
     try {
-        const listings = await getTutorListings(userId);
-        
-        if (listings.length === 0) {
-            return res.status(404).json({ message: "No listings found for this user" });
-        }
+        // Verify the JWT token authenticity
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decodedToken.id;
 
+        const listings = await getListings(userId);
         return res.status(200).json({ count: listings.length, results: listings });
     } catch (error) {
-        console.error('Error fetching tutor listings by user ID:', error);
-        return res.status(500).json({ message: "Failed to fetch listings" });
+        // Specific error for JWT unauthenticity
+        if (error instanceof jwt.JsonWebTokenError) {
+            return res.status(401).json({ message: "Invalid token" });
+        }
+
+        // Internal server error
+        return res.status(500).json({ message: "Failed to fetch tutor's listings" });
     }
 };
 
@@ -128,5 +128,5 @@ module.exports = {
     addListingHandler,
     searchListingHandler,
     getRecentListingsHandler,
-    getTutorListingsByUserHandler// Added new handler for fetching all tutor listings
+    getTutorListings
 }
