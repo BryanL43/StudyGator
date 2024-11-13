@@ -12,7 +12,7 @@
 **************************************************************/
 
 const jwt = require('jsonwebtoken');
-const { addListing, searchListing, getRecentListings } = require("../models/listingModel");
+const { addListing, searchListing, getRecentListings, getListings, deleteListing } = require("../models/listingModel");
 
 /**
  * Communicates with api endpoint to verify credential and create a tutor listing.
@@ -62,27 +62,32 @@ const searchListingHandler = async(req, res) => {
 
     try {
         const listings = await searchListing(selectedSubject, searchTerm);
-        if (listings.length > 0) { // Has drop down down and search text query
+        if (listings.length > 0) { // Has drop down and search text query
             return res.status(200).json({ count: listings.length, results: listings, random: false });
         }
 
         // No result found and have no drop down but have search text query. Throw all selections with random flag.
         if (!selectedSubject && searchTerm) {
             const allListings = await searchListing();
-            return res.status(200).json({ count: allListings.length, results: allListings, random: true});
+            return res.status(200).json({ count: allListings.length, results: allListings, random: true });
         }
 
         // No result found but have selected subject and probably invalid search term query.
         // Throw random selection with specified drop down selection.
         if (selectedSubject && searchTerm) {
             const dropDownListings = await searchListing(selectedSubject, false);
-            return res.status(200).json({ count: dropDownListings.length, results: dropDownListings, random: true});
+            return res.status(200).json({ count: dropDownListings.length, results: dropDownListings, random: true });
         }
     } catch (error) {
         return res.status(500).json({ message: "Failed to fetch listings" });
     }
 }
 
+/**
+ * Fetches the most recent tutor listings and returns them to the frontend.
+ * 
+ * @returns Response status: 200 (Success), 500 (Failed to fetch recent listings).
+ */
 const getRecentListingsHandler = async(req, res) => {
     try {
         const listings = await getRecentListings();
@@ -92,10 +97,60 @@ const getRecentListingsHandler = async(req, res) => {
     }
 }
 
-// Add delete listing here later
+const getTutorListingsHandler = async(req, res) => {
+    const token = req.headers.authorization;
+    if (!token) {
+        return res.status(400).json({ message: "Missing authentication token." });
+    }
+
+    try {
+        // Verify the JWT token authenticity
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decodedToken.id;
+
+        const listings = await getListings(userId);
+        return res.status(200).json({ count: listings.length, results: listings });
+    } catch (error) {
+        // Specific error for JWT unauthenticity
+        if (error instanceof jwt.JsonWebTokenError) {
+            return res.status(401).json({ message: "Invalid token" });
+        }
+
+        // Internal server error
+        return res.status(500).json({ message: "Failed to fetch tutor's listings" });
+    }
+};
+
+const deleteListingHandler = async(req, res) => {
+    const token = req.headers.authorization;
+    const { listingId } = req.body;
+
+    if (!token || !listingId) {
+        return res.status(400).json({ message: "Missing required fields." });
+    }
+
+    try {
+        // Verify the JWT token authenticity
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decodedToken.id;
+
+        await deleteListing(userId, listingId);
+        return res.status(200).json({ message: "Listing deleted successfully." });
+    } catch (error) {
+        // Specific error for JWT unauthenticity
+        if (error instanceof jwt.JsonWebTokenError) {
+            return res.status(401).json({ message: "Invalid token" });
+        }
+
+        // Internal server error
+        return res.status(500).json({ message: "Failed to delete tutor's listing" });
+    }
+}
 
 module.exports = {
     addListingHandler,
     searchListingHandler,
-    getRecentListingsHandler
+    getRecentListingsHandler,
+    getTutorListingsHandler,
+    deleteListingHandler
 }

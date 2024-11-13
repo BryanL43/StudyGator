@@ -8,15 +8,49 @@
 *
 **************************************************************/
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom'
 import emailIcon from '../icons/EmailIcon.svg';
 import trashCanIcon from '../icons/TrashCanIcon.svg';
+import axios from 'axios';
+import BASE_URL from '../utils/config';
 
-const TutorListingCard = React.memo(({ metadata, isDashboard }) => {
+import Confirmation from './Confirmation';
+
+const TutorListingCard = React.memo(({ metadata, isDashboard, refreshList }) => {
+    const [deleteWarning, setDeleteWarning] = useState(false);
+
+    const toggleDeleteWarning = () => setDeleteWarning(!deleteWarning);
+
+    const deleteListing = async() => {
+        try {
+            await axios.delete(`${BASE_URL}/api/delete`, {
+                headers: {
+                    'Authorization': localStorage.getItem("authToken")
+                },
+                data: {
+                    listingId: metadata.id
+                }
+            });
+            refreshList();
+        } catch (error) {
+            console.error("Error deleting listing:", error);
+        };
+    }
+
+    const handleDeleteConfirm = () => {
+        setDeleteWarning(false);
+        deleteListing();
+    };
 
     return (
         <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow">
+            <Confirmation 
+                deleteWarning={deleteWarning} 
+                toggleDeleteWarning={toggleDeleteWarning} 
+                onConfirm={handleDeleteConfirm}
+                message="Are you sure you want to delete the following listing?"
+            />
             {/* Image render */}
             <Link to="/">
                 <div className="h-80 overflow-hidden"> {/* Fixed height for the image container */}
@@ -45,8 +79,8 @@ const TutorListingCard = React.memo(({ metadata, isDashboard }) => {
                     ) : (
                         <button
                             type="button"
-                            className="px-3 py-3 min-w-[64px] min-h-[40px] text-base font-medium text-white bg-red-
-                            700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 rounded-lg"
+                            className="px-3 py-3 min-w-[64px] min-h-[40px] text-base font-medium text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 rounded-lg"
+                            onClick={toggleDeleteWarning}
                         >
                             <img src={trashCanIcon} className="w-10 h-4 filter invert hue-rotate-180" alt="delete listing" />
                         </button>

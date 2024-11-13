@@ -26,7 +26,7 @@ const addListing = async(userId, image, salesPitch, description, subjectId, pric
     const connection = await connectDB();
 
     try {
-        let sql = `INSERT INTO \`data-schema\`.TUTORLISTINGS (associated_user_id, image, sales_pitch, description, subject_id, pricing` +
+        let query = `INSERT INTO \`data-schema\`.TUTORLISTINGS (associated_user_id, image, sales_pitch, description, subject_id, pricing` +
             (attachedFile ? ', attached_file' : '') + 
             (attachedVideo ? ', attached_video' : '') +
             `) VALUES (?, ?, ?, ?, ?, ?` +
@@ -43,7 +43,7 @@ const addListing = async(userId, image, salesPitch, description, subjectId, pric
         }
 
         // Execute the query to add the listing
-        await connection.execute(sql, values);
+        await connection.execute(query, values);
     } catch (error) {
         throw error;
     }
@@ -122,24 +122,82 @@ const getRecentListings = async () => {
         // Execute the query to fetch the 3 most recent listings
         const [results] = await connection.execute(query);
 
-        // Convert the buffered images to renderable jpeg, pdf to renderable URL, & mp4 to renderable URL
-        const listings = results.map(item => ({
-            ...item,
-            image: item.image ? `data:image/jpeg;base64,${item.image.toString('base64')}` : null,
-            attachedFile: item.attached_file ? `data:application/pdf;base64,${item.attached_file.toString('base64')}` : null,
-            attachedVideo: item.attached_video ? `data:application/mp4;base64,${item.attached_video.toString('base64')}` : null
-        }));
-
+        // Convert the buffered blob images to renderable jpeg, pdf to renderable url, & mp4 to renderable url
+        const listings = results.map(item => {
+            if (item.image) {
+                item.image = `data:image/jpeg;base64,${item.image.toString('base64')}`;
+            }
+            if (item.attached_file) {
+                item.attached_file = `data:application/pdf;base64,${item.attached_file.toString('base64')}`;
+            }
+            if (item.attached_video) {
+                item.attached_video = `data:application/mp4;base64,${item.attached_video.toString('base64')}`;
+            }
+            return item;
+        });        
+        
         return listings;
     } catch (error) {
         throw error;
     }
 }
 
-// Add delete listing here later
+const getListings = async(userId) => {
+    const connection = await connectDB();
+
+    try {
+        let query = `
+            SELECT TL.*, RU.name AS tutorName, S.name AS subjectName
+            FROM \`data-schema\`.TUTORLISTINGS AS TL
+            JOIN \`data-schema\`.REGISTEREDUSERS AS RU ON TL.associated_user_id = RU.id
+            JOIN \`data-schema\`.SUBJECTS AS S ON TL.subject_id = S.id
+            WHERE TL.approved = 1 AND TL.associated_user_id = ?
+            ORDER BY TL.date_created DESC
+        `;
+
+        // Execute the query to fetch all listings associated with the specified tutor
+        const [results] = await connection.execute(query, [userId]);
+
+        // Convert the buffered blob images to renderable jpeg, pdf to renderable url, & mp4 to renderable url
+        const listings = results.map(item => {
+            if (item.image) {
+                item.image = `data:image/jpeg;base64,${item.image.toString('base64')}`;
+            }
+            if (item.attached_file) {
+                item.attached_file = `data:application/pdf;base64,${item.attached_file.toString('base64')}`;
+            }
+            if (item.attached_video) {
+                item.attached_video = `data:application/mp4;base64,${item.attached_video.toString('base64')}`;
+            }
+            return item;
+        });
+        
+        return listings;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const deleteListing = async(userId, listingId) => {
+    const connection = await connectDB();
+
+    try {
+        let query = `
+            DELETE FROM \`data-schema\`.TUTORLISTINGS
+            WHERE associated_user_id = ? AND id = ?
+        `;
+
+        // Execute the query to delete a unique listing associated with the specified tutor
+        await connection.execute(query, [userId, listingId]);
+    } catch (error) {
+        throw error;
+    }
+}
 
 module.exports = {
     addListing,
     searchListing,
-    getRecentListings
+    getRecentListings,
+    getListings,
+    deleteListing
 }
