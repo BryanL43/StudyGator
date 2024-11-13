@@ -73,7 +73,7 @@ const Detail = () => {
              {/* PDF Modal */}
              {isPdfModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
-                    <div className="w-full max-w-4xl p-8 bg-white rounded-lg shadow-lg">
+                    <div className="w-full max-w-3xl p-8 bg-white rounded-lg shadow-lg">
                         <div className="flex justify-between items-center mb-4">
                             <h3 className="text-xl font-semibold text-center w-full">Resume</h3>
                             <button
@@ -85,11 +85,11 @@ const Detail = () => {
                         </div>
 
                         {/* PDF Embed Viewer */}
-                        <div className="overflow-auto" style={{ maxHeight: '80vh' }}>
+                        <div className="overflow-auto" style={{ maxHeight: '90vh' }}>
                             <iframe
                                 src={tutor.attached_file}
                                 width="100%"
-                                height="900px"
+                                height="700px"
                                 className="rounded-md"
                                 title="Resume PDF"
                                 style={{ border: "none" }}
@@ -106,7 +106,7 @@ const Detail = () => {
             {/* Tutor Information */}
             <div className="text-center mb-8">
                 <h2 className="text-3xl font-bold text-gray-800 mb-2">{tutor?.tutorName}</h2>
-                <p className="text-lg text-gray-700"><strong>Subject Expertise:</strong> {tutor?.subject || 'N/A'}</p>
+                <p className="text-lg text-gray-700"><strong>Subject Expertise:</strong> {tutor?.subjectName || 'N/A'}</p>
             </div>
 
             {/* Short Pitch */}
