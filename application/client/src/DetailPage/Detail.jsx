@@ -9,7 +9,7 @@
  It includes options to message to the tutor and view their resume.
 
 **************************************************************/
-import React from 'react';
+import React, {useState} from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import emailIcon from '../icons/EmailIcon.svg';
 
@@ -17,6 +17,12 @@ const Detail = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const { tutor } = location.state || {};
+    const [isPdfModalOpen, setIsPdfModalOpen] = useState(false);
+
+    const togglePdfModal = () => {
+        setIsPdfModalOpen(!isPdfModalOpen);
+    };
+
 
     return (
         <div className="flex flex-col items-center bg-gray-50">
@@ -41,8 +47,8 @@ const Detail = () => {
                 </div>
             </div>
 
-            {/* Message and Resume Buttons */}
-            <div className="flex items-center justify-center space-x-4 mt-4">
+           {/* Message and Resume Buttons */}
+           <div className="flex items-center justify-center space-x-4 mt-4">
                 <button
                     type="button"
                     className="flex items-center justify-between px-4 py-2 text-base font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg"
@@ -52,16 +58,46 @@ const Detail = () => {
                 </button>
 
                 {tutor?.attached_file && (
-                    <a
-                        href={tutor.attached_file}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                    <button
+                        onClick={togglePdfModal}
                         className="px-4 py-2 text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-2 focus:ring-green-400"
                     >
                         View Resume
-                    </a>
+                    </button>
                 )}
             </div>
+
+             {/* PDF Modal */}
+             {isPdfModalOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
+                    <div className="w-full max-w-5xl p-8 bg-white rounded-lg shadow-lg">
+                        <div className="flex justify-between items-center mb-4">
+                            <h3 className="text-xl font-semibold text-center w-full">Resume</h3>
+                            <button
+                                onClick={togglePdfModal}
+                                className="text-gray-800 hover:text-gray-700"
+                            >
+                                Close
+                            </button>
+                        </div>
+
+                        {/* PDF Embed Viewer */}
+                        <div className="overflow-auto" style={{ maxHeight: '500px' }}>
+                            <iframe
+                                src={tutor.attached_file}
+                                width="100%"
+                                height="500px"
+                                className="rounded-md"
+                                title="Resume PDF"
+                                style={{ border: "none" }}
+                            ></iframe>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+
+
 
 
             {/* Tutor Information */}
@@ -113,6 +149,9 @@ const Detail = () => {
                     </svg>
                 </button>
             </div>
+
+        
+
 
         </div>
 
