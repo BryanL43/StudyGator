@@ -1,17 +1,42 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import BASE_URL from '../utils/config';
 
-// import TutorListingCard from '../components/TutorListingCard';
+import TutorListingCard from '../components/TutorListingCard';
 import Message from '../components/Message';
 import emailIcon from '../icons/EmailIcon.svg';
 import clipboardIcon from '../icons/ClipboardIcon.svg';
 import trashCanIcon from '../icons/TrashCanIcon.svg';
+import loadingIcon from '../icons/LoadingIcon.svg';
 
 const Dashboard = () => {
+    const [listings, setListings] = useState([]);
     const [deleteWarning, setDeleteWarning] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const toggleDeleteWarning = () => {
         setDeleteWarning(!deleteWarning);
     }
+
+    // Fetch tutor's listings on mount
+    const fetchListings = async() => {
+        setLoading(true);
+        try {
+            const response = await axios.get(`${BASE_URL}/api/fetchlistings`, {
+                headers: {
+                    'Authorization': localStorage.getItem("authToken")
+                }
+            });
+            setListings(response.data.results);
+            setLoading(false);
+        } catch (error) {
+            console.error("Error fetching recent listings:", error);
+        };
+    }
+
+    useEffect(() => {
+        fetchListings();
+    }, []);
 
     return (
         <div className="bg-gray-50">
@@ -51,41 +76,35 @@ const Dashboard = () => {
                             </div>
                         </div>
 
-                        {/* <section className="bg-gray-50 py-8 antialiased md:py-12 hidden">
+                        <section className="bg-gray-50 py-8 antialiased md:py-12">
                             <div className="mx-auto max-w-screen-xl px-4 2xl:px-0">
                                 <div className="mb-4 flex items-end justify-center space-y-4 sm:space-y-0 md:mb-8">
                                     <h2 className="mt-3 text-[28px] font-bold text-gray-900">Manage Tutor Listings</h2>
                                 </div>
 
-                                <div className="mb-4 grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 justify-center">
+                                {/* Loading icon */}
+                                {loading &&
+                                    <div className="flex items-center justify-center">
+                                        <img src={loadingIcon} className="w-20 h-20" alt="Loading..." />
+                                    </div>
+                                }
 
-                                    <TutorListingCard
-                                        name="Bryan Lee"
-                                        description="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec."
-                                        price="1,699"
-                                        imgSrc="/sillydogpfp.webp"
-                                        isDashboard="true"
-                                    />
-                                    <TutorListingCard
-                                        name="Bryan Lee"
-                                        description="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec."
-                                        price="1,699"
-                                        imgSrc="/sillydogpfp.webp"
-                                        isDashboard="true"
-                                    />
-                                    <TutorListingCard
-                                        name="Bryan Lee"
-                                        description="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec."
-                                        price="1,699"
-                                        imgSrc="/sillydogpfp.webp"
-                                        isDashboard="true"
-                                    />
+                                <div className={`${loading ? "hidden" : ""} mb-4 grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 justify-center`}>
+
+                                    {listings.map((listing) => (
+                                        <TutorListingCard
+                                            key={listing.id}
+                                            metadata={listing}
+                                            isDashboard={true}
+                                            refreshList={fetchListings}
+                                        />
+                                    ))}
 
                                 </div>
                             </div>
-                        </section> */}
+                        </section>
 
-                        <div className="flex flex-col mt-8">
+                        <div className="hidden flex flex-col mt-8">
                             <div className="py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
                                 <div className="min-h-[406px] inline-block min-w-full overflow-hidden align-middle border-b border-gray-200 shadow sm:rounded-lg">
                                     <table className="min-w-full">
@@ -154,31 +173,6 @@ const Dashboard = () => {
                     </div>
                 </main>
             </div >
-
-            <div id="popup-modal" tabindex="-1" class={`${deleteWarning ? "" : "hidden"} overflow-y-auto overflow-x-hidden fixed top-0 right-0 bottom-0 left-0 z-50 flex items-center justify-center`}>
-                <div className="absolute inset-0 transition-all duration-500 bg-black opacity-30" />
-                <div class="relative p-4 w-full max-w-md max-h-full">
-                    <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                        <button type="button" onClick={toggleDeleteWarning} class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="popup-modal">
-                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                            </svg>
-                            <span class="sr-only">Close modal</span>
-                        </button>
-                        <div class="p-4 md:p-5 text-center">
-                            <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                            </svg>
-                            <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to delete the following messages?</h3>
-                            <button onClick={toggleDeleteWarning} data-modal-hide="popup-modal" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
-                                Yes, I'm sure
-                            </button>
-                            <button onClick={toggleDeleteWarning} data-modal-hide="popup-modal" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">No, cancel</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
 
         </div >
     )

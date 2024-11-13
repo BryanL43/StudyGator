@@ -12,7 +12,7 @@
 **************************************************************/
 
 const jwt = require('jsonwebtoken');
-const { addListing, searchListing, getRecentListings, getListings } = require("../models/listingModel");
+const { addListing, searchListing, getRecentListings, getListings, deleteListing } = require("../models/listingModel");
 
 /**
  * Communicates with api endpoint to verify credential and create a tutor listing.
@@ -97,7 +97,7 @@ const getRecentListingsHandler = async(req, res) => {
     }
 }
 
-const getTutorListings = async(req, res) => {
+const getTutorListingsHandler = async(req, res) => {
     const token = req.headers.authorization;
     if (!token) {
         return res.status(400).json({ message: "Missing authentication token." });
@@ -121,12 +121,36 @@ const getTutorListings = async(req, res) => {
     }
 };
 
+const deleteListingHandler = async(req, res) => {
+    const token = req.headers.authorization;
+    const { listingId } = req.body;
 
-// Add delete listing here later
+    if (!token || !listingId) {
+        return res.status(400).json({ message: "Missing required fields." });
+    }
+
+    try {
+        // Verify the JWT token authenticity
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decodedToken.id;
+
+        await deleteListing(userId, listingId);
+        return res.status(200).json({ message: "Listing deleted successfully." });
+    } catch (error) {
+        // Specific error for JWT unauthenticity
+        if (error instanceof jwt.JsonWebTokenError) {
+            return res.status(401).json({ message: "Invalid token" });
+        }
+
+        // Internal server error
+        return res.status(500).json({ message: "Failed to delete tutor's listing" });
+    }
+}
 
 module.exports = {
     addListingHandler,
     searchListingHandler,
     getRecentListingsHandler,
-    getTutorListings
+    getTutorListingsHandler,
+    deleteListingHandler
 }

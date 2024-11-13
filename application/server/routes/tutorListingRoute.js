@@ -9,8 +9,8 @@
 **************************************************************/
 const express = require('express');
 const router = express.Router();
-const { getTutorListings } = require('../controller/listingController');
+const { getTutorListingsHandler } = require('../controller/listingController');
 
-router.get("/", getTutorListings);
+router.get("/", getTutorListingsHandler);
 
 module.exports = router;

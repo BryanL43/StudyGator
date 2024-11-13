@@ -178,9 +178,26 @@ const getListings = async(userId) => {
     }
 };
 
+const deleteListing = async(userId, listingId) => {
+    const connection = await connectDB();
+
+    try {
+        let query = `
+            DELETE FROM \`data-schema\`.TUTORLISTINGS
+            WHERE associated_user_id = ? AND id = ?
+        `;
+
+        // Execute the query to delete a unique listing associated with the specified tutor
+        await connection.execute(query, [userId, listingId]);
+    } catch (error) {
+        throw error;
+    }
+}
+
 module.exports = {
     addListing,
     searchListing,
     getRecentListings,
-    getListings
+    getListings,
+    deleteListing
 }
