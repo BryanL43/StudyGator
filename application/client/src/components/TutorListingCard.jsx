@@ -52,7 +52,7 @@ const TutorListingCard = React.memo(({ metadata, isDashboard, refreshList }) => 
                 message="Are you sure you want to delete the following listing?"
             />
             {/* Image render */}
-            <Link to="/">
+            <Link to={{pathname : "/detail", }} state={{tutor: metadata}}>
                 <div className="h-80 overflow-hidden"> {/* Fixed height for the image container */}
                     <img className="rounded-t-lg object-cover w-full h-full" src={metadata.image} alt={`${metadata.name} profile`} />
                 </div>
