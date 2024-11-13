@@ -82,11 +82,11 @@ const Detail = () => {
                         </div>
 
                         {/* PDF Embed Viewer */}
-                        <div className="overflow-auto" style={{ maxHeight: '500px' }}>
+                        <div className="overflow-auto" style={{ maxHeight: '800vh' }}>
                             <iframe
                                 src={tutor.attached_file}
                                 width="100%"
-                                height="500px"
+                                height="700px"
                                 className="rounded-md"
                                 title="Resume PDF"
                                 style={{ border: "none" }}
