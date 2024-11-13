@@ -70,7 +70,7 @@ const Detail = () => {
              {/* PDF Modal */}
              {isPdfModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
-                    <div className="w-full max-w-5xl p-8 bg-white rounded-lg shadow-lg">
+                    <div className="w-full max-w-4xl p-8 bg-white rounded-lg shadow-lg">
                         <div className="flex justify-between items-center mb-4">
                             <h3 className="text-xl font-semibold text-center w-full">Resume</h3>
                             <button
@@ -82,11 +82,11 @@ const Detail = () => {
                         </div>
 
                         {/* PDF Embed Viewer */}
-                        <div className="overflow-auto" style={{ maxHeight: '800vh' }}>
+                        <div className="overflow-auto" style={{ maxHeight: '80vh' }}>
                             <iframe
                                 src={tutor.attached_file}
                                 width="100%"
-                                height="700px"
+                                height="900px"
                                 className="rounded-md"
                                 title="Resume PDF"
                                 style={{ border: "none" }}
