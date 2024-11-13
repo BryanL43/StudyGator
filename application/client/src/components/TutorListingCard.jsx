@@ -1,5 +1,5 @@
 /**************************************************************
-* Author(s): Bryan Lee & Kenneth Wen
+* Author(s): Bryan Lee & Kenneth Wen & MIN YE THWAY KHAING
 * Last Updated: 11/2/2024
 *
 * File:: TutorListingCard.jsx
@@ -96,13 +96,15 @@ const TutorListingCard = React.memo(({ metadata, isDashboard, refreshList }) => 
                         <p className="text-2xl font-extrabold leading-tight text-gray-900">${metadata.pricing}</p>
                         <p className="text-gray-700 text-sm">/ hour</p>
                     </div>
+                    {/*More Detail button to link */}
+                    <Link to ={{ pathname: "/detail", }} state ={{tutor: metadata}} //pass the metadata as State
 
-                    <button type="button" className="inline-flex items-center rounded-lg px-4 py-1.5 text-sm font-medium text-gray-900 bg-[#ffdc70] hover:bg-[#fc3] focus:outline-none focus:ring-4 focus:ring-yellow-500">
+                     className="inline-flex items-center rounded-lg px-4 py-1.5 text-sm font-medium text-gray-900 bg-[#ffdc70] hover:bg-[#fc3] focus:outline-none focus:ring-4 focus:ring-yellow-500">
                         More details
                         <svg className="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10" >
                             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
                         </svg>
-                    </button>
+                    </Link>
                 </div>
             </div>
         </div>
@@ -110,3 +112,4 @@ const TutorListingCard = React.memo(({ metadata, isDashboard, refreshList }) => 
 });
 
 export default TutorListingCard;
+

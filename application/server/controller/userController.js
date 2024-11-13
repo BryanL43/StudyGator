@@ -52,7 +52,7 @@ const loginUserHandler = async(req, res) => {
         if (user) {
             const expirationTime = rememberMe ? "30d" : "2h";
             // Creates a JWT token (basically a more secure cookie)
-            const token = jwt.sign({ id: user.id, name: user.name }, process.env.JWT_SECRET, { expiresIn: expirationTime }); // 2 hrs sessions w/o remember me
+            const token = jwt.sign({ id: user.id, name: user.name, email: user.email }, process.env.JWT_SECRET, { expiresIn: expirationTime }); // 2 hrs sessions w/o remember me
             return res.status(200).json({ token });
         } else {
             return res.status(401).json({ message: "Invalid credentials" });
