@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../AuthContext';
 import loadingIcon from '../icons/LoadingIcon.svg';
+import { MdMail, MdPerson } from 'react-icons/md';
 
 import BASE_URL from '../utils/config';
 
@@ -159,9 +160,7 @@ const ApplyPage = () => {
                         <label htmlFor="name-icon" className="block mb-2 text-sm font-semibold text-gray-900">Name</label>
                         <div className="relative">
                             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none -ml-1">
-                                <svg className="w-6 h-6 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                                    <path fillRule="evenodd" d="M12 20a7.966 7.966 0 0 1-5.002-1.756l.002.001v-.683c0-1.794 1.492-3.25 3.333-3.25h3.334c1.84 0 3.333 1.456 3.333 3.25v.683A7.966 7.966 0 0 1 12 20ZM2 12C2 6.477 6.477 2 12 2s10 4.477 10 10c0 5.5-4.44 9.963-9.932 10h-.138C6.438 21.962 2 17.5 2 12Zm10-5c-1.84 0-3.333 1.455-3.333 3.25S10.159 13.5 12 13.5c1.84 0 3.333-1.455 3.333-3.25S13.841 7 12 7Z" clipRule="evenodd" />
-                                </svg>
+                                <MdPerson className="ml-0 mr-2 text-gray-500" size={25} />
                             </div>
                             <input
                                 type="text"
@@ -180,10 +179,7 @@ const ApplyPage = () => {
                         <label htmlFor="email-address-icon" className="block mb-2 text-sm font-semibold text-gray-900">SFSU Email</label>
                         <div className="relative">
                             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                <svg className="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
-                                    <path d="m10.036 8.278 9.258-7.79A1.979 1.979 0 0 0 18 0H2A1.987 1.987 0 0 0 .641.541l9.395 7.737Z" />
-                                    <path d="M11.241 9.817c-.36.275-.801.425-1.255.427-.428 0-.845-.138-1.187-.395L0 2.6V14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2.5l-8.759 7.317Z" />
-                                </svg>
+                                <MdMail className="-ml-1 mr-2 text-gray-500" size={22} />
                             </div>
                             <input
                                 type="text"
@@ -202,7 +198,7 @@ const ApplyPage = () => {
                         <label htmlFor="price" className="block mb-2 text-sm font-semibold text-gray-900">Price $/hr <label className="text-red-600">*</label></label>
                         <div className="relative">
                             <svg
-                                className="w-5 h-5 text-gray-600 absolute left-2 top-1/2 transform -translate-y-1/2 pointer-events-none"
+                                className="w-5 h-5 text-gray-500 absolute left-2 top-1/2 transform -translate-y-1/2 pointer-events-none"
                                 aria-hidden="true"
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"

@@ -10,7 +10,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { MdLock, MdPerson } from 'react-icons/md';
+import { MdLock, MdMail, MdPerson } from 'react-icons/md';
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { useAuth } from '../AuthContext';
 
@@ -68,7 +68,7 @@ const LoginPage = () => {
                             SFSU Email
                         </label>
                         <div className="mt-1 flex items-center border border-gray-300 rounded-md shadow-sm">
-                            <MdPerson className="ml-2 mr-2 text-gray-400" size={30} />
+                            <MdMail className="ml-2 mr-2 text-gray-400" size={30} />
                             <input
                                 type="text"
                                 placeholder="SFSU Email"
