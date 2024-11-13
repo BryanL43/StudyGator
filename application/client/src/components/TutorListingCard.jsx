@@ -92,6 +92,9 @@ const TutorListingCard = React.memo(({ metadata, isDashboard, refreshList }) => 
                         </button>
                     )}
                 </div>
+
+                {/* Subject Display */}
+                <p className = "text-gray-700 font-semibold" > {metadata.subject || 'No Subject Specified'}</p>
                 
                 {/* Description content */}
                 <p className="mb-3 font-normal text-gray-700">{metadata.sales_pitch}</p>
