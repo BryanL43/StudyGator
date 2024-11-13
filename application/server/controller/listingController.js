@@ -64,6 +64,8 @@ const searchListingHandler = async(req, res) => {
         const listings = await searchListing(selectedSubject, searchTerm);
         if (listings.length > 0) { // Has drop down and search text query
             return res.status(200).json({ count: listings.length, results: listings, random: false });
+        } else {
+            return res.status(200).json({ count: listings.length, results: listings });
         }
 
         // No result found and have no drop down but have search text query. Throw all selections with random flag.

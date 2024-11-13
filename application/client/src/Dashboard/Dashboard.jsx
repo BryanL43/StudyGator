@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../AuthContext';
 import axios from 'axios';
 import BASE_URL from '../utils/config';
 
@@ -9,10 +11,29 @@ import clipboardIcon from '../icons/ClipboardIcon.svg';
 import trashCanIcon from '../icons/TrashCanIcon.svg';
 import loadingIcon from '../icons/LoadingIcon.svg';
 
+import ErrorAlert from '../components/ErrorAlert';
+import SuccessAlert from '../components/SuccessAlert';
+
 const Dashboard = () => {
+    const { user } = useAuth();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const successAlert = location.state?.successAlert;
+
+    const [showingMsg, setShowingMsg] = useState(true);
+
     const [listings, setListings] = useState([]);
     const [deleteWarning, setDeleteWarning] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [serverError, setServerError] = useState(false);
+
+    useEffect(() => {
+        if (!user) {
+            navigate("/login"); // Redirect to log in if user is in unregistered mode
+        }
+    })
+
+    const resetServerError = () => {}; // empty pass-by
 
     const toggleDeleteWarning = () => {
         setDeleteWarning(!deleteWarning);
@@ -29,8 +50,11 @@ const Dashboard = () => {
             });
             setListings(response.data.results);
             setLoading(false);
+            setServerError(false);
         } catch (error) {
             console.error("Error fetching recent listings:", error);
+            setLoading(false);
+            setServerError(true);
         };
     }
 
@@ -39,7 +63,16 @@ const Dashboard = () => {
     }, []);
 
     return (
-        <div className="bg-gray-50">
+        <div className="bg-gray-50 sm:min-h-[70vh]">
+            {/* Success alert */}
+            {successAlert && (
+                <SuccessAlert message="Your application was submitted successfully!" />
+            )}
+
+            {/* Server error warning */}
+            {serverError &&
+                <ErrorAlert message="Failed to load your tutor listings. Internal server error!" resetError={resetServerError} />
+            }
 
             <div>
                 <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50">
@@ -49,7 +82,7 @@ const Dashboard = () => {
                         <div className="mt-4">
                             <div className="flex flex-wrap -mx-6">
                                 <div className="w-full px-6 sm:w-1/2 xl:w-1/3 cursor-pointer">
-                                    <div className="flex items-center px-5 py-6 bg-white rounded-md shadow-sm">
+                                    <div className="flex items-center px-5 py-6 bg-white rounded-md shadow-sm" onClick={() => { if (!showingMsg) setShowingMsg(true); }}>
                                         <div className="p-3 bg-indigo-600 bg-opacity-75 rounded-full">
                                             <img src={emailIcon} className="w-10 h-10 filter invert brightness-200" alt="" />
                                         </div>
@@ -62,7 +95,7 @@ const Dashboard = () => {
                                 </div>
 
                                 <div className="w-full px-6 mt-6 sm:w-1/2 xl:w-1/3 sm:mt-0 cursor-pointer">
-                                    <div className="flex items-center px-5 py-6 bg-white rounded-md shadow-sm">
+                                    <div className="flex items-center px-5 py-6 bg-white rounded-md shadow-sm" onClick={() => { if (showingMsg) setShowingMsg(false); }} >
                                         <div className="p-3 bg-orange-600 bg-opacity-75 rounded-full">
                                             <img src={clipboardIcon} className="w-10 h-10 filter invert brightness-200" alt="" />
                                         </div>
@@ -76,7 +109,7 @@ const Dashboard = () => {
                             </div>
                         </div>
 
-                        <section className="bg-gray-50 py-8 antialiased md:py-12">
+                        <section className={`${showingMsg ? "hidden" : ""} bg-gray-50 py-8 antialiased md:py-12`}>
                             <div className="mx-auto max-w-screen-xl px-4 2xl:px-0">
                                 <div className="mb-4 flex items-end justify-center space-y-4 sm:space-y-0 md:mb-8">
                                     <h2 className="mt-3 text-[28px] font-bold text-gray-900">Manage Tutor Listings</h2>
@@ -89,22 +122,31 @@ const Dashboard = () => {
                                     </div>
                                 }
 
-                                <div className={`${loading ? "hidden" : ""} mb-4 grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 justify-center`}>
+                                {/* Server error icon */}
+                                {serverError &&
+                                    <div className="flex items-center justify-center mb-16">
+                                        <img src="/500Icon.png" className="w-20 h-20" alt="Internal server error" />
+                                    </div>
+                                }
 
-                                    {listings.map((listing) => (
-                                        <TutorListingCard
-                                            key={listing.id}
-                                            metadata={listing}
-                                            isDashboard={true}
-                                            refreshList={fetchListings}
-                                        />
-                                    ))}
+                                {!loading && listings && listings.length > 0 ? (
+                                    <div className={`${serverError ? "hidden" : ""} mb-4 grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 justify-center justify-items-center`}>
+                                        {listings.map((listing) => (
+                                            <TutorListingCard
+                                                key={listing.id}
+                                                metadata={listing}
+                                                isDashboard={true}
+                                            />
+                                        ))}
+                                    </div>
+                                ) : !loading && (!listings || listings.length === 0) && !serverError ? (
+                                    <h2 className="text-m font-semibold text-center">You have no tutor listing yet. Apply now to become a tutor!</h2>
+                                ) : null}
 
-                                </div>
                             </div>
                         </section>
 
-                        <div className="hidden flex flex-col mt-8">
+                        <div className={`${showingMsg ? "" : "hidden"} flex flex-col mt-8`}>
                             <div className="py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
                                 <div className="min-h-[406px] inline-block min-w-full overflow-hidden align-middle border-b border-gray-200 shadow sm:rounded-lg">
                                     <table className="min-w-full">

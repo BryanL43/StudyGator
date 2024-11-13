@@ -15,6 +15,7 @@ import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { useAuth } from '../AuthContext';
 
 import loadingIcon from '../icons/LoadingIcon.svg';
+import ErrorAlert from '../components/ErrorAlert';
 
 import axios from 'axios';
 import BASE_URL from "../utils/config";
@@ -29,13 +30,18 @@ const SignupPage = () => {
     const [pwdVis, setPwdVis] = useState(false);
     const [passwordStrength, setPasswordStrength] = useState('no password');
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
+    const [errors, setErrors] = useState([]);
+    const [serverError, setServerError] = useState(false);
 
     useEffect(() => {
         if (user) {
             navigate("/search"); // Redirect to search all later (browsing pg)
         }
     })
+
+    const resetServerError = () => {
+        setServerError(false);
+    };
 
     const handlePasswordChange = (event) => {
         const newPassword = event.target.value;
@@ -69,41 +75,52 @@ const SignupPage = () => {
     };
 
     const validateRegistrationForm = () => {
+        let formErrors = [];
+    
+        // Check if all fields are filled
         if (!name || !email || !password) {
-            setError("Please fill in all fields.");
-            return false;
+            formErrors.push("Please fill in all fields.");
         }
-
+    
+        // Check if email matches the required format
         const emailRegex = /^[a-zA-Z0-9._%+-]+@sfsu\.edu$/;
         if (!emailRegex.test(email)) {
-            setError("Email must end with @sfsu.edu");
-            return false;
+            formErrors.push("Email must end with @sfsu.edu");
         }
-
+    
+        // Check if password contains spaces
         if (password.includes(" ")) {
-            setError("Password cannot contain spaces.");
-            return false;
+            formErrors.push("Password cannot contain spaces.");
         }
-
+    
+        // Password specific checks
         const hasUpperCase = /[A-Z]/.test(password);
         const hasLowerCase = /[a-z]/.test(password);
         const hasNumber = /\d/.test(password);
         const hasSpecialChar = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password);
         const hasLength = password.length >= 8;
-
+        
+        // Ensure strong password
         if (!(hasUpperCase && hasLowerCase && hasNumber && hasSpecialChar && hasLength)) {
-            setError("Passwords must be at least 8 characters in length and contain 1 upper case letter, 1 lower case letter, 1 number, and 1 special character.");
-            return false;
+            formErrors.push("Password must be at least 8 characters in length (and up to 255 characters).");
+            formErrors.push("Password must contain at least one lowercase & uppercase letter.");
+            formErrors.push("Password must contain at least one number.");
+            formErrors.push("Password must contain at least one special character, e.g., ! @ # ?");
         }
-
-        return true;
+    
+        // Update the state with the error messages
+        setErrors(formErrors);
+    
+        // If no errors, return true
+        return formErrors.length === 0;
     };
+    
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (validateRegistrationForm()) {
             setLoading(true);
-            setError('');
+            setErrors([]);
 
             try {
                 const requestBody = {
@@ -113,16 +130,24 @@ const SignupPage = () => {
                 }
                 await axios.put(`${BASE_URL}/api/register`, requestBody);
                 setLoading(false);
+                setServerError(false);
                 setPasswordStrength("no password");
                 navigate("/login");
             } catch (error) {
-                setError(error.response ? error.response.data.message : "Fatal: network/server error");
+                console.error("Error registering account:", error);
+                setLoading(false);
+                setServerError(true);
             }
         }
     };
 
     return (
         <div className="top-0 flex items-center justify-center sm:min-h-screen bg-gray-100">
+            {/* Server error warning */}
+            {serverError &&
+                <ErrorAlert message="Failed to register. Fatal: network/server error!" resetError={resetServerError} />
+            }
+
             <img src="/SFSU-img-4.png" className="absolute w-full h-full object-cover z-10 filter brightness-[0.8] sm:block hidden" alt="Bird eye view of SFSU" />
             <div className="w-full sm:max-w-md bg-white p-8 sm:rounded-lg sm:shadow-md z-30">
                 <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Sign Up</h2>
@@ -176,7 +201,7 @@ const SignupPage = () => {
                                 maxLength={255}
                                 required
                             />
-                            <button id="passwordVis" type="button" onClick={() => {setPwdVis(prevVisible => !prevVisible)}}>
+                            <button id="passwordVis" type="button" onClick={() => { setPwdVis(prevVisible => !prevVisible) }}>
                                 {pwdVis ? (
                                     <FaRegEyeSlash className="ml-2 mr-2 text-gray-400 hover:text-gray-500" size={25} />
                                 ) : (
@@ -193,16 +218,31 @@ const SignupPage = () => {
                         {passwordStrength && (
                             <p className="h-2 ml-[10px] text-[14px] mb-3 text-gray-900">
                                 {passwordStrength === "weak password" ? "Weak password" :
-                                passwordStrength === "medium password" ? "Medium password" :
-                                passwordStrength === "strong password" ? "Strong password" : ""}
+                                    passwordStrength === "medium password" ? "Medium password" :
+                                        passwordStrength === "strong password" ? "Strong password" : ""}
                             </p>
                         )}
                     </div>
 
-                    {error && <p className='text-red-500 text-sm'>{error}</p>}
+                    {errors && errors.length > 0 && (
+                        <div className="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                            <svg className="flex-shrink-0 inline w-4 h-4 me-3 mt-[2px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                            </svg>
+                            <span className="sr-only">Danger</span>
+                            <div>
+                                <span className="font-medium">Ensure that these requirements are met:</span>
+                                <ul className="mt-1.5 list-disc list-inside">
+                                    {errors.map((error, index) => (
+                                        <li key={index}>{error}</li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+                    )}
 
                     {/* Loading icon */}
-                    {loading && !error &&
+                    {loading &&
                         <div className="flex items-center justify-center">
                             <img src={loadingIcon} className="w-20 h-20" alt="Loading..." />
                         </div>

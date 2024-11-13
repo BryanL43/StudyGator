@@ -28,7 +28,7 @@ import Detail from './DetailPage/Detail.jsx'
 
 function App() {
 
-    document.title = "CSC648";
+    document.title = "StudyGator";
 
     return (
         <div>

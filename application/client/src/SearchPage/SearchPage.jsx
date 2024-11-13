@@ -15,6 +15,7 @@ import axios from 'axios';
 import BASE_URL from '../utils/config';
 
 import loadingIcon from '../icons/LoadingIcon.svg';
+import ErrorAlert from '../components/ErrorAlert';
 
 const ListingPage = () => {
     const location = useLocation();
@@ -23,6 +24,7 @@ const ListingPage = () => {
     const [listings, setListings] = useState([]);
     const [randomListing, setRandomListing] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [serverError, setServerError] = useState(false);
 
     // State variables for filter drop down
     const [minPrice, setMinPrice] = useState(0);
@@ -34,6 +36,10 @@ const ListingPage = () => {
     const selectedSubject = queryParams.get('selectedSubject') || '';
     const searchTerm = queryParams.get('searchTerm') || '';
 
+    const resetServerError = () => {
+        setServerError(false);
+    };
+
     // Fetch listing search results
     const fetchListings = useCallback(async() => {
         try {
@@ -43,7 +49,7 @@ const ListingPage = () => {
                     searchTerm: searchTerm
                 }
             });
-            
+
             if (!response.data.random) {
                 setRandomListing(false);
                 setListings(response.data.results);
@@ -60,8 +66,11 @@ const ListingPage = () => {
             }
             window.scrollTo({ top: 0 });
             setLoading(false);
+            setServerError(false);
         } catch (error) {
             console.error("Error fetching listings:", error);
+            setLoading(false);
+            setServerError(true);
         }
     }, [selectedSubject, searchTerm]);
 
@@ -78,97 +87,113 @@ const ListingPage = () => {
                 backgroundSize: "cover",
             }}
         >
-        <div className="flex flex-col items-center p-8 bg-gray-50 min-h-screen">
-            <h1 className="text-2xl font-bold mb-6">Browse Tutor Listings</h1>
 
-            {/* Container for search result text and filter button */}
-            <div className="flex items-center justify-between w-full max-w-5xl mb-6 px-4 sm:px-6 lg:px-8">
-                {/* Render listing count */}
-                {!loading && (
-                    <>
-                        {listings && listings.length > 0 && !randomListing ? (
-                            <h2 className="text-m font-semibold">Search Results: {listings.length} items found</h2>
-                        ) : listings && listings.length > 0 && randomListing ? (
-                            <h2 className="text-m font-semibold">
-                                We couldn't find your desired tutor listing, but here are some tutors that might interest you.
-                                <br />
-                                Please refine your search or select a subject for a more precise result.
-                            </h2>
-                        ) : (
-                            <h2 className="text-m font-semibold">No listings currently exist.</h2>
-                        )}
-                    </>
-                )}
+            {/* Server error warning */}
+            {serverError &&
+                <ErrorAlert message="Failed to load tutor listings. Internal server error!" resetError={resetServerError} />
+            }
 
-                {/* Price Filter Button */}
-                <div className="relative overflow-visible">
-                    <button
-                        id="priceDropdown"
-                        onClick={() => setIsPriceDropdownOpen(!isPriceDropdownOpen)}
-                        className="border border-gray-300 text-gray-800 bg-white hover:bg-purple-100 focus:ring-2 focus:ring-purple-400 rounded-md px-3 py-1 flex items-center"
-                    >
-                        Price
-                        <svg className="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
-                        </svg>
-                    </button>
-                    {isPriceDropdownOpen && (
-                        <div className="absolute z-10 border bg-white divide-y divide-gray-200 rounded-lg shadow-md w-48 mt-1 p-4 right-0">
-                            <label className="text-sm font-semibold mb-2">Price Range:</label>
-                            <div className="flex flex-col py-3">
-                                <input
-                                    type="range"
-                                    min="0"
-                                    max="100"
-                                    value={minPrice}
-                                    onChange={(e) => setMinPrice(Math.min(Number(e.target.value), maxPrice))}
-                                    className="slider"
-                                />
-                                <input
-                                    type="range"
-                                    min="0"
-                                    max="100"
-                                    value={maxPrice}
-                                    onChange={(e) => setMaxPrice(Math.max(Number(e.target.value), minPrice))}
-                                    className="slider"
-                                />
-                                <div className="flex justify-between text-sm text-gray-700 mt-2">
-                                    <span>${minPrice}</span>
-                                    <span>to</span>
-                                    <span>${maxPrice}</span>
+            <div className="flex flex-col items-center p-8 bg-gray-50 min-h-screen">
+                <h1 className="text-2xl font-bold mb-6">Browse Tutor Listings</h1>
+
+                {/* Container for search result text and filter button */}
+                <div className="flex items-center justify-between w-full max-w-5xl mb-6 px-4 sm:px-6 lg:px-8">
+                    {/* Render listing count */}
+                    {loading ? (
+                        <h2 className="text-m font-semibold">Loading...</h2>
+                    ) : (
+                        <>
+                            {listings && listings.length > 0 && !randomListing ? (
+                                <h2 className="text-m font-semibold">Search Results: {listings.length} items found</h2>
+                            ) : listings && listings.length > 0 && randomListing ? (
+                                <h2 className="text-m font-semibold">
+                                    We couldn't find your desired tutor listing, but here are some tutors that might interest you.
+                                    <br />
+                                    Please refine your search or select a subject for a more precise result.
+                                </h2>
+                            ) : listings && listings.length === 0 ? (
+                                <h2 className="text-m font-semibold pr-4">No tutor listing available.</h2>
+                            ) : (
+                                <h2 className="text-m font-semibold pr-4">Failed to load tutor listings.</h2>
+                            )}
+                        </>
+                    )}
+
+                    {/* Price Filter Button */}
+                    <div className="relative overflow-visible">
+                        <button
+                            id="priceDropdown"
+                            onClick={() => setIsPriceDropdownOpen(!isPriceDropdownOpen)}
+                            className="border border-gray-300 text-gray-800 bg-white hover:bg-purple-100 focus:ring-2 focus:ring-purple-400 rounded-md px-3 py-1 flex items-center"
+                        >
+                            Price
+                            <svg className="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
+                            </svg>
+                        </button>
+                        {isPriceDropdownOpen && (
+                            <div className="absolute z-10 border bg-white divide-y divide-gray-200 rounded-lg shadow-md w-48 mt-1 p-4 right-0">
+                                <label className="text-sm font-semibold mb-2">Price Range:</label>
+                                <div className="flex flex-col py-3">
+                                    <input
+                                        type="range"
+                                        min="0"
+                                        max="100"
+                                        value={minPrice}
+                                        onChange={(e) => setMinPrice(Math.min(Number(e.target.value), maxPrice))}
+                                        className="slider"
+                                    />
+                                    <input
+                                        type="range"
+                                        min="0"
+                                        max="100"
+                                        value={maxPrice}
+                                        onChange={(e) => setMaxPrice(Math.max(Number(e.target.value), minPrice))}
+                                        className="slider"
+                                    />
+                                    <div className="flex justify-between text-sm text-gray-700 mt-2">
+                                        <span>${minPrice}</span>
+                                        <span>to</span>
+                                        <span>${maxPrice}</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    )}
+                        )}
+                    </div>
                 </div>
-            </div>
 
-            {/* Loading icon */}
-            {loading && (
-                <div className="flex items-center justify-center mb-[50vh]">
-                    <img src={loadingIcon} className="w-20 h-20" alt="Loading..." />
-                </div>
-            )}
-
-            {/* Grid layout with 3 columns for the listing cards */}
-            <div className="grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 w-full max-w-5xl justify-center">
-                
-                {/* Render listings from search results */}
-                {listings ? (
-                    listings.map((listing) => (
-                        <TutorListingCard
-                            key={listing.id}
-                            metadata={listing}
-                            isDashboard={false}
-                        />
-                    ))
-                ) : (
-                    <p className="text-center">No listings available.</p>
+                {/* Loading icon */}
+                {loading && (
+                    <div className="flex items-center justify-center mb-[50vh]">
+                        <img src={loadingIcon} className="w-20 h-20" alt="Loading..." />
+                    </div>
                 )}
 
+                {/* Server error icon */}
+                {serverError &&
+                    <div className="flex items-center justify-center mb-16">
+                        <img src="/500Icon.png" className="w-20 h-20" alt="Internal server error" />
+                    </div>
+                }
+
+                {/* Grid layout with 3 columns for the listing cards */}
+                <div className={`${loading || serverError || listings.length <= 0 ? "hidden" : ""} grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 w-full max-w-5xl justify-center`}>
+                    
+                    {/* Render listings from search results */}
+                    {listings.length > 0 && (
+                        listings.map((listing) => (
+                            <TutorListingCard
+                                key={listing.id}
+                                metadata={listing}
+                                isDashboard={false}
+                            />
+                        ))
+                    )}
+
+                </div>
+                <p className={`${listings && listings.length === 0 && !loading && !serverError ? "" : "hidden"} text-center`}>No listings available.</p>
             </div>
         </div>
-    </div>
     );
 };
 

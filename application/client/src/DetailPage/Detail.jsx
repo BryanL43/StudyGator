@@ -9,7 +9,7 @@
  It includes options to message to the tutor and view their resume.
 
 **************************************************************/
-import React, {useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import emailIcon from '../icons/EmailIcon.svg';
 
@@ -23,6 +23,9 @@ const Detail = () => {
         setIsPdfModalOpen(!isPdfModalOpen);
     };
 
+    useEffect(() => {
+        window.scrollTo({ top: 0 }); // Load screen at the top
+    }, []);
 
     return (
         <div className="flex flex-col items-center bg-gray-50">

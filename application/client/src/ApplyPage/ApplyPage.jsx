@@ -104,8 +104,7 @@ const ApplyPage = () => {
                 }
             });
             setLoading(false);
-            navigate("/dashboard");
-            alert("Application submitted successfully!");
+            navigate("/dashboard", { state: { successAlert: true } });
         } catch (error) {
             setLoading(false);
             console.error("Error uploading listing:", error);

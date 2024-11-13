@@ -17,6 +17,7 @@ import imageIcon from '../icons/ImageIcon.svg';
 import loadingIcon from '../icons/LoadingIcon.svg';
 
 import TutorListingCard from '../components/TutorListingCard';
+import ErrorAlert from '../components/ErrorAlert';
 
 // Timer logic for handling manual interruption to automatic image rotation
 const useTimer = (callback, delay) => {
@@ -47,8 +48,13 @@ const Home = () => {
     const [overlayState, setOverlayState] = useState(false);
     const [isLocked, setIsLocked] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [serverError, setServerError] = useState(false);
 
     const [listings, setListings] = useState([]);
+
+    const resetServerError = () => {
+        setServerError(false);
+    };
 
     // Function to switch to the next slide
     const nextSlide = () => {
@@ -99,8 +105,11 @@ const Home = () => {
                 const response = await axios.get(`${BASE_URL}/api/recent`);
                 setListings(response.data.results);
                 setLoading(false);
+                setServerError(false);
             } catch (error) {
                 console.error("Error fetching recent listings:", error);
+                setLoading(false);
+                setServerError(true);
             };
         }
 
@@ -109,13 +118,18 @@ const Home = () => {
 
     return (
         <div>
+            {/* Server error warning */}
+            {serverError &&
+                <ErrorAlert message="Failed to load recent listings. Internal server error!" resetError={resetServerError} />
+            }
+
             {/* Image carousel */}
             <div id="default-carousel" className="relative w-full" data-carousel="slide">
                 <div className="relative h-[70vh] overflow-hidden">
                     <div className={`duration-700 ease-in-out z-10 ${currentSlide === 0 ? 'block' : 'hidden'}`} data-carousel-item>
                         <img
                             src="/SFSU-img-1.jpg"
-                            className="absolute w-full h-full object-cover -translate-x-1/2 sm:-translate-y-1/2 sm:top-1/2 left-1/2"
+                            className="absolute w-full h-full object-cover -translate-x-1/2 sm:-translate-y-1/2 sm:top-1/2 left-1/2 filter brightness-[0.8]"
                             alt="SFSU library"
                         />
                     </div>
@@ -182,22 +196,33 @@ const Home = () => {
                         </div>
                     }
 
+                    {/* Server error icon */}
+                    {serverError &&
+                        <div className="flex items-center justify-center mb-16">
+                            <img src="/500Icon.png" className="w-20 h-20" alt="Internal server error" />
+                        </div>
+                    }
+
                     {/* Grid layout with 3 columns for the listing cards*/}
-                    <div className={`${loading ? "hidden" : ""} mb-4 grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 justify-center justify-items-center`}>
-
-                        {listings.map((listing) => (
-                            <TutorListingCard
-                                key={listing.id}
-                                metadata={listing}
-                                isDashboard={false}
-                            />
-                        ))}
-
-                    </div>
-
-                    <div className="w-full text-center">
-                        <button type="button" onClick={() => { navigate("/search?selectedSubject=&searchTerm="); window.scrollTo({ top: 0 }); }} className="rounded-lg border border-gray-200 bg-white w-[130px] px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100">Browse more</button>
-                    </div>
+                    {!loading && listings && listings.length > 0 ? (
+                        <div className={`${serverError ? "hidden" : ""} mb-4 grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 justify-center justify-items-center`}>
+                            {listings.map((listing) => (
+                                <TutorListingCard
+                                    key={listing.id}
+                                    metadata={listing}
+                                    isDashboard={false}
+                                />
+                            ))}
+                        </div>
+                    ) : !loading && (!listings || listings.length === 0) && !serverError ? (
+                        <h2 className="text-m font-semibold text-center">No listings currently exist.</h2>
+                    ) : null}
+                    
+                    {listings && listings.length > 0 && (
+                        <div className="w-full text-center">
+                            <button type="button" onClick={() => { navigate("/search?selectedSubject=&searchTerm="); window.scrollTo({ top: 0 }); }} className="rounded-lg border border-gray-200 bg-white w-[130px] px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100">Browse more</button>
+                        </div>
+                    )}
                 </div>
             </section>
 

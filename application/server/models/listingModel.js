@@ -84,6 +84,9 @@ const searchListing = async(selectedSubject, searchTerm) => {
 
         // Execute database search with the concatenated queries & params
         const [results] = await connection.execute(query, params);
+        if (results.length <= 0) {
+            return [];
+        }
         
         // Convert the buffered blob images to renderable jpeg, pdf to renderable url, & mp4 to renderable url
         const listings = results.map(item => {

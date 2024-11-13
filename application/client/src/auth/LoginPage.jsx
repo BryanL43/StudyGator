@@ -10,11 +10,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { MdLock, MdMail, MdPerson } from 'react-icons/md';
+import { MdLock, MdMail } from 'react-icons/md';
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { useAuth } from '../AuthContext';
 
 import loadingIcon from '../icons/LoadingIcon.svg';
+import ErrorAlert from '../components/ErrorAlert';
 
 import axios from 'axios';
 import BASE_URL from "../utils/config";
@@ -29,12 +30,17 @@ const LoginPage = () => {
     const [rememberMe, setRememberMe] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [serverError, setServerError] = useState(false);
 
     useEffect(() => {
         if (user) {
             navigate("/search"); // Redirect to search all later (browsing pg)
         }
     })
+
+    const resetServerError = () => {
+        setServerError(false);
+    };
 
     const handleSubmit = async(e) => {
         e.preventDefault();
@@ -49,14 +55,25 @@ const LoginPage = () => {
             
             login(response.data.token, rememberMe);
             setLoading(false);
+            setServerError(false);
             navigate("/");
         } catch (error) {
-            setError(error.response ? error.response.data.message : "Fatal: network/server error");
+            if (error.response && error.response.status === 401) {
+                setError(error.response ? error.response.data.message : "Fatal: network/server error");
+            } else {
+                setLoading(false);
+                setServerError(true);
+            }
         }
     };
 
     return (
         <div className="top-0 flex items-center justify-center sm:min-h-screen bg-gray-100">
+            {/* Server error warning */}
+            {serverError &&
+                <ErrorAlert message="Failed to register. Fatal: network/server error!" resetError={resetServerError} />
+            }
+
             <img src="/SFSU-img-4.png" className="absolute w-full h-full object-cover z-10 filter brightness-[0.8] sm:block hidden" alt="Bird eye view of SFSU" />
             <div className="w-full sm:max-w-md bg-white p-8 sm:rounded-lg sm:shadow-md z-30">
 

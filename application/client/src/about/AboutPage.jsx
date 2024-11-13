@@ -26,7 +26,7 @@ const usersData = [
         role: "Lead Back-end Developer",
         imgUrl: "/phto.jpg",
         linkUrl: "/Nishi",
-        description: "Nishi is a graduate student at SFSU majoring in Computer Science. She is a software developer that develops scalable cloud applications with the help of Artifical intelligence. When she is not coding ,She is either enjoying various cusines or travelling around."
+        description: "Nishi is a graduate student at SFSU majoring in Computer Science. She is a software developer that develops scalable cloud applications with the help of Artificial intelligence. When she is not coding, she is either enjoying various cuisines or traveling."
     },
     {
         name: "Kenneth Wen",

@@ -137,7 +137,7 @@ const Navbar = () => {
                             pattern="[A-Za-z\s]*"
                             maxLength={40}
                             className="h-10 px-3 w-full block p-2 text-sm border-t border-b border-gray-300 bg-gray-50 focus:outline-none"
-                            placeholder="Search For Tutors"
+                            placeholder="Search tutors, subjects, or keywords..."
                         />
 
                         {/* Search Button with SVG Icon */}
@@ -235,7 +235,7 @@ const Navbar = () => {
                             pattern="[A-Za-z\s]*"
                             maxLength={40}
                             className="h-10 px-3 w-full text-sm border-t border-b border-gray-300 bg-gray-50 focus:outline-none"
-                            placeholder="Search For Tutors"
+                            placeholder="Search tutors, subjects, or keywords..."
                         />
 
                         {/* Search Button with SVG Icon */}
@@ -251,7 +251,7 @@ const Navbar = () => {
                     <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-transparent">
                         <li className={`${user ? '' : 'md:flex items-center justify-center'}`}>
                             <Link to="/search?selectedSubject=&searchTerm=" className="block py-2 px-3 text-black md:text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#FFDC70] md:p-0">
-                                Explore
+                                Find a Tutor
                             </Link>
                         </li>
                         <li className={`${user ? '' : 'md:flex items-center justify-center'}`}>
@@ -261,7 +261,7 @@ const Navbar = () => {
                         </li>
                         <li className={`${user ? '' : 'md:flex items-center justify-center'}`}>
                             <Link to="/about" className="block py-2 px-3 text-black md:text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#FFDC70] md:p-0">
-                                About
+                                About Us
                             </Link>
                         </li>
 
