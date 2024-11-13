@@ -60,9 +60,15 @@ const TutorListingCard = React.memo(({ metadata, isDashboard, refreshList }) => 
 
             {/* Main card content */}
             <div className="p-5 pt-2">
-                {/* Name and Message/Delete button container to prevent overflow and wrapping */}
+                {/* Name and Message/Delete button container */}
                 <div className="flex items-center space-x-4 mt-4 mb-2 justify-between">
-                    <Link to="/" className="flex-1 max-w-[75%]">
+                    <Link 
+                        to={{
+                            pathname: "/detail",
+                        }}
+                        state={{ tutor: metadata }} 
+                        className="flex-1 max-w-[75%]"
+                    >
                         <h5 className="text-2xl font-bold tracking-tight text-gray-900 overflow-hidden truncate">
                             {metadata.tutorName}
                         </h5>
