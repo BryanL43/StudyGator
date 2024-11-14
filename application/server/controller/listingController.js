@@ -149,10 +149,50 @@ const deleteListingHandler = async(req, res) => {
     }
 }
 
+const sendMessageHandler = async (req, res) => {
+    const token = req.headers.authorization;
+    
+    // Check if token is provided
+    if (!token) {
+        return res.status(400).json({ message: "Missing authentication token." });
+    }
+
+    try {
+        // Verify the JWT token
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+        const senderId = decodedToken.id; // Extract sender's ID from the token
+
+        // Extract data from the request body
+        const { tutorId, listingTitle, content } = req.body;
+
+        // Validate the request body
+        if (!tutorId || !listingTitle || !content) {
+            return res.status(400).json({ message: 'tutorId, listingTitle, and content are required.' });
+        }
+
+        // Insert message into the database
+        const result = await createMessage(senderId, tutorId, listingTitle, content);
+
+        // Send success response
+        return res.status(201).json({ message: 'Message sent successfully', data: result });
+    } catch (error) {
+        // Handle JWT-specific error
+        if (error instanceof jwt.JsonWebTokenError) {
+            return res.status(401).json({ message: "Invalid token" });
+        }
+
+        // Handle general server errors
+        console.error('Error sending message:', error);
+        return res.status(500).json({ message: "Failed to send message" });
+    }
+};
+
 module.exports = {
     addListingHandler,
     searchListingHandler,
     getRecentListingsHandler,
     getTutorListingsHandler,
-    deleteListingHandler
+    deleteListingHandler,
+    sendMessageHandler
+    
 }
