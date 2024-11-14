@@ -76,16 +76,6 @@ const Message = ({ name, email, subject, content, date }) => {
                         <div className="mb-4 p-4 bg-gray-100 rounded-lg" style={{ minHeight: '180px', maxHeight: '300px', overflowY: 'auto' }}>
                             <p className="text-gray-800">{content}</p>
                         </div>
-                        
-                         
-                        <div className="flex justify-end mt-4 pb-1">
-                            <button
-                                className="px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700"
-                                onClick={() => console.log('Reply function placeholder')}
-                            >
-                                Send
-                            </button>
-                        </div> 
                     </div>
                 </div>
             )}
