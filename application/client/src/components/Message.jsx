@@ -27,6 +27,7 @@ const Message = ({ name, email, subject, content, date }) => {
                             type="checkbox"
                             id="TosCheckBox"
                             className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                            onClick={(e) => e.stopPropagation()}
                         />
                         <div className="flex-shrink-0 w-10 h-10 ml-4">
                             <img className="w-10 h-10 rounded-full" src="/sillydogpfp.webp" alt="" />
