@@ -60,7 +60,7 @@ const TutorListingCard = React.memo(({ metadata, isDashboard, refreshList }) => 
 
             {/* Main card content */}
             <div className="p-5 pt-2">
-                {/* Name and Message/Delete button container */}
+                {/* Name and Pricing container */}
                 <div className="flex items-center space-x-4 mt-4 mb-2 justify-between">
                     <Link 
                         to={{
@@ -74,14 +74,32 @@ const TutorListingCard = React.memo(({ metadata, isDashboard, refreshList }) => 
                         </h5>
                     </Link>
 
-                    {/* Message/Delete button */}
+                    {/* Pricing Section */}
+                    <div className="flex items-baseline gap-1">
+                        <p className="text-2xl font-extrabold leading-tight text-gray-900">${metadata.pricing}</p>
+                        <p className="text-gray-700 text-sm">/ hour</p>
+                    </div>
+                </div>
+
+                {/* Subject Display */}
+                <p className="mb-3 inline-block px-3 py-1 bg-gray-200 rounded-full text-gray-800 font-medium">
+                    {metadata.subjectName || 'No Subject Specified'}
+                </p>
+                
+                {/* Description content */}
+                <p className="mb-3 font-normal text-gray-700">{metadata.sales_pitch}</p>
+
+                {/* Bottom bar with Message & More detail button */}
+                <div className="mt-4 flex items-center justify-between gap-4">
+                    {/* Message Button */}
                     {isDashboard === false ? (
                         <button
-                            type="button"
-                            className="px-3 py-3 min-w-[64px] min-h-[40px] text-base font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg"
-                        >
-                            <img src={emailIcon} className="w-10 h-4 filter invert brightness-200" alt="message tutor" />
-                        </button>
+                        type="button"
+                        className="flex items-center justify-between px-4 py-2 text-base font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg"
+                    >
+                        Message
+                        <img src={emailIcon} alt="Message Icon" className="w-5 h-5 ml-2 invert brightness-200" />
+                    </button>
                     ) : (
                         <button
                             type="button"
@@ -91,26 +109,12 @@ const TutorListingCard = React.memo(({ metadata, isDashboard, refreshList }) => 
                             <img src={trashCanIcon} className="w-10 h-4 filter invert hue-rotate-180" alt="delete listing" />
                         </button>
                     )}
-                </div>
 
-                {/* Subject Display */}
-                <p className = "mb-3 inline-block px-3 py-1 bg-gray-200 rounded-full text-gray-800 font-medium" > {metadata.subjectName  || 'No Subject Specified'}</p>
-                
-                {/* Description content */}
-                <p className="mb-3 font-normal text-gray-700">{metadata.sales_pitch}</p>
-
-                {/* Bottom bar with pricing & More detail button */}
-                <div className="mt-4 flex items-center justify-between gap-4">
-                    <div className="flex items-baseline gap-1">
-                        <p className="text-2xl font-extrabold leading-tight text-gray-900">${metadata.pricing}</p>
-                        <p className="text-gray-700 text-sm">/ hour</p>
-                    </div>
-                    {/*More Detail button to link */}
-                    <Link to ={{ pathname: "/detail", }} state ={{tutor: metadata}} //pass the metadata as State
-
-                     className="inline-flex items-center rounded-lg px-4 py-1.5 text-sm font-medium text-gray-900 bg-[#ffdc70] hover:bg-[#fc3] focus:outline-none focus:ring-4 focus:ring-yellow-500">
+                    {/* More Detail button */}
+                    <Link to={{ pathname: "/detail" }} state={{ tutor: metadata }} 
+                        className="inline-flex items-center rounded-lg px-4 py-1.5 text-sm font-medium text-gray-900 bg-[#ffdc70] hover:bg-[#fc3] focus:outline-none focus:ring-4 focus:ring-yellow-500">
                         More details
-                        <svg className="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10" >
+                        <svg className="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
                             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
                         </svg>
                     </Link>
@@ -121,4 +125,5 @@ const TutorListingCard = React.memo(({ metadata, isDashboard, refreshList }) => 
 });
 
 export default TutorListingCard;
+
 
