@@ -112,9 +112,9 @@ const TutorListingCard = React.memo(({ metadata, isDashboard, refreshList }) => 
 
                     {/* More Detail button */}
                     <Link to={{ pathname: "/detail" }} state={{ tutor: metadata }} 
-                        className="inline-flex items-center rounded-lg px-4 py-1.5 text-sm font-medium text-gray-900 bg-[#ffdc70] hover:bg-[#fc3] focus:outline-none focus:ring-4 focus:ring-yellow-500">
+                        className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-[#ffdc70] hover:bg-[#fc3] focus:outline-none focus:ring-4 focus:ring-yellow-500 rounded-lg min-w-[64px] min-h-[40px]">
                         More details
-                        <svg className="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                        <svg className="rtl:rotate-180 w-5 h-5 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
                             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
                         </svg>
                     </Link>
