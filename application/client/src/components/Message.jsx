@@ -27,6 +27,7 @@ const Message = ({ name, email, subject, content, date }) => {
                             type="checkbox"
                             id="TosCheckBox"
                             className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                            onClick={(e) => e.stopPropagation()}
                         />
                         <div className="flex-shrink-0 w-10 h-10 ml-4">
                             <img className="w-10 h-10 rounded-full" src="/sillydogpfp.webp" alt="" />
@@ -76,16 +77,6 @@ const Message = ({ name, email, subject, content, date }) => {
                         <div className="mb-4 p-4 bg-gray-100 rounded-lg" style={{ minHeight: '180px', maxHeight: '300px', overflowY: 'auto' }}>
                             <p className="text-gray-800">{content}</p>
                         </div>
-                        
-                         
-                        <div className="flex justify-end mt-4 pb-1">
-                            <button
-                                className="px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700"
-                                onClick={() => console.log('Reply function placeholder')}
-                            >
-                                Send
-                            </button>
-                        </div> 
                     </div>
                 </div>
             )}

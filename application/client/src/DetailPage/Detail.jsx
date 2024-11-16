@@ -104,7 +104,7 @@ const Detail = () => {
 
 
             {/* Tutor Information */}
-            <div className="text-center mb-8">
+            <div className="text-center mb-8 mt-8">
                 <h2 className="text-3xl font-bold text-gray-800 mb-2">{tutor?.tutorName}</h2>
                 <p className="text-lg text-gray-700"><strong>Subject Expertise:</strong> {tutor?.subjectName || 'N/A'}</p>
             </div>
