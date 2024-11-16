@@ -41,7 +41,7 @@ const ListingPage = () => {
     };
 
     // Fetch listing search results
-    const fetchListings = useCallback(async() => {
+    const fetchListings = useCallback(async () => {
         try {
             const response = await axios.get(`${BASE_URL}/api/search`, {
                 params: {
@@ -60,7 +60,7 @@ const ListingPage = () => {
                 // Shuffle the listings and take a random selection
                 const shuffledListings = response.data.results.sort(() => 0.5 - Math.random());
                 const randomListings = shuffledListings.slice(0, randomCount);
-                
+
                 setRandomListing(true);
                 setListings(randomListings);
             }
@@ -157,6 +157,30 @@ const ListingPage = () => {
                                         <span>${maxPrice}</span>
                                     </div>
                                 </div>
+                                {/* Clear and View Results Buttons */}
+                                <div className="inline-flex rounded-md shadow-sm w-full" role="group">
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setMinPrice(0); 
+                                            setMaxPrice(100);
+                                        }}
+                                        className="flex-1 px-2 py-1 text-sm font-medium text-gray-900 bg-white border
+                                        border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2
+                                        focus:ring-purple-400 focus:text-blue-700"
+                                    >
+                                        Clear
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={fetchListings}
+                                        className="flex-1 px-2 py-1 text-sm font-medium text-gray-900 bg-white border
+                                        border-gray-200 rounded-r-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2
+                                        focus:ring-purple-400 focus:text-blue-700"
+                                    >
+                                        View Results
+                                    </button>
+                                </div>
                             </div>
                         )}
                     </div>
@@ -178,7 +202,7 @@ const ListingPage = () => {
 
                 {/* Grid layout with 3 columns for the listing cards */}
                 <div className={`${loading || serverError || listings.length <= 0 ? "hidden" : ""} grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 w-full max-w-5xl justify-center`}>
-                    
+
                     {/* Render listings from search results */}
                     {listings.length > 0 && (
                         listings.map((listing) => (
