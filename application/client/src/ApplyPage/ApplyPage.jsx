@@ -376,8 +376,11 @@ const ApplyPage = () => {
                 <div className="text-sm pt-4 pb-2">
                     <p>Listing may take up to 24 to 48 hours to be approved by an admin before going public.</p>
                 </div>
-                <button type="submit" className={`${loading ? "hidden" : "flex"} text-white inline-flex items-center bg-[#231161] hover:bg-[#1f0e55] focus:ring-[#231161] focus:ring-offset-2 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5`}>
+                <button type="submit" className={`${loading ? "hidden" : "flex"} text-white inline-flex items-center bg-[#231161] hover:bg-[#1f0e55] focus:ring-[#552988] focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-4`}>
                     Submit Form
+                </button>
+                <button type="cancel"onClick={() => navigate("/search?selectedSubject=&searchTerm=")} className={`${loading ? "hidden" : "flex"} text-white inline-flex items-center bg-red-600 hover:bg-red-800 focus:ring-red-300 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5`}>
+                    Cancel
                 </button>
             </form>
         </div>

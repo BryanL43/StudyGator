@@ -23,7 +23,7 @@ const Navbar = () => {
     const [isSearchActive, setSearchActive] = useState(false);
 
     // Handle Hamburger dropdown button
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isMenuOpen, setIsMenuOpen] = useState(true);
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     };
@@ -95,7 +95,8 @@ const Navbar = () => {
 
     return (
         <nav className="bg-[#231161] border-gray-20">
-            <div className="max-w-screen-xl flex flex-wrap items-center justify-center mx-auto p-4 sm:gap-4">
+            <p className="text-white text-s text-center items-center font-medium py-1">CSC648-FA24-03-Team08 Demonstration Project</p>
+            <div className="max-w-screen-xl flex flex-wrap items-center justify-center mx-auto px-4 pb-4 sm:gap-4">
                 <div className="flex flex-grow flex-row items-center space-x-3 rtl:space-x-reverse mr-8">
                     {/* Logo */}
                     <Link to="/" className="flex w-fit items-center space-x-3 rtl:space-x-reverse">
@@ -249,11 +250,6 @@ const Navbar = () => {
 
                     {/* Buttons mobile version */}
                     <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-transparent">
-                        <li className={`${user ? '' : 'md:flex items-center justify-center'}`}>
-                            <Link to="/search?selectedSubject=&searchTerm=" className="block py-2 px-3 text-black md:text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#FFDC70] md:p-0">
-                                Find a Tutor
-                            </Link>
-                        </li>
                         <li className={`${user ? '' : 'md:flex items-center justify-center'}`}>
                             <Link to="/apply" className="block py-2 px-3 text-black md:text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#FFDC70] md:p-0">
                                 Apply As Tutor

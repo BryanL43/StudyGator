@@ -9,44 +9,18 @@
 *
 **************************************************************/
 
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import BASE_URL from '../utils/config';
 import { useNavigate } from 'react-router-dom';
-import imageIcon from '../icons/ImageIcon.svg';
 import loadingIcon from '../icons/LoadingIcon.svg';
 
 import TutorListingCard from '../components/TutorListingCard';
 import ErrorAlert from '../components/ErrorAlert';
 
-// Timer logic for handling manual interruption to automatic image rotation
-const useTimer = (callback, delay) => {
-    const intervalRef = useRef(null);
-
-    const startTimer = useCallback(() => {
-        clearInterval(intervalRef.current);
-        intervalRef.current = setInterval(callback, delay);
-    }, [callback, delay]);
-
-    const clearTimer = useCallback(() => {
-        clearInterval(intervalRef.current);
-    }, []);
-
-    // Start the timer on mount and clear it on unmount
-    useEffect(() => {
-        startTimer();
-        return clearTimer;
-    }, [startTimer, clearTimer]);
-
-    return { resetTimer: startTimer, stopTimer: clearTimer };
-};
-
 const Home = () => {
     const navigate = useNavigate();
 
-    const [currentSlide, setCurrentSlide] = useState(0);
-    const [overlayState, setOverlayState] = useState(false);
-    const [isLocked, setIsLocked] = useState(false);
     const [loading, setLoading] = useState(true);
     const [serverError, setServerError] = useState(false);
 
@@ -56,47 +30,13 @@ const Home = () => {
         setServerError(false);
     };
 
-    // Function to switch to the next slide
-    const nextSlide = () => {
-        if (isLocked) return;
-        setOverlayState(true);
-        setIsLocked(true);
+    const [imageIndex, setImageIndex] = useState(null);
 
-        setTimeout(() => {
-            setCurrentSlide((prevSlide) => {
-                if (prevSlide + 1 >= 3) {
-                    return 0;
-                }
-                return prevSlide + 1;
-            });
-            setOverlayState(false);
-
-            // Lock buttons for 1.5 seconds
-            setTimeout(() => {
-                setIsLocked(false);
-            }, 1500);
-        }, 400);
-    };
-
-    const { resetTimer } = useTimer(nextSlide, 6000);
-
-    // Direct slide jump to specified image & resets timer
-    const setSlide = (slideNum) => {
-        if (isLocked) return;
-        setOverlayState(true);
-        setIsLocked(true);
-
-        setTimeout(() => {
-            setCurrentSlide(slideNum);
-            setOverlayState(false);
-            resetTimer();
-
-            // Lock buttons for 1.5 seconds
-            setTimeout(() => {
-                setIsLocked(false);
-            }, 1500);
-        }, 400);
-    };
+    // Pick one of the 3 random backgroound and ensure it only renders once
+    useEffect(() => {
+        const randomIndex = Math.floor(Math.random() * 3) + 1;
+        setImageIndex(randomIndex);
+    }, []);
 
     // Fetch recent listings only on mount
     useEffect(() => {
@@ -124,62 +64,28 @@ const Home = () => {
             }
 
             {/* Image carousel */}
-            <div id="default-carousel" className="relative w-full" data-carousel="slide">
-                <div className="relative h-[70vh] overflow-hidden">
-                    <div className={`duration-700 ease-in-out z-10 ${currentSlide === 0 ? 'block' : 'hidden'}`} data-carousel-item>
+            <div className="relative w-full">
+                <div className="relative h-[60vh] overflow-hidden">
+                    <div className="duration-700 ease-in-out z-10" data-carousel-item>
                         <img
-                            src="/SFSU-img-1.jpg"
-                            className="absolute w-full h-full object-cover -translate-x-1/2 sm:-translate-y-1/2 sm:top-1/2 left-1/2 filter brightness-[0.8]"
-                            alt="SFSU library"
-                        />
-                    </div>
-                    <div className={`duration-700 ease-in-out z-10 ${currentSlide === 1 ? 'block' : 'hidden'}`} data-carousel-item>
-                        <img
-                            src="/SFSU-img-2.jpg"
-                            className="absolute w-full h-full object-cover -translate-x-1/2 sm:-translate-y-1/2 sm:top-1/2 left-1/2"
-                            alt="Night time SFSU library"
-                        />
-                    </div>
-                    <div className={`duration-700 ease-in-out z-10 ${currentSlide === 2 ? 'block' : 'hidden'}`} data-carousel-item>
-                        <img
-                            src="/SFSU-img-3.jpg"
-                            className="absolute w-full h-full object-cover -translate-x-1/2 sm:-translate-y-1/2 sm:top-1/2 left-1/2"
-                            alt="SFSU entrance"
+                            src={`/SFSU-img-${imageIndex}.jpg`}
+                            className="absolute w-full h-full object-cover -translate-x-1/2 sm:-translate-y-1/2 sm:top-1/2 left-1/2 filter brightness-[0.7]"
+                            alt="SFSU background"
                         />
                     </div>
                 </div>
 
                 {/* Overlay header */}
-                <div className="absolute z-40 w-[70%] left-[17.5%] sm:left-[25.5%] md:left-[22.5%] top-[45%] transform -translate-y-1/2">
+                <div className="absolute z-40 w-full top-[45%] transform -translate-y-1/2 flex flex-col items-center justify-center text-center px-4">
                     <h1 className="text-[48px] text-white font-bold drop-shadow-lg">
-                        Find Your SFSU Tutor at<br></br>StudyGator!
+                        Find Your SFSU Tutor at<br />
+                        <span className="text-[#FFDC70]">StudyGator!</span>
                     </h1>
+                    <h2 className="text-white text-[22px] mt-4">
+                        Connect with skilled SFSU student tutors dedicated to helping you succeed.<br></br>
+                        Receive personalized support tailored to your SFSU courses and academic goals.
+                    </h2>
                 </div>
-
-                {/* Overlay for transition effect */}
-                <div className={`absolute inset-0 transition-all duration-500 ${overlayState ? 'bg-white opacity-90' : 'bg-black opacity-20'}`} />
-
-                {/* Image carousel navigation */}
-                <div className="absolute hidden sm:block left-[20%] top-1/2 transform -translate-y-1/2 z-40">
-                    <ol className="border-s-[2px] border-white">
-                        <li className="mb-10 ms-6 h-16 flex items-center" onClick={() => setSlide(0)} >
-                        <span className={`absolute flex items-center justify-center w-8 h-8 ${(currentSlide === 0) ? 'ring-[#231161] bg-[#ffdc70]' : 'ring-white bg-gray-100 hover:ring-gray-50 hover:bg-gray-300'} rounded-full -start-4 ring-4 cursor-pointer`}>
-                                <img src={imageIcon} className="w-3.5 h-3.5" alt="" />
-                            </span>
-                        </li>
-                        <li className="mb-10 ms-6 h-16 flex items-center" onClick={() => setSlide(1)}>
-                            <span className={`absolute flex items-center justify-center w-8 h-8 ${(currentSlide === 1) ? 'ring-[#231161] bg-[#ffdc70]' : 'ring-white bg-gray-100 hover:ring-gray-50 hover:bg-gray-300'} rounded-full -start-4 ring-4 cursor-pointer`}>
-                                <img src={imageIcon} className="w-3.5 h-3.5" alt="" />
-                            </span>
-                        </li>
-                        <li className="mb-10 ms-6 h-16 flex items-center" onClick={() => setSlide(2)}>
-                        <span className={`absolute flex items-center justify-center w-8 h-8 ${(currentSlide === 2) ? 'ring-[#231161] bg-[#ffdc70]' : 'ring-white bg-gray-100 hover:ring-gray-50 hover:bg-gray-300'} rounded-full -start-4 ring-4 cursor-pointer`}>
-                                <img src={imageIcon} className="w-3.5 h-3.5" alt="" />
-                            </span>
-                        </li>
-                    </ol>
-                </div>
-
             </div>
             
             {/* Recent Listings */}
