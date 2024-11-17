@@ -1,6 +1,6 @@
 /**************************************************************
 * Author(s): Kenneth Wen
-* Last Updated: 11/8/2024
+* Last Updated: 11/16/2024
 *
 * File:: SearchPage.jsx
 *
@@ -22,13 +22,14 @@ const ListingPage = () => {
 
     // State variables for tutor listings
     const [listings, setListings] = useState([]);
+    const [filteredListings, setFilteredListings] = useState([]);
     const [randomListing, setRandomListing] = useState(false);
     const [loading, setLoading] = useState(true);
     const [serverError, setServerError] = useState(false);
 
     // State variables for filter drop down
     const [minPrice, setMinPrice] = useState(0);
-    const [maxPrice, setMaxPrice] = useState(100);
+    const [maxPrice, setMaxPrice] = useState(200);
     const [isPriceDropdownOpen, setIsPriceDropdownOpen] = useState(false);
 
     // Extract query information from URL
@@ -138,7 +139,7 @@ const ListingPage = () => {
                                     <input
                                         type="range"
                                         min="0"
-                                        max="100"
+                                        max="200"
                                         value={minPrice}
                                         onChange={(e) => setMinPrice(Math.min(Number(e.target.value), maxPrice))}
                                         className="slider"
@@ -146,7 +147,7 @@ const ListingPage = () => {
                                     <input
                                         type="range"
                                         min="0"
-                                        max="100"
+                                        max="200"
                                         value={maxPrice}
                                         onChange={(e) => setMaxPrice(Math.max(Number(e.target.value), minPrice))}
                                         className="slider"
@@ -157,13 +158,14 @@ const ListingPage = () => {
                                         <span className="w-10 text-left">${maxPrice}</span>
                                     </div>
                                 </div>
-                                {/* Clear and View Results Buttons */}
+
+                                {/* Clear Button */}
                                 <div className="inline-flex rounded-md shadow-sm w-full" role="group">
                                     <button
                                         type="button"
                                         onClick={() => {
-                                            setMinPrice(0); 
-                                            setMaxPrice(100);
+                                            setMinPrice(0);
+                                            setMaxPrice(200);
                                         }}
                                         className="flex-1 px-2 py-1 text-sm font-medium text-gray-900 bg-white border
                                         border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2
@@ -171,12 +173,19 @@ const ListingPage = () => {
                                     >
                                         Clear
                                     </button>
+                                    {/* View Results Button */}
                                     <button
                                         type="button"
-                                        onClick={fetchListings}
+                                        onClick={() => {
+                                            const filtered = listings.filter(
+                                                (listing) =>
+                                                    listing.pricing >= minPrice && listing.pricing <= maxPrice
+                                            );
+                                            setFilteredListings(filtered);
+                                        }}
                                         className="flex-1 px-2 py-1 text-sm font-medium text-gray-900 bg-white border
-                                        border-gray-200 rounded-r-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2
-                                        focus:ring-purple-400 focus:text-blue-700"
+                                         border-gray-200 rounded-r-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2
+                                         focus:ring-purple-400 focus:text-blue-700"
                                     >
                                         View Results
                                     </button>
@@ -204,16 +213,22 @@ const ListingPage = () => {
                 <div className={`${loading || serverError || listings.length <= 0 ? "hidden" : ""} grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 w-full max-w-5xl justify-center`}>
 
                     {/* Render listings from search results */}
-                    {listings.length > 0 && (
-                        listings.map((listing) => (
+                    {filteredListings.length > 0
+                        ? filteredListings.map((listing) => (
                             <TutorListingCard
                                 key={listing.id}
                                 metadata={listing}
                                 isDashboard={false}
                             />
                         ))
-                    )}
-
+                        : listings.length > 0 && filteredListings.length === 0 &&
+                        listings.map((listing) => (
+                            <TutorListingCard
+                                key={listing.id}
+                                metadata={listing}
+                                isDashboard={false}
+                            />
+                        ))}
                 </div>
                 <p className={`${listings && listings.length === 0 && !loading && !serverError ? "" : "hidden"} text-center`}>No listings available.</p>
             </div>
