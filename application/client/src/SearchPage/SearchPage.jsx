@@ -132,7 +132,7 @@ const ListingPage = () => {
                             </svg>
                         </button>
                         {isPriceDropdownOpen && (
-                            <div className="absolute z-10 border bg-white divide-y divide-gray-200 rounded-lg shadow-md w-48 mt-1 p-4 right-0">
+                            <div className="absolute z-10 border bg-white divide-y divide-gray-200 rounded-lg shadow-md w-60 mt-1 p-4 right-0">
                                 <label className="text-sm font-semibold mb-2">Price Range:</label>
                                 <div className="flex flex-col py-3">
                                     <input
@@ -152,9 +152,9 @@ const ListingPage = () => {
                                         className="slider"
                                     />
                                     <div className="flex justify-between text-sm text-gray-700 mt-2">
-                                        <span>${minPrice}</span>
+                                        <span className="w-10 text-right">${minPrice}</span>
                                         <span>to</span>
-                                        <span>${maxPrice}</span>
+                                        <span className="w-10 text-left">${maxPrice}</span>
                                     </div>
                                 </div>
                                 {/* Clear and View Results Buttons */}
