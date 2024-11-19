@@ -211,14 +211,12 @@ const createMessage = async ({  recipientId, listingId, content, decodedToken })
         const senderId = decodedToken.id;
 
         // Execute the query to insert a new message
-        const [result] = await connection.execute(query, [listingId, senderId, recipientId, content]);
+        await connection.execute(query, [listingId, senderId, recipientId, content]);
 
-        return result; // Return the result of the insertion
+        
     } catch (error) {
         throw error;
-    } finally {
-        connection.end();
-    }
+    } 
 };
 
 module.exports = {
