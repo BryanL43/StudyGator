@@ -1,6 +1,6 @@
 /**************************************************************
 * Author(s): Kenneth Wen
-* Last Updated: 11/8/2024
+* Last Updated: 11/18/2024
 *
 * File:: SearchPage.jsx
 *
@@ -22,13 +22,15 @@ const ListingPage = () => {
 
     // State variables for tutor listings
     const [listings, setListings] = useState([]);
+    const [filteredListings, setFilteredListings] = useState([]);
+    const [isFilterApplied, setIsFilterApplied] = useState(false);
     const [randomListing, setRandomListing] = useState(false);
     const [loading, setLoading] = useState(true);
     const [serverError, setServerError] = useState(false);
 
     // State variables for filter drop down
     const [minPrice, setMinPrice] = useState(0);
-    const [maxPrice, setMaxPrice] = useState(100);
+    const [maxPrice, setMaxPrice] = useState(200);
     const [isPriceDropdownOpen, setIsPriceDropdownOpen] = useState(false);
 
     // Extract query information from URL
@@ -41,7 +43,7 @@ const ListingPage = () => {
     };
 
     // Fetch listing search results
-    const fetchListings = useCallback(async() => {
+    const fetchListings = useCallback(async () => {
         try {
             const response = await axios.get(`${BASE_URL}/api/search`, {
                 params: {
@@ -60,7 +62,7 @@ const ListingPage = () => {
                 // Shuffle the listings and take a random selection
                 const shuffledListings = response.data.results.sort(() => 0.5 - Math.random());
                 const randomListings = shuffledListings.slice(0, randomCount);
-                
+
                 setRandomListing(true);
                 setListings(randomListings);
             }
@@ -103,7 +105,13 @@ const ListingPage = () => {
                         <h2 className="text-m font-semibold">Loading...</h2>
                     ) : (
                         <>
-                            {listings && listings.length > 0 && !randomListing ? (
+                            {isFilterApplied ? (
+                                // If the filter is applied
+                                <h2 className="text-m font-semibold">Search Results: {filteredListings.length} items found</h2>
+                            ) : listings.length > 0 && !randomListing ? (
+                                // If no filter is applied
+                                <h2 className="text-m font-semibold">Search Results: {listings.length} items found</h2>
+                            ) : listings && listings.length > 0 && !randomListing ? (
                                 <h2 className="text-m font-semibold">Search Results: {listings.length} items found</h2>
                             ) : listings && listings.length > 0 && randomListing ? (
                                 <h2 className="text-m font-semibold">
@@ -132,13 +140,13 @@ const ListingPage = () => {
                             </svg>
                         </button>
                         {isPriceDropdownOpen && (
-                            <div className="absolute z-10 border bg-white divide-y divide-gray-200 rounded-lg shadow-md w-48 mt-1 p-4 right-0">
+                            <div className="absolute z-10 border bg-white divide-y divide-gray-200 rounded-lg shadow-md w-60 mt-1 p-4 right-0">
                                 <label className="text-sm font-semibold mb-2">Price Range:</label>
                                 <div className="flex flex-col py-3">
                                     <input
                                         type="range"
                                         min="0"
-                                        max="100"
+                                        max="200"
                                         value={minPrice}
                                         onChange={(e) => setMinPrice(Math.min(Number(e.target.value), maxPrice))}
                                         className="slider"
@@ -146,16 +154,48 @@ const ListingPage = () => {
                                     <input
                                         type="range"
                                         min="0"
-                                        max="100"
+                                        max="200"
                                         value={maxPrice}
                                         onChange={(e) => setMaxPrice(Math.max(Number(e.target.value), minPrice))}
                                         className="slider"
                                     />
                                     <div className="flex justify-between text-sm text-gray-700 mt-2">
-                                        <span>${minPrice}</span>
+                                        <span className="w-10 text-right">${minPrice}</span>
                                         <span>to</span>
-                                        <span>${maxPrice}</span>
+                                        <span className="w-10 text-left">${maxPrice}</span>
                                     </div>
+                                </div>
+
+                                {/* Clear Button */}
+                                <div className="inline-flex rounded-md shadow-sm w-full" role="group">
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setMinPrice(0);
+                                            setMaxPrice(200);
+                                        }}
+                                        className="flex-1 px-2 py-1 text-sm font-medium text-gray-900 bg-white border
+                                        border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2
+                                        focus:ring-purple-400 focus:text-blue-700"
+                                    >
+                                        Clear
+                                    </button>
+                                    {/* View Results Button */}
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            const filtered = listings.filter((listing) => {
+                                                return listing.pricing >= minPrice && listing.pricing <= maxPrice;
+                                            });
+                                            setFilteredListings(filtered);
+                                            setIsFilterApplied(true);
+                                        }}
+                                        className="flex-1 px-2 py-1 text-sm font-medium text-gray-900 bg-white border
+                                         border-gray-200 rounded-r-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2
+                                         focus:ring-purple-400 focus:text-blue-700"
+                                    >
+                                        View Results
+                                    </button>
                                 </div>
                             </div>
                         )}
@@ -178,23 +218,32 @@ const ListingPage = () => {
 
                 {/* Grid layout with 3 columns for the listing cards */}
                 <div className={`${loading || serverError || listings.length <= 0 ? "hidden" : ""} grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 w-full max-w-5xl justify-center`}>
-                    
+
                     {/* Render listings from search results */}
-                    {listings.length > 0 && (
-                        listings.map((listing) => (
+                    {isFilterApplied && filteredListings.length === 0 ? ( //if no results within price range
+                        <></>
+                    ) : filteredListings.length > 0
+                        ? filteredListings.map((listing) => ( //if results within price range
                             <TutorListingCard
                                 key={listing.id}
                                 metadata={listing}
                                 isDashboard={false}
                             />
                         ))
-                    )}
-
+                        : listings.length > 0 && filteredListings.length === 0 && //default no filter
+                        listings.map((listing) => (
+                            <TutorListingCard
+                                key={listing.id}
+                                metadata={listing}
+                                isDashboard={false}
+                            />
+                        ))}
                 </div>
-                <p className={`${listings && listings.length === 0 && !loading && !serverError ? "" : "hidden"} text-center`}>No listings available.</p>
+                <p className={`${((listings && listings.length === 0) || (isFilterApplied && filteredListings.length === 0)) && !loading && !serverError ? "" : "hidden"} text-center`}>No listings available.</p>
             </div>
         </div>
     );
 };
 
 export default ListingPage;
+
