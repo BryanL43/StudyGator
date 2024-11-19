@@ -197,25 +197,7 @@ const deleteListing = async(userId, listingId) => {
     }
 }
 // message recipient
-const createMessage = async (senderId, tutorId, listingTitle, content) => {
-    const connection = await connectDB();
 
-    try {
-        const query = `
-            INSERT INTO \`data-schema\`.MESSAGES (listing_id, user_id, content, timestamp)
-            VALUES (?, ?, ?, NOW())
-        `;
-
-        // Execute the query to insert a new message
-        const [result] = await connection.execute(query, [listingTitle, tutorId, content]);
-
-        return result; // Return the result of the insertion
-    } catch (error) {
-        throw error;
-    } finally {
-        connection.end();
-    }
-}
 const createMessage = async ({  recipientId, listingId, content, decodedToken }) => {
     const connection = await connectDB();
 
