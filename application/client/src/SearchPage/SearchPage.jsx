@@ -1,6 +1,6 @@
 /**************************************************************
 * Author(s): Kenneth Wen
-* Last Updated: 11/16/2024
+* Last Updated: 11/18/2024
 *
 * File:: SearchPage.jsx
 *
@@ -105,7 +105,13 @@ const ListingPage = () => {
                         <h2 className="text-m font-semibold">Loading...</h2>
                     ) : (
                         <>
-                            {listings && listings.length > 0 && !randomListing ? (
+                            {isFilterApplied ? (
+                                // If the filter is applied
+                                <h2 className="text-m font-semibold">Search Results: {filteredListings.length} items found</h2>
+                            ) : listings.length > 0 && !randomListing ? (
+                                // If no filter is applied
+                                <h2 className="text-m font-semibold">Search Results: {listings.length} items found</h2>
+                            ) : listings && listings.length > 0 && !randomListing ? (
                                 <h2 className="text-m font-semibold">Search Results: {listings.length} items found</h2>
                             ) : listings && listings.length > 0 && randomListing ? (
                                 <h2 className="text-m font-semibold">
@@ -215,8 +221,8 @@ const ListingPage = () => {
 
                     {/* Render listings from search results */}
                     {isFilterApplied && filteredListings.length === 0 ? ( //if no results within price range
-                            <></> 
-                        ) :filteredListings.length > 0
+                        <></>
+                    ) : filteredListings.length > 0
                         ? filteredListings.map((listing) => ( //if results within price range
                             <TutorListingCard
                                 key={listing.id}
