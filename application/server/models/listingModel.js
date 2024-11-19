@@ -216,6 +216,28 @@ const createMessage = async (senderId, tutorId, listingTitle, content) => {
         connection.end();
     }
 }
+const createMessage = async ({  recipientId, listingId, content, decodedToken }) => {
+    const connection = await connectDB();
+
+    try {
+        const query = `
+            INSERT INTO \`data-schema\`.MESSAGES (listing_id, user_id, recipient_id, content, created_at)
+            VALUES (?, ?, ?, ?, NOW())
+        `;
+
+        // Extract senderId from the decoded token
+        const senderId = decodedToken.id;
+
+        // Execute the query to insert a new message
+        const [result] = await connection.execute(query, [listingId, senderId, recipientId, content]);
+
+        return result; // Return the result of the insertion
+    } catch (error) {
+        throw error;
+    } finally {
+        connection.end();
+    }
+};
 
 module.exports = {
     addListing,
