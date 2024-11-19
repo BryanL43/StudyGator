@@ -23,6 +23,7 @@ const ListingPage = () => {
     // State variables for tutor listings
     const [listings, setListings] = useState([]);
     const [filteredListings, setFilteredListings] = useState([]);
+    const [isFilterApplied, setIsFilterApplied] = useState(false);
     const [randomListing, setRandomListing] = useState(false);
     const [loading, setLoading] = useState(true);
     const [serverError, setServerError] = useState(false);
@@ -177,11 +178,11 @@ const ListingPage = () => {
                                     <button
                                         type="button"
                                         onClick={() => {
-                                            const filtered = listings.filter(
-                                                (listing) =>
-                                                    listing.pricing >= minPrice && listing.pricing <= maxPrice
-                                            );
+                                            const filtered = listings.filter((listing) => {
+                                                return listing.pricing >= minPrice && listing.pricing <= maxPrice;
+                                            });
                                             setFilteredListings(filtered);
+                                            setIsFilterApplied(true);
                                         }}
                                         className="flex-1 px-2 py-1 text-sm font-medium text-gray-900 bg-white border
                                          border-gray-200 rounded-r-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2
@@ -213,15 +214,17 @@ const ListingPage = () => {
                 <div className={`${loading || serverError || listings.length <= 0 ? "hidden" : ""} grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 w-full max-w-5xl justify-center`}>
 
                     {/* Render listings from search results */}
-                    {filteredListings.length > 0
-                        ? filteredListings.map((listing) => (
+                    {isFilterApplied && filteredListings.length === 0 ? ( //if no results within price range
+                            <></> 
+                        ) :filteredListings.length > 0
+                        ? filteredListings.map((listing) => ( //if results within price range
                             <TutorListingCard
                                 key={listing.id}
                                 metadata={listing}
                                 isDashboard={false}
                             />
                         ))
-                        : listings.length > 0 && filteredListings.length === 0 &&
+                        : listings.length > 0 && filteredListings.length === 0 && //default no filter
                         listings.map((listing) => (
                             <TutorListingCard
                                 key={listing.id}
@@ -230,10 +233,11 @@ const ListingPage = () => {
                             />
                         ))}
                 </div>
-                <p className={`${listings && listings.length === 0 && !loading && !serverError ? "" : "hidden"} text-center`}>No listings available.</p>
+                <p className={`${((listings && listings.length === 0) || (isFilterApplied && filteredListings.length === 0)) && !loading && !serverError ? "" : "hidden"} text-center`}>No listings available.</p>
             </div>
         </div>
     );
 };
 
 export default ListingPage;
+
