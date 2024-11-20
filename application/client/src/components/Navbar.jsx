@@ -125,7 +125,6 @@ const Navbar = () => {
                         {/* Search Input */}
                         <input
                             type="text"
-                            id="search-navbar"
                             value={searchInput}
                             onChange={handleSearchChange}
                             onFocus={() => setSearchActive(true)}
@@ -223,7 +222,6 @@ const Navbar = () => {
                         {/* Search Input */}
                         <input
                             type="text"
-                            id="search-navbar"
                             value={searchInput}
                             onChange={handleSearchChange}
                             onFocus={() => setSearchActive(true)}

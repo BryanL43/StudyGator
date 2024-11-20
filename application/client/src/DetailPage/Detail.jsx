@@ -65,7 +65,7 @@ const Detail = () => {
                         onClick={togglePdfModal}
                         className="px-4 py-2 text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-2 focus:ring-green-400"
                     >
-                        View Resume
+                        View Resume/CV
                     </button>
                 )}
             </div>
@@ -75,7 +75,7 @@ const Detail = () => {
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
                     <div className="w-full max-w-3xl p-8 bg-white rounded-lg shadow-lg">
                         <div className="flex justify-between items-center mb-4">
-                            <h3 className="text-xl font-semibold text-center w-full">Resume</h3>
+                            <h3 className="text-xl font-semibold text-center w-full">Resume/CV</h3>
                             <button
                                 onClick={togglePdfModal}
                                 className="text-gray-800 hover:text-gray-700"

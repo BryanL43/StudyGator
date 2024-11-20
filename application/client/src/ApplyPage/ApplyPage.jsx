@@ -1,6 +1,6 @@
 /**************************************************************
-* Author(s): Kenneth Wen
-* Last Updated: 11/8/2024
+* Author(s): Kenneth Wen, Bryan Lee
+* Last Updated: 11/19/2024
 *
 * File:: ApplyPage.jsx
 *
@@ -24,6 +24,7 @@ const ApplyPage = () => {
     const navigate = useNavigate();
     const { user } = useAuth();
 
+    const [title, setTitle] = useState('');
     const [salesPitch, setSalesPitch] = useState('');
     const [description, setDescription] = useState('');
     const [subjectId, setSubjectId] = useState('');
@@ -34,15 +35,21 @@ const ApplyPage = () => {
 
     const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        if (!user) {
-            navigate("/login"); // Redirect to log in if user is in unregistered mode
-        }
-    })
-
     const handleImageUpload = (e) => {
         const image = e.target.files[0];
+        if (!image) {
+            return;
+        }
+
         const maxSize = 5 * 1024 * 1024; // 5 MB max size
+        const allowedExtensions = ['svg', 'png', 'jpg', 'jpeg'];
+
+        const extension = image.name.split('.').pop().toLowerCase();
+        if (!allowedExtensions.includes(extension)) {
+            alert("Invalid file type. Please upload an SVG, PNG, JPG, or JPGF.");
+            setSelectedImage(null);
+            return;
+        }
 
         if (image && image.size > maxSize) {
             alert("Image size exceeds 5MB. Please upload a smaller image.");
@@ -54,7 +61,20 @@ const ApplyPage = () => {
 
     const handleFileUpload = (e) => {
         const file = e.target.files[0];
+        if (!file) {
+            return;
+        }
+
         const maxSize = 10 * 1024 * 1024; // 10 MB max size
+
+        const allowedExtensions = ['pdf'];
+
+        const extension = file.name.split('.').pop().toLowerCase();
+        if (!allowedExtensions.includes(extension)) {
+            alert("Invalid file type. Please upload an PDF only.");
+            setSelectedImage(null);
+            return;
+        }
 
         if (file && file.size > maxSize) {
             alert("File size exceeds 10MB. Please upload a smaller file.");
@@ -66,7 +86,19 @@ const ApplyPage = () => {
 
     const handleVideoUpload = (e) => {
         const video = e.target.files[0];
-        const maxSize = 250 * 1024 * 1024; // 250 MB max size
+        if (!video) {
+            return;
+        }
+
+        const maxSize = 250 * 1024 * 1024; // 250 MB max siz
+        const allowedExtensions = ['mp4', 'mov', 'webm'];
+
+        const extension = video.name.split('.').pop().toLowerCase();
+        if (!allowedExtensions.includes(extension)) {
+            alert("Invalid file type. Please upload an MP4, MOV, or WEBM.");
+            setSelectedImage(null);
+            return;
+        }
 
         if (video && video.size > maxSize) {
             alert("File size exceeds 10MB. Please upload a smaller file.");
@@ -79,15 +111,38 @@ const ApplyPage = () => {
     // Handle form submission for tutor application
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        // Trigger lazy registeration
+        if (!user) {
+            // Save form data to local storage
+            const formState = {
+                title,
+                salesPitch,
+                description,
+                subjectId,
+                pricing,
+                // Only saves the name of the file. This will be use in alerting the user to reupload.
+                selectedImage: selectedImage ? selectedImage.name : null,
+                selectedFile: selectedFile ? selectedFile.name : null,
+                selectedVideo: selectedVideo ? selectedVideo.name : null,
+            };
+            localStorage.setItem("formData", JSON.stringify(formState));
+    
+            window.scroll({ top: 0 });
+            navigate("/login");
+            return;
+        }
+
         setLoading(true);
 
-        if (!selectedImage || !salesPitch || !description || !subjectId || !pricing) {
+        if (!selectedImage || !title || !salesPitch || !description || !subjectId || !pricing) {
             alert("Please fill out all required fields.");
             setLoading(false);
             return;
         }
 
         const formData = new FormData();
+        formData.append('title', title);
         formData.append('salesPitch', salesPitch);
         formData.append('description', description);
         formData.append('subjectId', subjectId);
@@ -128,6 +183,28 @@ const ApplyPage = () => {
         fetchSubjects();
     }, []);
 
+    // Repopulate data on re-entry from lazy registeration
+    useEffect(() => {
+        const savedFormData = localStorage.getItem("formData");
+        if (savedFormData) {
+            const parsedData = JSON.parse(savedFormData);
+    
+            setTitle(parsedData.title || "");
+            setSalesPitch(parsedData.salesPitch || "");
+            setDescription(parsedData.description || "");
+            setSubjectId(parsedData.subjectId || "");
+            setPricing(parsedData.pricing || "");
+    
+            // Note: Files like selectedImage, selectedFile, and selectedVideo need to be re-uploaded
+            if (parsedData.selectedImage || parsedData.selectedFile || parsedData.selectedVideo) {
+                alert(`Please re-upload your image or attached files/videos.`);
+            }
+        }
+    
+        // Clear local storage after repopulating
+        localStorage.removeItem("formData");
+    }, []);    
+
     return (
         <div
             className="top-0 flex items-center justify-center sm:min-h-screen bg-gray-100 bg-fixed relative"
@@ -166,7 +243,7 @@ const ApplyPage = () => {
                                 name="name"
                                 id="name-icon"
                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full pl-10 p-2.5"
-                                placeholder="Type your full name"
+                                placeholder="Sign in/Register to apply as a tutor"
                                 value={user?.name || ""}
                                 disabled
                             />
@@ -185,7 +262,7 @@ const ApplyPage = () => {
                                 name="email"
                                 id="email-address-icon"
                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full pl-10 p-2.5"
-                                placeholder="Type SFSU email"
+                                placeholder="Sign in/Register to apply as a tutor"
                                 value={user?.email || ""}
                                 disabled
                             />
@@ -211,14 +288,14 @@ const ApplyPage = () => {
                                     d="M8 17.345a4.76 4.76 0 0 0 2.558 1.618c2.274.589 4.512-.446 4.999-2.31.487-1.866-1.273-3.9-3.546-4.49-2.273-.59-4.034-2.623-3.547-4.488.486-1.865 2.724-2.899 4.998-2.31.982.236 1.87.793 2.538 1.592m-3.879 12.171V21m0-18v2.2"
                                 />
                             </svg>
-                        <input type="number" onChange={(e) => setPricing(e.target.value)} min="1" step="1" name="price" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full pl-10 p-2.5" placeholder="Enter price per hour" required />
+                        <input type="number" value={pricing || ""} onChange={(e) => setPricing(e.target.value)} min="1" step="1" name="price" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full pl-10 p-2.5" placeholder="Enter price per hour" required />
                     </div>
                 </div>
 
                     {/* Subject Dropdown Field*/}
                     <div>
                         <label htmlFor="category" className="block mb-2 text-sm font-semibold text-gray-900">Which Subject Are You Tutoring? <label className="text-red-600">*</label></label>
-                        <select id="category" onChange={(e) => setSubjectId(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" required>
+                        <select id="category" value={subjectId || ""} onChange={(e) => setSubjectId(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" required>
                             <option value="">---</option>
 
                             {subjectList.map((subjectItem) => (
@@ -230,16 +307,22 @@ const ApplyPage = () => {
                         </select>
                     </div>
 
-                    {/* Pitch Input Field*/}
+                    {/* Title Input Field*/}
                     <div className="sm:col-span-1">
+                        <label htmlFor="title" className="block mb-2 text-sm font-semibold text-gray-900">Creative title for listing <label className="text-red-600">*</label></label>
+                        <textarea id="title" rows="3" maxLength={100} value={title || ""} onChange={(e) => setTitle(e.target.value)} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-600 focus:border-primary-600 " placeholder="Create a creative short title here! (100 characters max)" required></textarea>
+                    </div>
+
+                    {/* Pitch Input Field*/}
+                    <div className="sm:col-span-2">
                         <label htmlFor="description" className="block mb-2 text-sm font-semibold text-gray-900">Short pitch for listing <label className="text-red-600">*</label></label>
-                        <textarea id="description" rows="5" maxLength={300} onChange={(e) => setSalesPitch(e.target.value)} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-600 focus:border-primary-600 " placeholder="Advertise yourself here! (300 characters max)" required></textarea>
+                        <textarea id="description" rows="5" maxLength={300} value={salesPitch || ""} onChange={(e) => setSalesPitch(e.target.value)} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-600 focus:border-primary-600 " placeholder="Advertise yourself here! (300 characters max)" required></textarea>
                     </div>
 
                     {/* Tutor bio Input Field*/}
-                    <div className="sm:col-span-2">
+                    <div className="sm:col-span-3">
                         <label htmlFor="description" className="block mb-2 text-sm font-semibold text-gray-900">About Me <label className="text-red-600">*</label></label>
-                        <textarea id="description" rows="8" onChange={(e) => setDescription(e.target.value)} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-600 focus:border-primary-600 " placeholder="Write your tutor bio here" required></textarea>
+                        <textarea id="description" rows="8" value={description || ""} onChange={(e) => setDescription(e.target.value)} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-600 focus:border-primary-600 " placeholder="Write your tutor bio here" required></textarea>
                     </div>
                 </div>
 
@@ -273,14 +356,14 @@ const ApplyPage = () => {
                             <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
                                 <span className="font-semibold">Click to upload</span> or drag and drop
                             </p>
-                            <p className="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, or JPGF (MAX. 5MB)</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG, or JPGF (MAX. 5MB)</p>
                         </div>
                         <input
                             type="file"
                             id="dropzone-file"
                             className="absolute opacity-0 cursor-pointer"
                             style={{ width: '100%', height: '100%', top: 0, left: 0 }}
-                            accept=".svg,.png,.jpg"
+                            accept=".svg,.png,.jpg, .jpgf"
                             onChange={handleImageUpload}
                             required
                         />
@@ -317,14 +400,14 @@ const ApplyPage = () => {
                             <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
                                 <span className="font-semibold">Click to upload</span> or drag and drop
                             </p>
-                            <p className="text-xs text-gray-500 dark:text-gray-400">PDF or DOCX (MAX. 10MB)</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">PDF ONLY (MAX. 10MB)</p>
                         </div>
                         <input
                             type="file"
                             id="dropzone-file"
                             className="absolute opacity-0 cursor-pointer"
                             style={{ width: '100%', height: '100%', top: 0, left: 0 }}
-                            accept=".pdf, .docx"
+                            accept=".pdf"
                             onChange={handleFileUpload}
                         />
                     </label>
@@ -379,7 +462,7 @@ const ApplyPage = () => {
                 <button type="submit" className={`${loading ? "hidden" : "flex"} text-white inline-flex items-center bg-[#231161] hover:bg-[#1f0e55] focus:ring-[#552988] focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-4`}>
                     Submit Form
                 </button>
-                <button type="cancel"onClick={() => navigate("/search?selectedSubject=&searchTerm=")} className={`${loading ? "hidden" : "flex"} text-white inline-flex items-center bg-red-600 hover:bg-red-800 focus:ring-red-300 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5`}>
+                <button type="cancel"onClick={() => navigate("/search")} className={`${loading ? "hidden" : "flex"} text-white inline-flex items-center bg-red-600 hover:bg-red-800 focus:ring-red-300 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5`}>
                     Cancel
                 </button>
             </form>

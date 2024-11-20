@@ -89,9 +89,9 @@ const Home = () => {
             </div>
             
             {/* Recent Listings */}
-            <section className="bg-gray-50 py-8 antialiased md:py-12">
+            <section className="bg-gray-50 py-4 antialiased md:py-6">
                 <div className="mx-auto max-w-screen-xl px-4 2xl:px-0">
-                    <div className="mb-12 flex items-end justify-center space-y-4 sm:space-y-0 md:mb-16">
+                    <div className="mb-6 flex items-end justify-center space-y-4 sm:space-y-0 md:mb-8">
                         <h2 className="mt-3 text-[28px] font-bold text-gray-900">Recent Tutor Listings</h2>
                     </div>
 

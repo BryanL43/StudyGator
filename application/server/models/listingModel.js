@@ -22,19 +22,19 @@ const connectDB = require("../config/db");
  * @param {int} pricing The specified pricing per hour.
  * @return void, otherwise throws an error.
  */
-const addListing = async(userId, image, salesPitch, description, subjectId, pricing, attachedFile, attachedVideo) => {
+const addListing = async(userId, image, title, salesPitch, description, subjectId, pricing, attachedFile, attachedVideo) => {
     const connection = await connectDB();
 
     try {
-        let query = `INSERT INTO \`data-schema\`.TUTORLISTINGS (associated_user_id, image, sales_pitch, description, subject_id, pricing` +
+        let query = `INSERT INTO \`data-schema\`.TUTORLISTINGS (associated_user_id, image, title, sales_pitch, description, subject_id, pricing` +
             (attachedFile ? ', attached_file' : '') + 
             (attachedVideo ? ', attached_video' : '') +
-            `) VALUES (?, ?, ?, ?, ?, ?` +
+            `) VALUES (?, ?, ?, ?, ?, ?, ?` +
             (attachedFile ? ', ?' : '') +
             (attachedVideo ? ', ?' : '') +
             `)`;
 
-        const values = [userId, image, salesPitch, description, subjectId, pricing];
+        const values = [userId, image, title, salesPitch, description, subjectId, pricing];
         if (attachedFile) {
             values.push(attachedFile); // Add attached file if available
         }
@@ -78,7 +78,7 @@ const searchListing = async(selectedSubject, searchTerm) => {
         
         // Append search terms
         if (searchTerm) {
-            query += ` AND REPLACE(CONCAT_WS('', S.name, TL.sales_pitch, TL.description, RU.name), ' ', '') LIKE ?`;
+            query += ` AND REPLACE(CONCAT_WS('', S.name, TL.title, TL.sales_pitch, TL.description, RU.name), ' ', '') LIKE ?`;
             params.push(`%${searchTerm.replace(/\s/g, '')}%`);
         }
 

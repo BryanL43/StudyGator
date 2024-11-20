@@ -23,12 +23,12 @@ const { addListing, searchListing, getRecentListings, getListings, deleteListing
 const addListingHandler = async(req, res) => {
     // Acquire jwt token and process data
     const token = req.headers.authorization;
-    const { salesPitch, description, subjectId, pricing } = req.body;
+    const { title, salesPitch, description, subjectId, pricing } = req.body;
     const image = req.files["image"] ? req.files["image"][0].buffer : null;
     const attachedFile = req.files["attached_file"] ? req.files["attached_file"][0].buffer : null;
     const attachedVideo = req.files["attached_video"] ? req.files["attached_video"][0].buffer : null;
 
-    if (!token || !image || !salesPitch || !description || !subjectId || !pricing) {
+    if (!token || !image || !title || !salesPitch || !description || !subjectId || !pricing) {
         return res.status(400).json({ message: "Missing required fields." });
     }
 
@@ -37,7 +37,7 @@ const addListingHandler = async(req, res) => {
         const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
         const userId = decodedToken.id;
 
-        await addListing(userId, image, salesPitch, description, subjectId, pricing, attachedFile, attachedVideo);
+        await addListing(userId, image, title, salesPitch, description, subjectId, pricing, attachedFile, attachedVideo);
         return res.status(201).json({ message: "Listing created successfully." });
     } catch (error) {
         // Specific error for JWT unauthenticity

@@ -107,14 +107,14 @@ const ListingPage = () => {
                         <>
                             {isFilterApplied ? (
                                 // If the filter is applied
-                                <h2 className="text-m font-semibold">Search Results: {filteredListings.length} items found</h2>
+                                <h2 className="text-m font-semibold pr-4">Search Results: {filteredListings.length} items found</h2>
                             ) : listings.length > 0 && !randomListing ? (
                                 // If no filter is applied
-                                <h2 className="text-m font-semibold">Search Results: {listings.length} items found</h2>
+                                <h2 className="text-m font-semibold pr-4">Search Results: {listings.length} items found</h2>
                             ) : listings && listings.length > 0 && !randomListing ? (
-                                <h2 className="text-m font-semibold">Search Results: {listings.length} items found</h2>
+                                <h2 className="text-m font-semibold pr-4">Search Results: {listings.length} items found</h2>
                             ) : listings && listings.length > 0 && randomListing ? (
-                                <h2 className="text-m font-semibold">
+                                <h2 className="text-m font-semibold pr-4">
                                     We couldn't find your desired tutor listing, but here are some tutors that might interest you.
                                     <br />
                                     Please refine your search or select a subject for a more precise result.

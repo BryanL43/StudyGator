@@ -56,7 +56,12 @@ const LoginPage = () => {
             login(response.data.token, rememberMe);
             setLoading(false);
             setServerError(false);
-            navigate("/");
+
+            if (!localStorage.getItem("formData")) {
+                navigate("/");
+            } else {
+                navigate("/apply");
+            }
         } catch (error) {
             if (error.response && error.response.status === 401) {
                 setError(error.response ? error.response.data.message : "Fatal: network/server error");
@@ -151,7 +156,7 @@ const LoginPage = () => {
                         </span>
                         <button
                             type="submit"
-                            className="bg-[#231161] hover:bg-[#1f0e55] text-white font-medium rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#231161] focus:ring-offset-2"
+                            className="bg-[#231161] hover:bg-[#1f0e55] text-white font-medium rounded-lg px-4 py-2 focus:outline-none focus:ring-4 focus:ring-[#552988]"
                         >
                             Login
                         </button>
