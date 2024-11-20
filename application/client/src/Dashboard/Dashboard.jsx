@@ -148,7 +148,7 @@ const Dashboard = () => {
 
                         <div className={`${showingMsg ? "" : "hidden"} flex flex-col mt-8`}>
                             <div className="py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-                                <div className="min-h-[406px] inline-block min-w-full overflow-hidden align-middle border-b border-gray-200 shadow sm:rounded-lg">
+                                <div className="min-h-[406px] max-h-64 inline-block min-w-full overflow-y-auto align-middle border-b border-gray-200 shadow sm:rounded-lg">
                                     <table className="min-w-full">
                                         <thead>
                                             <tr>
@@ -171,7 +171,7 @@ const Dashboard = () => {
                                             </tr>
                                         </thead>
 
-                                        <tbody className="bg-white">
+                                        <tbody className="bg-white max-h-64 overflow-y-auto">
                                             <Message
                                                 name="Bryan Lee"
                                                 email="blee@sfsu.edu"
@@ -190,6 +190,27 @@ const Dashboard = () => {
                                                 awdawdwdadwad
                                                 awddawdawdawd
                                                 awdwdawdawdwdwadawdwadwdawdawdwadwdwad..."
+                                                date="November 2, 2024, 13:46:55"
+                                            />
+                                            <Message
+                                                name="Bryan Lee"
+                                                email="blee@sfsu.edu"
+                                                subject="Seeking computer science tutor"
+                                                content="I need help with CSC648..."
+                                                date="November 2, 2024, 13:46:55"
+                                            />
+                                            <Message
+                                                name="Bryan Lee"
+                                                email="blee@sfsu.edu"
+                                                subject="Seeking computer science tutor"
+                                                content="I need help with CSC648..."
+                                                date="November 2, 2024, 13:46:55"
+                                            />
+                                            <Message
+                                                name="Bryan Lee"
+                                                email="blee@sfsu.edu"
+                                                subject="Seeking computer science tutor"
+                                                content="I need help with CSC648..."
                                                 date="November 2, 2024, 13:46:55"
                                             />
                                             <Message
