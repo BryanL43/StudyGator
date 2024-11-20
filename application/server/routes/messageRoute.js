@@ -10,9 +10,9 @@
 
 const express = require('express');
 const router = express.Router();
-const {sendMessageHandler }= require('../controller/listingController');
+const { sendMessageHandler }= require('../controller/messageController');
 
 // Route to send a message
-router.post('/send', sendMessageHandler);
+router.post('/', sendMessageHandler);
 
 module.exports = router;

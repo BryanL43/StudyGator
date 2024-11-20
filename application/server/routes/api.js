@@ -18,7 +18,11 @@ const getSubjectRoute = require("./subjectRoute.js");
 const recentListingRoute = require("./recentListingRoute.js");
 const tutorListingRoute = require("./tutorListingRoute.js");
 const deleteListingRoute = require("./deleteListingRoute.js");
+const messageRoute = require("./messageRoute.js");
+const fetchMessageRoute = require("./fetchMessageRoute.js");
 
+// Note: these are individual endpoints rather than using /endpoint/:id
+// as I do not want to expose sensitive data via the JWT tokens to a public url query
 router.use("/register", registerRoute);
 router.use("/login", loginRoute);
 router.use("/apply", applyRoute);
@@ -27,5 +31,7 @@ router.use("/subject", getSubjectRoute);
 router.use("/recent", recentListingRoute);
 router.use("/fetchlistings", tutorListingRoute);
 router.use("/delete", deleteListingRoute);
+router.use("/message", messageRoute);
+router.use("/fetchmessages", fetchMessageRoute);
 
 module.exports = router;

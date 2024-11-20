@@ -149,47 +149,10 @@ const deleteListingHandler = async(req, res) => {
     }
 }
 
-const sendMessageHandler = async (req, res) => {
-    // Extract everything from req.body
-    const { recipientId, listingId, content } = req.body;
-    const token =req.headers.authorization;
-    
-
-    // Check if all required fields are provided
-    if ( !recipientId || !listingId || !content || !token) {
-        return res.status(400).json({ message: "Missing required fields." });
-    }
-
-    try {
-        // Verify the JWT token to authenticate the sender
-        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-
-        // Ensure that the senderId matches the decoded token's ID
-       // if (decodedToken.id !== senderId) {
-           // return res.status(401).json({ message: "Unauthorized sender ID." });
-       // }
-
-        // Pass the entire body to the createMessage function
-        const result = await createMessage(req.body);
-
-        return res.status(201).json({ message: "Message sent successfully.", result });
-    } catch (error) {
-        // Specific error for JWT unauthenticity
-        if (error instanceof jwt.JsonWebTokenError) {
-            return res.status(401).json({ message: "Invalid token" });
-        }
-
-        // Internal server error
-        return res.status(500).json({ message: "Failed to send message", error: error.message });
-    }
-};
-
 module.exports = {
     addListingHandler,
     searchListingHandler,
     getRecentListingsHandler,
     getTutorListingsHandler,
-    deleteListingHandler,
-    sendMessageHandler
-    
+    deleteListingHandler
 }
