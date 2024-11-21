@@ -87,7 +87,7 @@ const TutorListingCard = React.memo(({ metadata, isDashboard, refreshList }) => 
                 </p>
                 
                 {/* Description content */}
-                <p className="mb-3 font-normal text-gray-700">{metadata.sales_pitch}</p>
+                <p className="mb-3 font-normal text-gray-700 min-h-48 max-h-48">{metadata.sales_pitch}</p>
 
                 {/* Bottom bar with Message & More detail button */}
                 <div className="mt-4 flex items-center justify-between gap-4">
