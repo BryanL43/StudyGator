@@ -82,7 +82,7 @@ const Dashboard = () => {
                         <div className="mt-4">
                             <div className="flex flex-wrap -mx-6">
                                 <div className="w-full px-6 sm:w-1/2 xl:w-1/3 cursor-pointer">
-                                    <div className="flex items-center px-5 py-6 bg-white rounded-md shadow-sm" onClick={() => { if (!showingMsg) setShowingMsg(true); }}>
+                                    <div className="flex items-center px-5 py-6 bg-white rounded-md shadow-sm hover:bg-gray-100" onClick={() => { if (!showingMsg) setShowingMsg(true); }}>
                                         <div className="p-3 bg-indigo-600 bg-opacity-75 rounded-full">
                                             <img src={emailIcon} className="w-10 h-10 filter invert brightness-200" alt="" />
                                         </div>
@@ -94,13 +94,13 @@ const Dashboard = () => {
                                     </div>
                                 </div>
 
-                                <div className="w-full px-6 mt-6 sm:w-1/2 xl:w-1/3 sm:mt-0 cursor-pointer">
-                                    <div className="flex items-center px-5 py-6 bg-white rounded-md shadow-sm" onClick={() => { if (showingMsg) setShowingMsg(false); }} >
+                                <div className="w-full px-6 mt-6 sm:w-1/2 xl:w-1/3 sm:mt-0 cursor-pointer ">
+                                    <div className="flex items-center px-5 py-6 bg-white rounded-md shadow-sm hover:bg-gray-100" onClick={() => { if (showingMsg) setShowingMsg(false); }} >
                                         <div className="p-3 bg-orange-600 bg-opacity-75 rounded-full">
                                             <img src={clipboardIcon} className="w-10 h-10 filter invert brightness-200" alt="" />
                                         </div>
 
-                                        <div className="mx-5">
+                                        <div className="mx-5 ">
                                             <h4 className="text-2xl font-semibold text-gray-700">My Listings</h4>
                                             <div className="text-gray-500">Manage your tutor listings here</div>
                                         </div>
@@ -150,7 +150,7 @@ const Dashboard = () => {
                             <div className="py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
                                 <div className="min-h-[406px] max-h-64 inline-block min-w-full overflow-y-auto align-middle border-b border-gray-200 shadow sm:rounded-lg">
                                     <table className="min-w-full">
-                                        <thead>
+                                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                             <tr>
                                                 <th
                                                     className="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
@@ -165,14 +165,14 @@ const Dashboard = () => {
                                                     className="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
                                                     Date Sent</th>
                                                 <th
-                                                    className="border-b border-gray-200 bg-gray-50">
-                                                    <img src={trashCanIcon} onClick={toggleDeleteWarning} className="w-[20px] h-[20px] cursor-pointer" alt="delete message" />
+                                                    className="border-b border-gray-200 bg-gray-50 ">
+                                                    <img src={trashCanIcon} onClick={toggleDeleteWarning} className="w-[20px] h-[20px] cursor-pointer hover:bg-gray-300" alt="delete message" />
                                                 </th>
                                             </tr>
                                         </thead>
 
                                         <tbody className="bg-white max-h-64 overflow-y-auto">
-                                            <Message
+                                            <Message  
                                                 name="Bryan Lee"
                                                 email="blee@sfsu.edu"
                                                 subject="Seeking computer science tutor"
