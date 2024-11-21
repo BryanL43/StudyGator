@@ -110,8 +110,9 @@ const Home = () => {
                     }
 
                     {/* Grid layout with 3 columns for the listing cards*/}
+                    <div className="flex items-center justify-center min-h-screen">
                     {!loading && listings && listings.length > 0 ? (
-                        <div className={`${serverError ? "hidden" : ""} mb-4 grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 justify-center justify-items-center`}>
+                        <div className={`${serverError ? "hidden" : ""} mb-4 grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 max-w-5xl justify-center`}>
                             {listings.map((listing) => (
                                 <TutorListingCard
                                     key={listing.id}
@@ -123,7 +124,8 @@ const Home = () => {
                     ) : !loading && (!listings || listings.length === 0) && !serverError ? (
                         <h2 className="text-m font-semibold text-center">No listings currently exist.</h2>
                     ) : null}
-                    
+                    </div>
+
                     {listings && listings.length > 0 && (
                         <div className="w-full text-center">
                             <button type="button" onClick={() => { navigate("/search?selectedSubject=&searchTerm="); window.scrollTo({ top: 0 }); }} className="rounded-lg border border-gray-200 bg-white w-[130px] px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100">Browse more</button>
