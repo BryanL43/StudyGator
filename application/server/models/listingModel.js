@@ -202,5 +202,5 @@ module.exports = {
     searchListing,
     getRecentListings,
     getListings,
-    deleteListing
+    deleteListing,
 }
