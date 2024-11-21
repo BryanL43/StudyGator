@@ -100,7 +100,7 @@ const Dashboard = () => {
                                             <img src={clipboardIcon} className="w-10 h-10 filter invert brightness-200" alt="" />
                                         </div>
 
-                                        <div className="mx-5">
+                                        <div className="mx-5 ">
                                             <h4 className="text-2xl font-semibold text-gray-700">My Listings</h4>
                                             <div className="text-gray-500">Manage my tutor listings here</div>
                                         </div>
@@ -148,9 +148,9 @@ const Dashboard = () => {
 
                         <div className={`${showingMsg ? "" : "hidden"} flex flex-col mt-8`}>
                             <div className="py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-                                <div className="min-h-[406px] inline-block min-w-full overflow-hidden align-middle border-b border-gray-200 shadow sm:rounded-lg">
+                                <div className="min-h-[406px] max-h-64 inline-block min-w-full overflow-y-auto align-middle border-b border-gray-200 shadow sm:rounded-lg">
                                     <table className="min-w-full">
-                                        <thead>
+                                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                             <tr>
                                                 <th
                                                     className="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
@@ -165,14 +165,14 @@ const Dashboard = () => {
                                                     className="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
                                                     Date Sent</th>
                                                 <th
-                                                    className="border-b border-gray-200 bg-gray-50">
-                                                    <img src={trashCanIcon} onClick={toggleDeleteWarning} className="w-[20px] h-[20px] cursor-pointer" alt="delete message" />
+                                                    className="border-b border-gray-200 bg-gray-50 ">
+                                                    <img src={trashCanIcon} onClick={toggleDeleteWarning} className="w-[20px] h-[20px] cursor-pointer hover:bg-gray-300" alt="delete message" />
                                                 </th>
                                             </tr>
                                         </thead>
 
-                                        <tbody className="bg-white">
-                                            <Message
+                                        <tbody className="bg-white max-h-64 overflow-y-auto">
+                                            <Message  
                                                 name="Bryan Lee"
                                                 email="blee@sfsu.edu"
                                                 subject="Seeking computer science tutor"
@@ -190,6 +190,27 @@ const Dashboard = () => {
                                                 awdawdwdadwad
                                                 awddawdawdawd
                                                 awdwdawdawdwdwadawdwadwdawdawdwadwdwad..."
+                                                date="November 2, 2024, 13:46:55"
+                                            />
+                                            <Message
+                                                name="Bryan Lee"
+                                                email="blee@sfsu.edu"
+                                                subject="Seeking computer science tutor"
+                                                content="I need help with CSC648..."
+                                                date="November 2, 2024, 13:46:55"
+                                            />
+                                            <Message
+                                                name="Bryan Lee"
+                                                email="blee@sfsu.edu"
+                                                subject="Seeking computer science tutor"
+                                                content="I need help with CSC648..."
+                                                date="November 2, 2024, 13:46:55"
+                                            />
+                                            <Message
+                                                name="Bryan Lee"
+                                                email="blee@sfsu.edu"
+                                                subject="Seeking computer science tutor"
+                                                content="I need help with CSC648..."
                                                 date="November 2, 2024, 13:46:55"
                                             />
                                             <Message
