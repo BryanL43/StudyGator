@@ -51,7 +51,13 @@ const Footer = () => {
                             <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase">Location</h2>
                             <ul className="text-gray-500 font-medium">
                                 <li className="mb-4">
-                                    HSS Building<br></br>1600 Holloway Ave.<br></br>San Francisco,<br></br>CA 94132
+                                    HSS Building
+                                </li>
+                                <li className="mb-4">
+                                    1600 Holloway Ave.
+                                </li>
+                                <li className="mb-4">
+                                    San Francisco, CA 94132
                                 </li>
                             </ul>
                         </div>

@@ -59,18 +59,18 @@ const Message = ({ name, email, subject, content, date }) => {
             {/* Modal for Message Details */}
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
-                    <div className="w-full max-w-3xl p-8 bg-white rounded-lg shadow-lg">
+                    <div className="w-full max-w-3xl p-6 bg-white rounded-lg shadow-lg">
                         <div className="flex justify-between items-center mb-2">
                             <h3 className="text-2xl font-semibold">{subject}</h3>
                             <button
                                 onClick={toggleModal}
-                                className="text-gray-800 hover:text-gray-700"
+                                className="text-gray-800 hover:text-gray-700 hover:underline"
                             >
                                 Close
                             </button>
                         </div>
                         <p className="text-gray-600 mb-2">
-                            <strong>From:</strong> {name} (<a href={`mailto:${email}`} className="text-blue-600">{email}</a>)
+                            <strong>From:</strong> {name} (<a href={`mailto:${email}`} className="text-blue-600 hover:underline">{email}</a>)
                         </p>
                         <p className="text-gray-600 mb-4"><strong>Date Sent:</strong> {date}</p>
                         

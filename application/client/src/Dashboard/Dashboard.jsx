@@ -28,7 +28,7 @@ const Dashboard = () => {
     const [serverError, setServerError] = useState(false);
 
     useEffect(() => {
-        if (!user) {
+        if (!localStorage.getItem('authToken')) { // Direct fast verification
             navigate("/login"); // Redirect to log in if user is in unregistered mode
         }
     })
@@ -77,32 +77,32 @@ const Dashboard = () => {
             <div>
                 <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50">
                     <div className="container px-6 py-8 mx-auto">
-                        <h3 className="text-3xl font-medium text-gray-700">Dashboard</h3>
+                        <h3 className="text-3xl font-medium text-gray-700">Dashboard - Hello, {user?.name || "user"}</h3>
 
                         <div className="mt-4">
                             <div className="flex flex-wrap -mx-6">
                                 <div className="w-full px-6 sm:w-1/2 xl:w-1/3 cursor-pointer">
-                                    <div className="flex items-center px-5 py-6 bg-white rounded-md shadow-sm hover:bg-gray-100" onClick={() => { if (!showingMsg) setShowingMsg(true); }}>
+                                    <div className={`flex items-center px-5 py-6 ${showingMsg ? "bg-gray-200" : "bg-white"} hover:bg-gray-100 rounded-md shadow-sm`} onClick={() => { if (!showingMsg) setShowingMsg(true); }}>
                                         <div className="p-3 bg-indigo-600 bg-opacity-75 rounded-full">
                                             <img src={emailIcon} className="w-10 h-10 filter invert brightness-200" alt="" />
                                         </div>
 
                                         <div className="mx-5">
                                             <h4 className="text-2xl font-semibold text-gray-700">My Messages</h4>
-                                            <div className="text-gray-500">3 new messages</div>
+                                            <div className="text-gray-500">View my messages here</div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className="w-full px-6 mt-6 sm:w-1/2 xl:w-1/3 sm:mt-0 cursor-pointer ">
-                                    <div className="flex items-center px-5 py-6 bg-white rounded-md shadow-sm hover:bg-gray-100" onClick={() => { if (showingMsg) setShowingMsg(false); }} >
+                                <div className="w-full px-6 mt-6 sm:w-1/2 xl:w-1/3 sm:mt-0 cursor-pointer">
+                                    <div className={`flex items-center px-5 py-6 ${!showingMsg ? "bg-gray-200" : "bg-white"} hover:bg-gray-100 rounded-md shadow-sm`} onClick={() => { if (showingMsg) setShowingMsg(false); }} >
                                         <div className="p-3 bg-orange-600 bg-opacity-75 rounded-full">
                                             <img src={clipboardIcon} className="w-10 h-10 filter invert brightness-200" alt="" />
                                         </div>
 
                                         <div className="mx-5 ">
                                             <h4 className="text-2xl font-semibold text-gray-700">My Listings</h4>
-                                            <div className="text-gray-500">Manage your tutor listings here</div>
+                                            <div className="text-gray-500">Manage my tutor listings here</div>
                                         </div>
                                     </div>
                                 </div>

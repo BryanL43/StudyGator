@@ -20,7 +20,6 @@ import Home from "./Home/Home.jsx";
 import About from "./about/AboutPage.jsx";
 import LoginPage from './auth/LoginPage.jsx';
 import SignupPage from './auth/SignupPage.jsx';
-import Results from './Home/Results.jsx';
 import Dashboard from './Dashboard/Dashboard.jsx';
 import SearchPage from './SearchPage/SearchPage.jsx'; 
 import ApplyPage from './ApplyPage/ApplyPage.jsx';  
@@ -42,7 +41,6 @@ function App() {
                             <Route path="/about/:name" element={<About />} />
                             <Route path="/login" element={<LoginPage />} />
                             <Route path="/signup" element={<SignupPage />} />
-                            <Route path="/results" element={<Results />} />
                             <Route path="/dashboard" element={<Dashboard />} />
                             <Route path="/search" element={<SearchPage />} />
                             <Route path="/apply" element={<ApplyPage />} />
