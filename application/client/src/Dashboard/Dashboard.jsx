@@ -33,14 +33,14 @@ const Dashboard = () => {
         }
     })
 
-    const resetServerError = () => {}; // empty pass-by
+    const resetServerError = () => { }; // empty pass-by
 
     const toggleDeleteWarning = () => {
         setDeleteWarning(!deleteWarning);
     }
 
     // Fetch tutor's listings on mount
-    const fetchListings = async() => {
+    const fetchListings = async () => {
         setLoading(true);
         try {
             const response = await axios.get(`${BASE_URL}/api/fetchlistings`, {
@@ -130,14 +130,16 @@ const Dashboard = () => {
                                 }
 
                                 {!loading && listings && listings.length > 0 ? (
-                                    <div className={`${serverError ? "hidden" : ""} mb-4 grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 justify-center justify-items-center`}>
-                                        {listings.map((listing) => (
-                                            <TutorListingCard
-                                                key={listing.id}
-                                                metadata={listing}
-                                                isDashboard={true}
-                                            />
-                                        ))}
+                                    <div class="flex justify-center items-center">
+                                        <div className={`${serverError ? "hidden" : ""} mb-4 grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 max-w-5xl justify-items-center`}>
+                                            {listings.map((listing) => (
+                                                <TutorListingCard
+                                                    key={listing.id}
+                                                    metadata={listing}
+                                                    isDashboard={true}
+                                                />
+                                            ))}
+                                        </div>
                                     </div>
                                 ) : !loading && (!listings || listings.length === 0) && !serverError ? (
                                     <h2 className="text-m font-semibold text-center">You have no tutor listing yet. Apply now to become a tutor!</h2>
@@ -172,7 +174,7 @@ const Dashboard = () => {
                                         </thead>
 
                                         <tbody className="bg-white max-h-64 overflow-y-auto">
-                                            <Message  
+                                            <Message
                                                 name="Bryan Lee"
                                                 email="blee@sfsu.edu"
                                                 subject="Seeking computer science tutor"

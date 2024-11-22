@@ -110,7 +110,7 @@ const Home = () => {
                     }
 
                     {/* Grid layout with 3 columns for the listing cards*/}
-                    <div className="flex items-center justify-center min-h-screen">
+                    <div className="flex items-center justify-center">
                     {!loading && listings && listings.length > 0 ? (
                         <div className={`${serverError ? "hidden" : ""} mb-4 grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 max-w-5xl justify-center`}>
                             {listings.map((listing) => (
