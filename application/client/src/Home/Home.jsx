@@ -14,17 +14,22 @@ import axios from 'axios';
 import BASE_URL from '../utils/config';
 import { useNavigate } from 'react-router-dom';
 import loadingIcon from '../icons/LoadingIcon.svg';
+import { useAuth } from '../AuthContext';
 
 import TutorListingCard from '../components/TutorListingCard';
 import ErrorAlert from '../components/ErrorAlert';
+import SuccessAlert from '../components/SuccessAlert';
 
 const Home = () => {
+    const { user } = useAuth();
     const navigate = useNavigate();
 
     const [loading, setLoading] = useState(true);
     const [serverError, setServerError] = useState(false);
+    const [successAlert, setSuccessAlert] = useState(false);
 
     const [listings, setListings] = useState([]);
+    const [contents, setContents] = useState("");
 
     const resetServerError = () => {
         setServerError(false);
@@ -56,12 +61,50 @@ const Home = () => {
         fetchRecentListings();
     }, []);
 
+    // Lazy registeration re-entry to automatically send message
+    useEffect(() => {
+        const savedMessageData = localStorage.getItem("messageData");
+        
+        if (savedMessageData && user) {
+            const parsedData = JSON.parse(savedMessageData);
+            setContents(parsedData.content || "");
+            
+            if (contents && contents !== "") {
+                const sendMessage = async () => {
+                    try {
+                        await axios.post(`${BASE_URL}/api/message`, {
+                            token: localStorage.getItem("authToken"),
+                            listingId: parsedData.listingId,
+                            recipientId: parsedData.recipientId,
+                            content: contents
+                        });
+                        
+                        setSuccessAlert(true);
+                        localStorage.removeItem("messageData");
+                    } catch (error) {
+                        console.error("Error sending message:", error);
+                    }
+                };
+    
+                sendMessage();
+            }
+        }
+    
+        // Clear local storage after repopulating
+    }, [user, contents]);
+     
+
     return (
         <div>
             {/* Server error warning */}
             {serverError &&
                 <ErrorAlert message="Failed to load recent listings. Internal server error!" resetError={resetServerError} />
             }
+
+            {/* Success alert */}
+            {successAlert && (
+                <SuccessAlert message="Your message was successfully sent!" />
+            )}
 
             {/* Image carousel */}
             <div className="relative w-full">

@@ -18,14 +18,23 @@ const MessagePopUp = ({ name, email, title, content, date, metadata, toggleModal
     }
 
     const sendMessage = async() => {
-        if (!user) {
-            navigate("/login");
-            window.scroll({ top: 0 });
+        if (!contents) {
+            alert("Cannot send a empty message.");
             return;
         }
 
-        if (!contents) {
-            alert("Cannot send a empty message.");
+        // Trigger lazy registeration
+        if (!user) {
+            // Save message data to local storage
+            const messageState = {
+                listingId: metadata.id,
+                recipientId: metadata.associated_user_id,
+                content: contents
+            };
+            localStorage.setItem("messageData", JSON.stringify(messageState));
+    
+            window.scroll({ top: 0 });
+            navigate("/login");
             return;
         }
 

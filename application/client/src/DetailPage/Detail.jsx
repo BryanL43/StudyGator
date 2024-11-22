@@ -13,11 +13,15 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import emailIcon from '../icons/EmailIcon.svg';
 
+import MessagePopUp from '../components/MessagePopUp';
+import SuccessAlert from '../components/SuccessAlert';
+
 const Detail = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const { tutor } = location.state || {};
     const [isPdfModalOpen, setIsPdfModalOpen] = useState(false);
+    const [successAlert, setSuccessAlert] = useState(false);
 
     const togglePdfModal = () => {
         setIsPdfModalOpen(!isPdfModalOpen);
@@ -27,8 +31,33 @@ const Detail = () => {
         window.scrollTo({ top: 0 }); // Load screen at the top
     }, []);
 
+    // State to control modal visibility
+    const [isMsgPopUpOpen, setMsgPopUpOpen] = useState(false);
+
+    const toggleModal = () => {
+        setMsgPopUpOpen(!isMsgPopUpOpen);
+    };
+
     return (
         <div className="flex flex-col items-center bg-gray-50">
+
+            {/* Success alert */}
+            {successAlert && (
+                <SuccessAlert message="Your message was successfully sent!" />
+            )}
+
+            {isMsgPopUpOpen && (
+                <MessagePopUp
+                    name={tutor?.tutorName || ""}
+                    title={tutor?.title || ""}
+                    content=""
+                    metadata={tutor}
+                    toggleModal={toggleModal}
+                    isSending={true}
+                    setSuccessAlert={setSuccessAlert}
+                />
+            )}
+
             {/* Full Width Background Section */}
             <div
                 className="w-full h-64 mb-[-3rem] bg-cover bg-center"
@@ -54,6 +83,7 @@ const Detail = () => {
            <div className="flex items-center justify-center space-x-4 mt-4">
                 <button
                     type="button"
+                    onClick={toggleModal}
                     className="flex items-center justify-between px-4 py-2 text-base font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg"
                 >
                     Message
@@ -63,7 +93,7 @@ const Detail = () => {
                 {tutor?.attached_file && (
                     <button
                         onClick={togglePdfModal}
-                        className="px-4 py-2 text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-2 focus:ring-green-400"
+                        className="px-4 py-2 text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-green-400 focus:ring-4 focus:outline-none"
                     >
                         View Resume/CV
                     </button>
@@ -78,7 +108,7 @@ const Detail = () => {
                             <h3 className="text-xl font-semibold text-center w-full">Resume/CV</h3>
                             <button
                                 onClick={togglePdfModal}
-                                className="text-gray-800 hover:text-gray-700"
+                                className="text-gray-800 hover:text-gray-700 hover:underline"
                             >
                                 Close
                             </button>
@@ -143,8 +173,16 @@ const Detail = () => {
             {/* Back Button */}
             <div className="w-full flex justify-end p-4 max-w-screen-md">
                 <button
+                    type="button"
+                    onClick={toggleModal}
+                    className="flex items-center justify-between px-4 py-2 mr-4 text-base font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg"
+                >
+                    Message
+                    <img src={emailIcon} alt="Message Icon" className="w-5 h-5 ml-2 invert brightness-200" />
+                </button>
+                <button
                     onClick={() => navigate(-1)} // Navigate back to the previous page
-                    className="flex items-center text-white bg-[#231161] hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5"
+                    className="flex items-center text-white bg-[#231161] hover:bg-[#1f0e55] focus:ring-[#552988] focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5"
                 >
                     Back
                     <svg className="ml-2 -mr-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
