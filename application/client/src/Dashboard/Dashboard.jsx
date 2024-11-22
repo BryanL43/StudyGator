@@ -6,9 +6,9 @@ import BASE_URL from '../utils/config';
 
 import TutorListingCard from '../components/TutorListingCard';
 import Message from '../components/Message';
+import MessagePopUp from '../components/MessagePopUp';
 import emailIcon from '../icons/EmailIcon.svg';
 import clipboardIcon from '../icons/ClipboardIcon.svg';
-import trashCanIcon from '../icons/TrashCanIcon.svg';
 import loadingIcon from '../icons/LoadingIcon.svg';
 
 import ErrorAlert from '../components/ErrorAlert';
@@ -23,7 +23,7 @@ const Dashboard = () => {
     const [showingMsg, setShowingMsg] = useState(true);
 
     const [listings, setListings] = useState([]);
-    const [deleteWarning, setDeleteWarning] = useState(false);
+    const [messageList, setMessageList] = useState([0]);
     const [loading, setLoading] = useState(true);
     const [serverError, setServerError] = useState(false);
 
@@ -33,14 +33,23 @@ const Dashboard = () => {
         }
     })
 
-    const resetServerError = () => { }; // empty pass-by
+    // State to control modal visibility
+    const [selectedMessage, setSelectedMessage] = useState(null);
+    const [isMsgPopUpOpen, setMsgPopUpOpen] = useState(false);
 
-    const toggleDeleteWarning = () => {
-        setDeleteWarning(!deleteWarning);
-    }
+    const toggleModal = () => {
+        setMsgPopUpOpen(!isMsgPopUpOpen);
+    };
+
+    const handleOpenModal = (messageData) => {
+        setSelectedMessage(messageData);
+        toggleModal();
+    };
+
+    const resetServerError = () => {}; // empty pass-by
 
     // Fetch tutor's listings on mount
-    const fetchListings = async () => {
+    const fetchListings = async() => {
         setLoading(true);
         try {
             const response = await axios.get(`${BASE_URL}/api/fetchlistings`, {
@@ -58,7 +67,25 @@ const Dashboard = () => {
         };
     }
 
+    const fetchMessages = async() => {
+        try {
+            const response = await axios.get(`${BASE_URL}/api/fetchmessages`, {
+                headers: {
+                    'Authorization': localStorage.getItem("authToken")
+                }
+            });
+            setMessageList(response.data.results);
+        } catch (error) {
+            console.error("Error fetching messages:", error);
+        }
+    }
+
+    const refreshList = async() => {
+        await fetchListings();
+    };
+
     useEffect(() => {
+        fetchMessages();
         fetchListings();
     }, []);
 
@@ -70,9 +97,21 @@ const Dashboard = () => {
             )}
 
             {/* Server error warning */}
-            {serverError &&
+            {serverError && (
                 <ErrorAlert message="Failed to load your tutor listings. Internal server error!" resetError={resetServerError} />
-            }
+            )}
+
+            {isMsgPopUpOpen && selectedMessage && (
+                <MessagePopUp
+                    name={selectedMessage.name}
+                    email={selectedMessage.email}
+                    title={selectedMessage.title}
+                    content={selectedMessage.content}
+                    date={selectedMessage.date}
+                    toggleModal={toggleModal}
+                    isSending={false}
+                />
+            )}
 
             <div>
                 <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50">
@@ -130,16 +169,15 @@ const Dashboard = () => {
                                 }
 
                                 {!loading && listings && listings.length > 0 ? (
-                                    <div class="flex justify-center items-center">
-                                        <div className={`${serverError ? "hidden" : ""} mb-4 grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 max-w-5xl justify-items-center`}>
-                                            {listings.map((listing) => (
-                                                <TutorListingCard
-                                                    key={listing.id}
-                                                    metadata={listing}
-                                                    isDashboard={true}
-                                                />
-                                            ))}
-                                        </div>
+                                    <div className={`${serverError ? "hidden" : ""} mb-4 grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 justify-center justify-items-center`}>
+                                        {listings.map((listing) => (
+                                            <TutorListingCard
+                                                key={listing.id}
+                                                metadata={listing}
+                                                isDashboard={true}
+                                                refreshList={refreshList}
+                                            />
+                                        ))}
                                     </div>
                                 ) : !loading && (!listings || listings.length === 0) && !serverError ? (
                                     <h2 className="text-m font-semibold text-center">You have no tutor listing yet. Apply now to become a tutor!</h2>
@@ -152,83 +190,54 @@ const Dashboard = () => {
                             <div className="py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
                                 <div className="min-h-[406px] max-h-64 inline-block min-w-full overflow-y-auto align-middle border-b border-gray-200 shadow sm:rounded-lg">
                                     <table className="min-w-full">
-                                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                             <tr>
                                                 <th
-                                                    className="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+                                                    className="px-10 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
                                                     Sender</th>
                                                 <th
                                                     className="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
-                                                    Subject</th>
+                                                    Tutor Listing Title</th>
                                                 <th
                                                     className="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
                                                     Content</th>
                                                 <th
                                                     className="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
                                                     Date Sent</th>
-                                                <th
-                                                    className="border-b border-gray-200 bg-gray-50 ">
-                                                    <img src={trashCanIcon} onClick={toggleDeleteWarning} className="w-[20px] h-[20px] cursor-pointer hover:bg-gray-300" alt="delete message" />
-                                                </th>
                                             </tr>
                                         </thead>
 
                                         <tbody className="bg-white max-h-64 overflow-y-auto">
-                                            <Message
-                                                name="Bryan Lee"
-                                                email="blee@sfsu.edu"
-                                                subject="Seeking computer science tutor"
-                                                content="I need help with CSC648 and 
-                                                
-                                                afafawfea 
-                                                afawfawf
-                                                awfawfawf
-                                                afawfawfwa
-                                                fawf
-                                                awf
-                                                awfaw
-                                                faw
-                                                dawdwa
-                                                awdawdwdadwad
-                                                awddawdawdawd
-                                                awdwdawdawdwdwadawdwadwdawdawdwadwdwad..."
-                                                date="November 2, 2024, 13:46:55"
-                                            />
-                                            <Message
-                                                name="Bryan Lee"
-                                                email="blee@sfsu.edu"
-                                                subject="Seeking computer science tutor"
-                                                content="I need help with CSC648..."
-                                                date="November 2, 2024, 13:46:55"
-                                            />
-                                            <Message
-                                                name="Bryan Lee"
-                                                email="blee@sfsu.edu"
-                                                subject="Seeking computer science tutor"
-                                                content="I need help with CSC648..."
-                                                date="November 2, 2024, 13:46:55"
-                                            />
-                                            <Message
-                                                name="Bryan Lee"
-                                                email="blee@sfsu.edu"
-                                                subject="Seeking computer science tutor"
-                                                content="I need help with CSC648..."
-                                                date="November 2, 2024, 13:46:55"
-                                            />
-                                            <Message
-                                                name="Bryan Lee"
-                                                email="blee@sfsu.edu"
-                                                subject="Seeking computer science tutor"
-                                                content="I need help with CSC648..."
-                                                date="November 2, 2024, 13:46:55"
-                                            />
-                                            <Message
-                                                name="Bryan Lee"
-                                                email="blee@sfsu.edu"
-                                                subject="Seeking computer science tutor"
-                                                content="I need help with CSC648..."
-                                                date="November 2, 2024, 13:46:55"
-                                            />
+
+                                            {messageList && messageList.length === 0 ? (
+                                                <tr>
+                                                    <td colSpan="4" className="text-center w-full h-[362px]">
+                                                        You have no messages yet!
+                                                    </td>
+                                                </tr>
+                                            ) : (
+                                                messageList.map((messages) => (
+                                                    <Message
+                                                        key={Math.random()}
+                                                        id={messages.id}
+                                                        name={messages.senderName}
+                                                        email={messages.senderEmail}
+                                                        title={messages.listingTitle}
+                                                        content={messages.content}
+                                                        date={messages.date_created}
+                                                        onClick={() =>
+                                                            handleOpenModal({
+                                                                name: messages.senderName,
+                                                                email: messages.senderEmail,
+                                                                title: messages.listingTitle,
+                                                                content: messages.content,
+                                                                date: messages.date_created,
+                                                            })
+                                                        }
+                                                    />
+                                                ))
+                                            )}
+
                                         </tbody>
                                     </table>
                                 </div>

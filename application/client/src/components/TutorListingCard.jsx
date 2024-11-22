@@ -16,8 +16,11 @@ import axios from 'axios';
 import BASE_URL from '../utils/config';
 
 import Confirmation from './Confirmation';
+import MessagePopUp from './MessagePopUp';
+import SuccessAlert from './SuccessAlert';
 
 const TutorListingCard = React.memo(({ metadata, isDashboard, refreshList }) => {
+    const [successAlert, setSuccessAlert] = useState(false);
     const [deleteWarning, setDeleteWarning] = useState(false);
 
     const toggleDeleteWarning = () => setDeleteWarning(!deleteWarning);
@@ -43,6 +46,13 @@ const TutorListingCard = React.memo(({ metadata, isDashboard, refreshList }) => 
         deleteListing();
     };
 
+    // State to control modal visibility
+    const [isMsgPopUpOpen, setMsgPopUpOpen] = useState(false);
+
+    const toggleModal = () => {
+        setMsgPopUpOpen(!isMsgPopUpOpen);
+    };
+
     return (
         <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow">
             <Confirmation 
@@ -51,6 +61,23 @@ const TutorListingCard = React.memo(({ metadata, isDashboard, refreshList }) => 
                 onConfirm={handleDeleteConfirm}
                 message="Are you sure you want to delete the following listing?"
             />
+
+            {isMsgPopUpOpen && (
+                <MessagePopUp
+                    name={metadata.tutorName}
+                    title={metadata.title}
+                    content=""
+                    metadata={metadata}
+                    toggleModal={toggleModal}
+                    isSending={true}
+                    setSuccessAlert={setSuccessAlert}
+                />
+            )}
+
+            {/* Success alert */}
+            {successAlert && (
+                <SuccessAlert message="Your message was successfully sent!" />
+            )}
 
             {/* Listing title */}
             <Link to={{pathname : "/detail", }} state={{tutor: metadata}}>
@@ -101,6 +128,7 @@ const TutorListingCard = React.memo(({ metadata, isDashboard, refreshList }) => 
                     {isDashboard === false ? (
                         <button
                         type="button"
+                        onClick={toggleModal}
                         className="flex items-center justify-between px-4 py-2 text-base font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg"
                     >
                         Message

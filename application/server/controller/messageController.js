@@ -15,8 +15,7 @@ const jwt = require('jsonwebtoken');
 const { createMessage, getMessages } = require("../models/messageModel");
 
 const sendMessageHandler = async(req, res) => {
-    const token = req.headers.authorization;
-    const { listingId, recipientId, content } = req.body;
+    const { token, listingId, recipientId, content } = req.body;
 
     // Check if all required fields are provided
     if (!token || !listingId || !recipientId || !content) {

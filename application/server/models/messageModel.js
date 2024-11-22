@@ -33,10 +33,11 @@ const getMessages = async(userId) => {
 
     try {
         let query = `
-            SELECT M.*, SU.name AS senderName, RU.name AS recipientName
+            SELECT M.*, SU.name AS senderName, SU.email AS senderEmail, RU.name AS recipientName, TL.title AS listingTitle
             FROM \`data-schema\`.MESSAGES AS M
             JOIN \`data-schema\`.REGISTEREDUSERS AS SU ON M.sender_user_id = SU.id
             JOIN \`data-schema\`.REGISTEREDUSERS AS RU ON M.recipient_user_id = RU.id
+            JOIN \`data-schema\`.TUTORLISTINGS AS TL ON M.listing_id = TL.id
             WHERE M.recipient_user_id = ?
             ORDER BY M.date_created DESC
         `;
