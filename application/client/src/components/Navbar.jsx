@@ -158,10 +158,10 @@ const Navbar = () => {
                     <div ref={dropdownRef} className={`relative ${user ? '' : 'hidden'}`}>
                         <button
                             type="button"
-                            className="flex text-sm overflow-hidden bg-white rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 md:ml-4"
+                            className="flex text-sm overflow-hidden bg-white rounded-full md:me-0 focus:ring-4 focus:ring-yellow-500 md:ml-4"
                             id="user-menu-button"
                             aria-expanded={isDropdownOpen}
-                            onClick={toggleDropdown}
+                            onClick={toggleDropdown} 
                         >
                             <span className="sr-only">Open user menu</span>
                             <img className="w-8 h-8 rounded-full" src="/pfp.png" alt="Open user menu" />

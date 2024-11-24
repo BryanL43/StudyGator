@@ -148,7 +148,7 @@ const Dashboard = () => {
                             </div>
                         </div>
 
-                        <section className={`${showingMsg ? "hidden" : ""} bg-gray-50 py-8 antialiased md:py-12`}>
+                        <section className={`${showingMsg ? "hidden" : ""} bg-gray-50 py-8 antialiased md:py-12 flex justify-center`}>
                             <div className="mx-auto max-w-screen-xl px-4 2xl:px-0">
                                 <div className="mb-4 flex items-end justify-center space-y-4 sm:space-y-0 md:mb-8">
                                     <h2 className="mt-3 text-[28px] font-bold text-gray-900">Manage Tutor Listings</h2>
@@ -169,7 +169,7 @@ const Dashboard = () => {
                                 }
 
                                 {!loading && listings && listings.length > 0 ? (
-                                    <div className={`${serverError ? "hidden" : ""} mb-4 grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 justify-center justify-items-center`}>
+                                    <div className={`${serverError ? "hidden" : ""} grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 w-full max-w-5xl justify-center`}>
                                         {listings.map((listing) => (
                                             <TutorListingCard
                                                 key={listing.id}
