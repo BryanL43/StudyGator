@@ -12,6 +12,6 @@ const express = require('express');
 const router = express.Router();
 const { deleteMessageHandler } = require('../controller/messageController');
 
-router.get("/", deleteMessageHandler);
+router.delete("/", deleteMessageHandler);
 
 module.exports = router;

@@ -9,12 +9,15 @@
  It includes options to message to the tutor and view their resume.
 
 **************************************************************/
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import emailIcon from '../icons/EmailIcon.svg';
 
 import MessagePopUp from '../components/MessagePopUp';
 import SuccessAlert from '../components/SuccessAlert';
+
+const VideoComponent = React.lazy(() => import('../components/VideoComponent'));
+const PDFRenderComponent = React.lazy(() => import('../components/PDFRenderComponent'));
 
 const Detail = () => {
     const location = useLocation();
@@ -38,12 +41,20 @@ const Detail = () => {
         setMsgPopUpOpen(!isMsgPopUpOpen);
     };
 
+    // Reset successAlert in case user sends another message via the bottom message button
+    const toggleSuccessHandler = () => {
+        setSuccessAlert(false);
+    }
+
     return (
         <div className="flex flex-col items-center bg-gray-50">
 
             {/* Success alert */}
             {successAlert && (
-                <SuccessAlert message="Your message was successfully sent!" />
+                <SuccessAlert
+                    message="Your message was successfully sent!"
+                    onClose={toggleSuccessHandler}
+                />
             )}
 
             {isMsgPopUpOpen && (
@@ -102,7 +113,7 @@ const Detail = () => {
 
              {/* PDF Modal */}
              {isPdfModalOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50 will-change-transform">
                     <div className="w-full max-w-3xl p-8 bg-white rounded-lg shadow-lg">
                         <div className="flex justify-between items-center mb-4">
                             <h3 className="text-xl font-semibold text-center w-full">Resume/CV</h3>
@@ -115,23 +126,13 @@ const Detail = () => {
                         </div>
 
                         {/* PDF Embed Viewer */}
-                        <div className="overflow-auto" style={{ maxHeight: '90vh' }}>
-                            <iframe
-                                src={tutor.attached_file}
-                                width="100%"
-                                height="700px"
-                                className="rounded-md"
-                                title="Resume PDF"
-                                style={{ border: "none" }}
-                            ></iframe>
-                        </div>
+                        <Suspense fallback={<div>Loading pdf...</div>}>
+                        <   PDFRenderComponent pdfSrc={tutor.attached_file} />
+                        </Suspense>
+
                     </div>
                 </div>
             )}
-
-
-
-
 
             {/* Tutor Information */}
             <div className="text-center mb-8 mt-8">
@@ -147,21 +148,10 @@ const Detail = () => {
 
 
             {/* Video Section */}
-
             {tutor?.attached_video && (
-                <div className="flex justify-center w-full max-w-screen-md mb-8">
-                    {/* Aspect Ratio Wrapper */}
-                    <div className="relative w-full" style={{ paddingTop: '56.25%' }}> {/* 16:9 Aspect Ratio */}
-                        <video
-                            controls
-                            className="absolute top-0 left-0 w-full h-full rounded-md shadow-2xl object-cover"
-                        >
-                            <source src={tutor?.attached_video} type="video/mp4" />
-                            Your browser does not support the video tag.
-                        </video>
-                    </div>
-                </div>
-
+                <Suspense fallback={<div>Loading video...</div>}>
+                    <VideoComponent videoSrc={tutor.attached_video} />
+                </Suspense>
             )}
 
             {/* About Tutor */}
@@ -191,12 +181,7 @@ const Detail = () => {
                 </button>
             </div>
 
-        
-
-
         </div>
-
-
     );
 };
 

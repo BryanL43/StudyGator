@@ -7,7 +7,7 @@ import trashCanIcon from '../icons/TrashCanIcon.svg';
 import Confirmation from '../components/Confirmation';
 const convertDate = require('../utils/dateConverter');
 
-const MessagePopUp = ({ name, email, title, content, date, metadata, toggleModal, isSending, setSuccessAlert }) => {
+const MessagePopUp = ({ id, name, email, title, content, date, metadata, toggleModal, isSending, setSuccessAlert, refreshMessageList }) => {
     const { user } = useAuth();
     const navigate = useNavigate();
     const [contents, setContents] = useState(content);
@@ -54,7 +54,21 @@ const MessagePopUp = ({ name, email, title, content, date, metadata, toggleModal
     }
 
     const deleteMessage = async() => {
-        console.log("Delete function");
+        try {
+            await axios.delete(`${BASE_URL}/api/deletemessage`, {
+                headers: {
+                    'Authorization': localStorage.getItem("authToken")
+                },
+                data: {
+                    messageId: id
+                }
+            });
+            toggleDeleteWarning();
+            toggleModal();
+            refreshMessageList();
+        } catch (error) {
+            console.error("Error deleting message:", error);
+        };
     }
 
     return (

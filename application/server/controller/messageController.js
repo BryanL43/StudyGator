@@ -66,9 +66,9 @@ const getMessageHandler = async(req, res) => {
 
 const deleteMessageHandler = async (req, res) => {
     const token = req.headers.authorization; 
-    const { userId } = req.body; 
+    const { messageId } = req.body; 
 
-    if (!token || !userId) {
+    if (!token || !messageId) {
         return res.status(400).json({ message: 'Missing required fields.' });
     }
 
@@ -77,7 +77,7 @@ const deleteMessageHandler = async (req, res) => {
         const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
         const userId = decodedToken.id;
         
-        await deleteMessage(userId);
+        await deleteMessage(messageId, userId);
         return res.status(200).json({ message: 'Message deleted successfully.' });
     } catch (error) {
         // Handle invalid JWT token

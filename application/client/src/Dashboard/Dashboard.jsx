@@ -84,6 +84,10 @@ const Dashboard = () => {
         await fetchListings();
     };
 
+    const refreshMessageList = async() => {
+        await fetchMessages();
+    }
+
     useEffect(() => {
         fetchMessages();
         fetchListings();
@@ -103,6 +107,7 @@ const Dashboard = () => {
 
             {isMsgPopUpOpen && selectedMessage && (
                 <MessagePopUp
+                    id={selectedMessage.id}
                     name={selectedMessage.name}
                     email={selectedMessage.email}
                     title={selectedMessage.title}
@@ -110,6 +115,7 @@ const Dashboard = () => {
                     date={selectedMessage.date}
                     toggleModal={toggleModal}
                     isSending={false}
+                    refreshMessageList={refreshMessageList}
                 />
             )}
 
@@ -227,6 +233,7 @@ const Dashboard = () => {
                                                         date={messages.date_created}
                                                         onClick={() =>
                                                             handleOpenModal({
+                                                                id: messages.id,
                                                                 name: messages.senderName,
                                                                 email: messages.senderEmail,
                                                                 title: messages.listingTitle,

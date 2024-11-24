@@ -49,17 +49,16 @@ const getMessages = async(userId) => {
     }
 }
 
-const deleteMessage = async(userId) => {
+const deleteMessage = async(messageId, userId) => {
     const connection = await connectDB();
-
+    
     try {
-        let query = `
-            DELETE FROM  \`data-schema\`.MESSAGES
-            WHERE (sender_user_id = ? OR recipient_user_id = ?)
-            
+        const query = `
+            DELETE FROM \`data-schema\`.MESSAGES
+            WHERE id = ? AND recipient_user_id = ?
         `;
         
-        await connection.execute(query, [userId]);
+        await connection.execute(query, [messageId, userId]);
     } catch (error) {
         throw error;
     }

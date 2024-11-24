@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkclient=self.webpackChunkclient||[]).push([[840],{840:(e,s,t)=>{t.r(s),t.d(s,{default:()=>r});var l=t(43),a=t(579);const r=(0,l.memo)((e=>{let{pdfSrc:s}=e;return(0,a.jsx)("div",{className:"overflow-auto",style:{maxHeight:"90vh"},children:(0,a.jsx)("iframe",{src:s,width:"100%",height:"700px",className:"rounded-md",title:"Resume PDF",style:{border:"none"},loading:"lazy"})})}))}}]);
+//# sourceMappingURL=840.467d6d3e.chunk.js.map

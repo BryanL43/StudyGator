@@ -11,7 +11,7 @@
 import React from 'react';
 const convertDate = require('../utils/dateConverter');
 
-const Message = ({ id, name, email, title, content, date, onClick }) => {
+const Message = ({ name, email, title, content, date, onClick }) => {
     return (
         <>
             <tr className="cursor-pointer" onClick={onClick}>
