@@ -81,7 +81,7 @@ const TutorListingCard = React.memo(({ metadata, isDashboard, refreshList }) => 
 
             {/* Listing title */}
             <Link to={{pathname : "/detail", }} state={{tutor: metadata}}>
-                <h1 className="text-xl font-bold tracking-tight text-gray-900 text-ellipsis px-4 py-2 line-clamp-2 hover:underline">{metadata.title}</h1>
+                <h1 className="text-xl font-bold tracking-tight text-gray-900 text-ellipsis px-4 py-2 line-clamp-2 hover:underline min-h-16 max-h-16" >{metadata.title}</h1>
             </Link>
 
             {/* Image render */}
@@ -120,7 +120,7 @@ const TutorListingCard = React.memo(({ metadata, isDashboard, refreshList }) => 
                 </p>
                 
                 {/* Description content */}
-                <p className="mb-3 font-normal text-gray-700 min-h-48 max-h-48">{metadata.sales_pitch}</p>
+                <p className="mb-3 font-normal text-gray-700 min-h-48 max-h-48 overflow-hidden">{metadata.sales_pitch}</p>
 
                 {/* Bottom bar with Message & More detail button */}
                 <div className="mt-4 flex items-center justify-between gap-4">
