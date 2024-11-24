@@ -1,8 +1,5 @@
 const convertDate = (isoDate) => {
     const date = new Date(isoDate);
-    
-    // UTC-8 adjustments (Daylight savings for Fall 2024)
-    const pstDate = new Date(date.getTime() - (8 * 60 * 60 * 1000));
 
     const formatter = new Intl.DateTimeFormat("en-US", {
         year: "numeric",
@@ -11,9 +8,10 @@ const convertDate = (isoDate) => {
         hour: "numeric",
         minute: "numeric",
         hour12: true,
+        timeZone: "America/Los_Angeles"
     });
 
-    return formatter.format(pstDate);
+    return formatter.format(date);
 };
 
 module.exports = convertDate;
