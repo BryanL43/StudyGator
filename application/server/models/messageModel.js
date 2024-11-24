@@ -49,7 +49,24 @@ const getMessages = async(userId) => {
     }
 }
 
+const deleteMessage = async(userId) => {
+    const connection = await connectDB();
+
+    try {
+        let query = `
+            DELETE FROM  \`data-schema\`.MESSAGES
+            WHERE (sender_user_id = ? OR recipient_user_id = ?)
+            
+        `;
+        
+        await connection.execute(query, [userId]);
+    } catch (error) {
+        throw error;
+    }
+}
+
 module.exports = {
     createMessage,
-    getMessages
+    getMessages,
+    deleteMessage
 }

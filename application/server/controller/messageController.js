@@ -12,7 +12,7 @@
 **************************************************************/
 
 const jwt = require('jsonwebtoken');
-const { createMessage, getMessages } = require("../models/messageModel");
+const { createMessage, getMessages, deleteMessage } = require("../models/messageModel");
 
 const sendMessageHandler = async(req, res) => {
     const { token, listingId, recipientId, content } = req.body;
@@ -64,7 +64,34 @@ const getMessageHandler = async(req, res) => {
     }
 }
 
+const deleteMessageHandler = async (req, res) => {
+    const token = req.headers.authorization; 
+    const { userId } = req.body; 
+
+    if (!token || !userId) {
+        return res.status(400).json({ message: 'Missing required fields.' });
+    }
+
+    try {
+        // Verify the JWT token and extract the user ID
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decodedToken.id;
+        
+        await deleteMessage(userId);
+        return res.status(200).json({ message: 'Message deleted successfully.' });
+    } catch (error) {
+        // Handle invalid JWT token
+        if (error instanceof jwt.JsonWebTokenError) {
+            return res.status(401).json({ message: 'Invalid token' });
+        }
+
+        // Internal server error
+        return res.status(500).json({ message: error.message || 'Failed to delete message.' });
+    }
+};
+
 module.exports = {
     sendMessageHandler,
-    getMessageHandler
+    getMessageHandler,
+    deleteMessageHandler
 }
