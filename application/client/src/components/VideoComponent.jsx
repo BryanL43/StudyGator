@@ -14,7 +14,7 @@ import React, { memo } from 'react'
 
 const VideoComponent = memo(({ videoSrc }) => {
     return (
-        <div className="flex justify-center w-full max-w-screen-md mb-8">
+        <div className="flex justify-center w-full max-w-screen-md mb-8 px-4">
             {/* Aspect Ratio Wrapper */}
             <div className="relative w-full" style={{ paddingTop: '56.25%' }}> {/* 16:9 Aspect Ratio */}
                 <video

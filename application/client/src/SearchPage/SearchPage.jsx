@@ -95,7 +95,7 @@ const ListingPage = () => {
                 <ErrorAlert message="Failed to load tutor listings. Internal server error!" resetError={resetServerError} />
             }
 
-            <div className="flex flex-col items-center p-8 bg-gray-50 min-h-screen">
+            <div className="flex flex-col items-center p-8 bg-gray-50 min-h-screen w-full lg:w-auto">
                 <h1 className="text-2xl font-bold mb-6">Browse Tutor Listings</h1>
 
                 {/* Container for search result text and filter button */}

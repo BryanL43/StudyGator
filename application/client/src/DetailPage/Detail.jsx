@@ -12,6 +12,7 @@
 import React, { useEffect, useState, Suspense } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import emailIcon from '../icons/EmailIcon.svg';
+import cvIcon from '../icons/CVIcon.svg';
 
 import MessagePopUp from '../components/MessagePopUp';
 import SuccessAlert from '../components/SuccessAlert';
@@ -27,8 +28,24 @@ const Detail = () => {
     const [successAlert, setSuccessAlert] = useState(false);
 
     const togglePdfModal = () => {
-        setIsPdfModalOpen(!isPdfModalOpen);
+        if (tutor?.attached_file) {
+            const isMobile = /iPhone|iPod|Android/i.test(navigator.userAgent);
+            if (isMobile) {
+                // If not desktop/laptop screen then it will render the pdf as a seperate window due to MIME issue
+                const base64Pdf = tutor.attached_file;
+                const blob = new Blob([Uint8Array.from(atob(base64Pdf.split(",")[1]), c => c.charCodeAt(0))], { type: 'application/pdf' });
+                const blobUrl = URL.createObjectURL(blob);
+
+                window.open(blobUrl, '_blank');
+
+                // Revoke the Blob URL after use
+                setTimeout(() => URL.revokeObjectURL(blobUrl), 10000);
+            } else {
+                setIsPdfModalOpen(!isPdfModalOpen);
+            }
+        }
     };
+    
 
     useEffect(() => {
         window.scrollTo({ top: 0 }); // Load screen at the top
@@ -104,19 +121,20 @@ const Detail = () => {
                 {tutor?.attached_file && (
                     <button
                         onClick={togglePdfModal}
-                        className="px-4 py-2 text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-green-400 focus:ring-4 focus:outline-none"
+                        className="flex items-center justify-between px-4 py-2 text-base font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-green-400 focus:ring-4 focus:outline-none"
                     >
-                        View Resume/CV
+                        View CV
+                        <img src={cvIcon} alt="View CV Icon" className="w-5 h-5 ml-2 invert brightness-200" />
                     </button>
                 )}
             </div>
 
-             {/* PDF Modal */}
-             {isPdfModalOpen && (
+            {/* PDF Modal */}
+            {isPdfModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50 will-change-transform">
                     <div className="w-full max-w-3xl p-8 bg-white rounded-lg shadow-lg">
                         <div className="flex justify-between items-center mb-4">
-                            <h3 className="text-xl font-semibold text-center w-full">Resume/CV</h3>
+                            <h3 className="text-xl font-semibold text-center w-full">{tutor?.tutorName}'s CV</h3>
                             <button
                                 onClick={togglePdfModal}
                                 className="text-gray-800 hover:text-gray-700 hover:underline"
@@ -135,13 +153,13 @@ const Detail = () => {
             )}
 
             {/* Tutor Information */}
-            <div className="text-center mb-8 mt-8">
+            <div className="text-center mb-8 mt-8 px-4">
                 <h2 className="text-3xl font-bold text-gray-800 mb-2">{tutor?.tutorName}</h2>
                 <p className="text-lg text-gray-700"><strong>Subject Expertise:</strong> {tutor?.subjectName || 'N/A'}</p>
             </div>
 
             {/* Short Pitch */}
-            <div className="w-full max-w-lg text-left mb-8">
+            <div className="w-full max-w-lg text-left mb-8 px-4">
                 <h3 className="text-xl font-semibold text-gray-800 mb-2">Short Pitch</h3>
                 <p className="text-gray-700">{tutor?.sales_pitch?.slice(0, 300) || 'N/A'}</p>
             </div>
@@ -155,7 +173,7 @@ const Detail = () => {
             )}
 
             {/* About Tutor */}
-            <div className="w-full max-w-lg text-left">
+            <div className="w-full max-w-lg text-left px-4">
                 <h3 className="text-xl font-semibold text-gray-800 mb-2">About Tutor</h3>
                 <p className="text-gray-700">{tutor?.description || 'N/A'}</p>
             </div>

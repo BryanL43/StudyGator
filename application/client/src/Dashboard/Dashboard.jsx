@@ -193,22 +193,26 @@ const Dashboard = () => {
                         </section>
 
                         <div className={`${showingMsg ? "" : "hidden"} flex flex-col mt-8`}>
-                            <div className="py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+                            <div className="py-2 -my-2 max-w-screen overflow-x-hidden sm:overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
                                 <div className="min-h-[406px] max-h-64 inline-block min-w-full overflow-y-auto align-middle border-b border-gray-200 shadow sm:rounded-lg">
                                     <table className="min-w-full">
                                         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                            <tr>
+                                            {/* Loads the desktop version */}
+                                            <tr> 
                                                 <th
-                                                    className="px-10 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+                                                    className="sm:hidden px-5 py-[12px] text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+                                                    Message Inbox</th>
+                                                <th
+                                                    className="invisible sm:visible px-10 sm:py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
                                                     Sender</th>
                                                 <th
-                                                    className="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+                                                    className="invisible sm:visible px-6 sm:py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
                                                     Tutor Listing Title</th>
                                                 <th
-                                                    className="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+                                                    className="invisible sm:visible px-6 sm:py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
                                                     Content</th>
                                                 <th
-                                                    className="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+                                                    className="invisible sm:visible px-6 sm:py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
                                                     Date Sent</th>
                                             </tr>
                                         </thead>
