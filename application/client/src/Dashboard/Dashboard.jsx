@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import ReactGA from "react-ga";
+import ReactGA from "react-ga4";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
 import axios from 'axios';
@@ -96,7 +96,7 @@ const Dashboard = () => {
 
     // Google Analytics
     useEffect(() => {
-        ReactGA.pageview(window.location.pathname);
+        ReactGA.send({ hitType: "pageview", page: window.location.pathname, title: "Dashboard page" });
     }, []);
 
     return (

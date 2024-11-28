@@ -10,7 +10,7 @@
 **************************************************************/
 
 import React, { useEffect, useState } from 'react';
-import ReactGA from "react-ga";
+import ReactGA from "react-ga4";
 import axios from 'axios';
 import BASE_URL from '../utils/config';
 import { useNavigate } from 'react-router-dom';
@@ -96,7 +96,7 @@ const Home = () => {
     
     // Google Analytics
     useEffect(() => {
-        ReactGA.pageview(window.location.pathname);
+        ReactGA.send({ hitType: "pageview", page: window.location.pathname, title: "Home page" });
     }, []);
 
     return (

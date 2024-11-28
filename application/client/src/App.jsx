@@ -10,7 +10,7 @@
 **************************************************************/
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import ReactGA from "react-ga";
+import ReactGA from "react-ga4";
 
 import { AuthProvider } from './AuthContext';
 import DefaultLayout from './layouts/DefaultLayout.jsx';
@@ -25,8 +25,7 @@ import SearchPage from './SearchPage/SearchPage.jsx';
 import ApplyPage from './ApplyPage/ApplyPage.jsx';  
 import Detail from './DetailPage/Detail.jsx'
 
-const TRACKING_ID = "G-WB2BBB7CCQ";
-ReactGA.initialize(TRACKING_ID);
+ReactGA.initialize("WB2BBB7CCQ");
 
 function App() {
     document.title = "StudyGator";
