@@ -12,6 +12,7 @@
 **************************************************************/
 
 import React, { useEffect, useState } from 'react';
+import ReactGA from "react-ga";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../AuthContext';
@@ -203,7 +204,12 @@ const ApplyPage = () => {
     
         // Clear local storage after repopulating
         localStorage.removeItem("formData");
-    }, []);    
+    }, []);
+
+    // Google Analytics
+    useEffect(() => {
+        ReactGA.pageview(window.location.pathname);
+    }, []);
 
     return (
         <div

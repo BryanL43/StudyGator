@@ -10,7 +10,8 @@
 *
 **************************************************************/
 
-import React from 'react'
+import React, { useEffect } from 'react'
+import ReactGA from "react-ga";
 import { Link, useParams } from 'react-router-dom';
 
 const usersData = [
@@ -115,6 +116,11 @@ const RenderUser = ({ user }) => {
 const About = () => {
     const { name } = useParams();
     const foundUser = usersData.find(user => user.linkUrl.replace("/", "") === name);
+
+    // Google Analytics
+    useEffect(() => {
+        ReactGA.pageview(window.location.pathname);
+    }, []);
 
     return (
         <section className="bg-white" >

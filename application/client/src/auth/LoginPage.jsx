@@ -9,6 +9,7 @@
 **************************************************************/
 
 import React, { useState, useEffect } from 'react';
+import ReactGA from "react-ga";
 import { Link, useNavigate } from 'react-router-dom';
 import { MdLock, MdMail } from 'react-icons/md';
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
@@ -71,6 +72,11 @@ const LoginPage = () => {
             }
         }
     };
+
+    // Google Analytics
+    useEffect(() => {
+        ReactGA.pageview(window.location.pathname);
+    }, []);
 
     return (
         <div className="top-0 flex items-center justify-center sm:min-h-screen bg-gray-100">

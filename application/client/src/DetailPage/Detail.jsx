@@ -10,6 +10,7 @@
 
 **************************************************************/
 import React, { useEffect, useState, Suspense } from 'react';
+import ReactGA from "react-ga";
 import { useLocation, useNavigate } from 'react-router-dom';
 import emailIcon from '../icons/EmailIcon.svg';
 import cvIcon from '../icons/CVIcon.svg';
@@ -62,6 +63,11 @@ const Detail = () => {
     const toggleSuccessHandler = () => {
         setSuccessAlert(false);
     }
+
+    // Google Analytics
+    useEffect(() => {
+        ReactGA.pageview(window.location.pathname);
+    }, []);
 
     return (
         <div className="flex flex-col items-center bg-gray-50">

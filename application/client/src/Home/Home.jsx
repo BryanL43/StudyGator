@@ -10,6 +10,7 @@
 **************************************************************/
 
 import React, { useEffect, useState } from 'react';
+import ReactGA from "react-ga";
 import axios from 'axios';
 import BASE_URL from '../utils/config';
 import { useNavigate } from 'react-router-dom';
@@ -92,7 +93,11 @@ const Home = () => {
     
         // Clear local storage after repopulating
     }, [user, contents]);
-     
+    
+    // Google Analytics
+    useEffect(() => {
+        ReactGA.pageview(window.location.pathname);
+    }, []);
 
     return (
         <div>

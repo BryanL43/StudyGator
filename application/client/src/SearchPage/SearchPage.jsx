@@ -9,6 +9,7 @@
 *
 **************************************************************/
 import React, { useEffect, useState, useCallback } from 'react';
+import ReactGA from "react-ga";
 import TutorListingCard from '../components/TutorListingCard';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
@@ -79,6 +80,11 @@ const ListingPage = () => {
     useEffect(() => {
         fetchListings();
     }, [fetchListings]);
+
+    // Google Analytics
+    useEffect(() => {
+        ReactGA.pageview(window.location.pathname);
+    }, []);
 
     return (
         <div
