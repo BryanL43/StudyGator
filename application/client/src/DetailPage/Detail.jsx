@@ -70,7 +70,7 @@ const Detail = () => {
 
             <div className="relative w-full flex justify-center -mt-20">
                 {/* Fixed-Size Container for the Profile Picture */}
-                <div className="w-80 h-80 rounded-md shadow-xl overflow-hidden">
+                <div className="w-80 h-80 rounded-md shadow-xl overflow-hidden bg-white">
                     <img
                         src={tutor?.image || '/default-profile.png'}
                         alt={`${tutor?.tutorName}'s profile`}
