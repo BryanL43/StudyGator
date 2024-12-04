@@ -95,7 +95,7 @@ const Navbar = () => {
 
     return (
         <nav className="bg-[#231161] border-gray-20">
-            <p className="text-white text-s text-center items-center font-medium py-1">CSC648-FA24-03-Team08 Demonstration Project</p>
+            <p className="text-white text-s text-center items-center font-medium py-1">SFSU SOFTWARE ENGINEERING PROJECT CSC 648-848, Fall 2024. For Demonstration Only</p>
             <div className="max-w-screen-xl flex flex-wrap items-center justify-center mx-auto px-4 pb-4 sm:gap-4">
                 <div className="flex flex-grow flex-row items-center space-x-3 rtl:space-x-reverse mr-8">
                     {/* Logo */}
