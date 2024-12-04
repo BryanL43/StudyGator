@@ -86,7 +86,7 @@ const TutorListingCard = React.memo(({ metadata, isDashboard, refreshList }) => 
 
             {/* Image render */}
             <Link to={{pathname : "/detail", }} state={{tutor: metadata}}>
-                <div className="h-80 overflow-hidden"> {/* Fixed height for the image container */}
+                <div className="h-80 overflow-hidden bg-gray-50"> {/* Fixed height for the image container */}
                     <img className="object-cover w-full h-full" src={metadata.image} alt={`${metadata.name} profile`} />
                 </div>
             </Link>
