@@ -1,3 +1,14 @@
+/**************************************************************
+* Author(s): Bryan Lee
+* Last Updated: 12/3/2024
+*
+* File:: Confirmation.jsx
+*
+* Description:: The confirmation pop-up model for deleting a listing
+*               or a message.
+*
+**************************************************************/
+
 import React, { useEffect, useState } from 'react';
 import ReactGA from "react-ga4";
 import { useLocation, useNavigate } from 'react-router-dom';

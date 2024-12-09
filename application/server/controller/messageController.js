@@ -1,5 +1,5 @@
 /**************************************************************
-* Author(s): Bryan Lee
+* Author(s): Bryan Lee & Nishi Suratia
 * Last Updated: 11/20/2024
 *
 * File:: messageController.js
@@ -14,6 +14,12 @@
 const jwt = require('jsonwebtoken');
 const { createMessage, getMessages, deleteMessage } = require("../models/messageModel");
 
+/**
+ * Communicates with api endpoint to verify credential and send a message to desired tutor.
+ * 
+ * @returns Response status: 201 (Success), 400 (Missing field), 401 (Invalid token), 500 (Internal server error).
+ *          Response status has corresponding json message in form of { message: "status msg" }
+ */
 const sendMessageHandler = async(req, res) => {
     const { token, listingId, recipientId, content } = req.body;
 
@@ -40,6 +46,13 @@ const sendMessageHandler = async(req, res) => {
     }
 };
 
+/**
+ * Communicates with api endpoint to verify credential and fetch all messages recieved by
+ * the registered user.
+ * 
+ * @returns Response status: 201 (Success), 400 (Missing field), 401 (Invalid token), 500 (Internal server error).
+ *          Response status has corresponding json message in form of { message: "status msg" }
+ */
 const getMessageHandler = async(req, res) => {
     const token = req.headers.authorization;
     if (!token) {
@@ -64,6 +77,12 @@ const getMessageHandler = async(req, res) => {
     }
 }
 
+/**
+ * Communicates with api endpoint to verify credential and delete a specific message.
+ * 
+ * @returns Response status: 201 (Success), 400 (Missing field), 401 (Invalid token), 500 (Internal server error).
+ *          Response status has corresponding json message in form of { message: "status msg" }
+ */
 const deleteMessageHandler = async (req, res) => {
     const token = req.headers.authorization; 
     const { messageId } = req.body; 

@@ -4,8 +4,8 @@
 *
 * File:: Home.jsx
 *
-* Description:: The landing page for the application containing a image carousel
-*               and a list of recent tutor listings.
+* Description:: The landing page for the application containing
+*               a list of recent tutor listings.
 *
 **************************************************************/
 
@@ -32,19 +32,20 @@ const Home = () => {
     const [listings, setListings] = useState([]);
     const [contents, setContents] = useState("");
 
+    // Handles resetting the error alert model
     const resetServerError = () => {
         setServerError(false);
     };
 
     const [imageIndex, setImageIndex] = useState(null);
 
-    // Pick one of the 3 random backgroound and ensure it only renders once
+    // Render the chosen image for the landing page
     useEffect(() => {
-        const randomIndex = Math.floor(Math.random() * 3) + 1;
-        setImageIndex(randomIndex);
+        //const randomIndex = Math.floor(Math.random() * 3) + 1;
+        setImageIndex(3);
     }, []);
 
-    // Fetch recent listings only on mount
+    // Fetch recent listings from database only on mount
     useEffect(() => {
         const fetchRecentListings = async() => {
             try {
@@ -64,12 +65,14 @@ const Home = () => {
 
     // Lazy registeration re-entry to automatically send message
     useEffect(() => {
+        // Acquire locally stored message data
         const savedMessageData = localStorage.getItem("messageData");
         
         if (savedMessageData && user) {
             const parsedData = JSON.parse(savedMessageData);
             setContents(parsedData.content || "");
             
+            // If there is a message body then prompt the backend to upload it to the database
             if (contents && contents !== "") {
                 const sendMessage = async () => {
                     try {
@@ -81,7 +84,7 @@ const Home = () => {
                         });
                         
                         setSuccessAlert(true);
-                        localStorage.removeItem("messageData");
+                        localStorage.removeItem("messageData"); // Clear sent data
                     } catch (error) {
                         console.error("Error sending message:", error);
                     }
@@ -173,7 +176,8 @@ const Home = () => {
                         <h2 className="text-m font-semibold text-center">No listings currently exist.</h2>
                     ) : null}
                     </div>
-
+                    
+                    {/* Browse more button */}
                     {listings && listings.length > 0 && (
                         <div className="w-full text-center">
                             <button type="button" onClick={() => { navigate("/search?selectedSubject=&searchTerm="); window.scrollTo({ top: 0 }); }} className="rounded-lg border border-gray-200 bg-white w-[130px] px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100">Browse more</button>

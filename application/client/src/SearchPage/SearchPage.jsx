@@ -77,6 +77,7 @@ const ListingPage = () => {
         }
     }, [selectedSubject, searchTerm]);
 
+    // Fetch listings when page mounts
     useEffect(() => {
         fetchListings();
     }, [fetchListings]);

@@ -1,14 +1,15 @@
 /**************************************************************
-* Author(s): MIN YE THWAY KHAING
+* Author(s): MIN YE THWAY KHAING & Kenneth Wen
 * Last Updated: 11/10/2024
 *
 * File:: Detail.jsx
 *
-* Description:: this is the tutor detail page and it displays tutor's profile picture,
- subject expertise, short pitch, video, and additional information about the tutor.
- It includes options to message to the tutor and view their resume.
-
+* Description:: This is the tutor detail page and it displays tutor's profile picture,
+*               subject expertise, short pitch, video, and additional information about the tutor.
+*               It includes options to message to the tutor and view their resume.
+*
 **************************************************************/
+
 import React, { useEffect, useState, Suspense } from 'react';
 import ReactGA from "react-ga4";
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -18,6 +19,7 @@ import cvIcon from '../icons/CVIcon.svg';
 import MessagePopUp from '../components/MessagePopUp';
 import SuccessAlert from '../components/SuccessAlert';
 
+// Lazy loading for optimization. Basically loads the component in the background until done
 const VideoComponent = React.lazy(() => import('../components/VideoComponent'));
 const PDFRenderComponent = React.lazy(() => import('../components/PDFRenderComponent'));
 
@@ -28,6 +30,7 @@ const Detail = () => {
     const [isPdfModalOpen, setIsPdfModalOpen] = useState(false);
     const [successAlert, setSuccessAlert] = useState(false);
 
+    // Creates the reconstructed pdf as a url object and opens it
     const togglePdfModal = () => {
         if (tutor?.attached_file) {
             const isMobile = /iPhone|iPod|Android/i.test(navigator.userAgent);
@@ -52,7 +55,7 @@ const Detail = () => {
         window.scrollTo({ top: 0 }); // Load screen at the top
     }, []);
 
-    // State to control modal visibility
+    // State to control message modal visibility
     const [isMsgPopUpOpen, setMsgPopUpOpen] = useState(false);
 
     const toggleModal = () => {
@@ -68,6 +71,7 @@ const Detail = () => {
     useEffect(() => {
         ReactGA.send({ hitType: "pageview", page: window.location.pathname, title: "Detail page" });
     }, []);
+
     return (
         <div className="flex flex-col items-center bg-gray-50">
 
@@ -100,7 +104,6 @@ const Detail = () => {
             ></div>
 
             {/* Tutor Profile Picture */}
-
             <div className="relative w-full flex justify-center -mt-20">
                 {/* Fixed-Size Container for the Profile Picture */}
                 <div className="w-80 h-80 rounded-md shadow-xl overflow-hidden">
@@ -112,7 +115,7 @@ const Detail = () => {
                 </div>
             </div>
 
-           {/* Message and Resume Buttons */}
+           {/* Message and show CV Buttons */}
            <div className="flex items-center justify-center space-x-4 mt-4">
                 <button
                     type="button"
@@ -134,7 +137,7 @@ const Detail = () => {
                 )}
             </div>
 
-            {/* PDF Modal */}
+            {/* PDF pop-up Modal */}
             {isPdfModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50 will-change-transform">
                     <div className="w-full max-w-3xl p-8 bg-white rounded-lg shadow-lg">
@@ -183,7 +186,7 @@ const Detail = () => {
                 <p className="text-gray-700">{tutor?.description || 'N/A'}</p>
             </div>
 
-            {/* Back Button */}
+            {/* Bottom bar's Message & Back Button */}
             <div className="w-full flex justify-end p-4 max-w-screen-md">
                 <button
                     type="button"

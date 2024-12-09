@@ -35,7 +35,7 @@ function App() {
             <AuthProvider>
                 <Router>
                     <Routes>
-                        {/* Routes with Default Layout (Authenticated) */}
+                        {/* Routes with Default Layout (Contains authorization context for cookied) */}
                         <Route element={<DefaultLayout />}>
                             <Route path="/" element={<Home />} />
                             <Route path="/about" element={<About />} />

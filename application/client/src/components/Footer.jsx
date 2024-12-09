@@ -4,7 +4,7 @@
 *
 * File:: Footer.jsx
 *
-* Description:: The footer component that will be rendered on all pages.
+* Description:: The application's footer component that will be rendered on all pages.
 *
 **************************************************************/
 
@@ -25,6 +25,7 @@ const Footer = () => {
 
                     {/* Main footer content */}
                     <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
+                        {/* Social media links */}
                         <div>
                             <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase">Follow us</h2>
                             <ul className="text-gray-500 font-medium">
@@ -36,6 +37,7 @@ const Footer = () => {
                                 </li>
                             </ul>
                         </div>
+                        {/* Legal links */}
                         <div>
                             <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase">Legal</h2>
                             <ul className="text-gray-500 font-medium">
@@ -47,6 +49,7 @@ const Footer = () => {
                                 </li>
                             </ul>
                         </div>
+                        {/* "Headquarter" location information */}
                         <div>
                             <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase">Location</h2>
                             <ul className="text-gray-500 font-medium">
@@ -64,7 +67,7 @@ const Footer = () => {
                     </div>
                 </div>
 
-                {/* Bottom of footer with icons and copyright */}
+                {/* Bottom of footer with social media icons and copyright */}
                 <hr className="my-3 border-[#666666] sm:mx-auto" />
                 <div className="sm:flex sm:items-center sm:justify-between">
                     <span className="text-sm text-gray-500 sm:text-center">© 2024 <Link href="/" className="hover:underline">StudyGator™</Link>. All Rights Reserved.

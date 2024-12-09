@@ -45,7 +45,14 @@ const usersData = [
     }
 ]
 
-// Card template to display a team member
+/**
+ * Card template to dynamically display a team member's bio.
+ * 
+ * @param {string} name Team member's name.
+ * @param {string} role Team member's role in the project.
+ * @param {string} imgUrl The file system link to the team member's image.
+ * @param {string} linkUrl The query link to the individual's about page.
+ */
 const TeamMember = ({ name, role, imgUrl, linkUrl }) => (
     <Link to={`/about${linkUrl}`} rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
         <div className="items-center bg-gray-50 xl:h-full rounded-lg shadow sm:flex">
@@ -62,7 +69,7 @@ const TeamMember = ({ name, role, imgUrl, linkUrl }) => (
     </Link>
 );
 
-// Render the About page
+// Render the main About page
 const Team = () => {
     return (
         <>
@@ -112,7 +119,7 @@ const RenderUser = ({ user }) => {
     )
 }
 
-// Render the sub about page
+// Render the sub about page via url querying
 const About = () => {
     const { name } = useParams();
     const foundUser = usersData.find(user => user.linkUrl.replace("/", "") === name);

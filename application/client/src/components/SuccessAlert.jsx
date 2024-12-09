@@ -1,5 +1,24 @@
+/**************************************************************
+* Author(s): Bryan Lee
+* Last Updated: 12/5/2024
+*
+* File:: SuccessAlert.jsx
+*
+* Description:: The success alert at the top of the page. This will
+*               display successful listing upload or message sent.
+*
+**************************************************************/
+
 import React, { useState } from 'react';
 
+/**
+ * Creates the success alert that will be displayed at the top of the page on successful
+ * listing upload or message sent.
+ * 
+ * @param {String} message The message to display on the success alert model. 
+ * @param {function} onClose The pass-by-reference to reset the close the model.
+ * @returns The success alert model.
+ */
 const SuccessAlert = ({ message, onClose }) => {
     const [closeAlert, setCloseAlert] = useState(false);
 

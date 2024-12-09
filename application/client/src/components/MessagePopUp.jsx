@@ -1,3 +1,14 @@
+/**************************************************************
+* Author(s): Min Ye Thway Khaing, Bryan Lee
+* Last Updated: 12/3/2024
+*
+* File:: MessagePopUp.jsx
+*
+* Description:: The confirmation pop-up model for showing the full
+*               message content. Very complex component encapsulation and referencing.
+*
+**************************************************************/
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
@@ -7,6 +18,25 @@ import trashCanIcon from '../icons/TrashCanIcon.svg';
 import Confirmation from '../components/Confirmation';
 const convertDate = require('../utils/dateConverter');
 
+/**
+ * Dynamically creates the message pop-up model. Allows for the reuse of the same model, but
+ * with different message metadata.
+ * 
+ * @param {String} id The message's uuid. Placeholder to satisfy React warning.
+ * @param {String} name The sender's name.
+ * @param {String} email The sender's email.
+ * @param {String} title The message associated listing title.
+ * @param {String} content The message's body.
+ * @param {String} date The date and time the message was sent.
+ * @param {Object} metadata The optional metadata of the associated tutor listing.
+ * @param {function} toggleModal The pass-by-reference function to hide the message pop-up.
+ * @param {boolean} isSending Boolean state to render delete button.
+ * @param {function} setSuccessAlert The pass-by-reference to show the success alert
+ *                                   if message was successfully sent.
+ * @param {function} refreshMessageList The pass-by-reference function to refresh the
+ *                                   message list in dashboard when a message is deleted.
+ * @returns The message pop-up model.
+ */
 const MessagePopUp = ({ id, name, email, title, content, date, metadata, toggleModal, isSending, setSuccessAlert, refreshMessageList }) => {
     const { user } = useAuth();
     const navigate = useNavigate();
@@ -17,6 +47,7 @@ const MessagePopUp = ({ id, name, email, title, content, date, metadata, toggleM
         setDeleteWarning(!deleteWarning);
     }
 
+    // Handles sending the message to the backend with necessary metadatas
     const sendMessage = async() => {
         if (!contents) {
             alert("Cannot send a empty message.");
@@ -53,6 +84,7 @@ const MessagePopUp = ({ id, name, email, title, content, date, metadata, toggleM
         };
     }
 
+    // Prompt the backend to delete the specific message
     const deleteMessage = async() => {
         try {
             await axios.delete(`${BASE_URL}/api/deletemessage`, {
@@ -83,6 +115,7 @@ const MessagePopUp = ({ id, name, email, title, content, date, metadata, toggleM
                 />
             )}
 
+            {/* The message associated tutor listing's title */}
             <div className="w-full max-w-3xl p-6 bg-white rounded-lg shadow-lg">
                 <div className="flex justify-between items-center mb-2">
                     <h3 className="text-2xl font-semibold line-clamp-1">Tutor Listing: {title}</h3>
@@ -94,6 +127,7 @@ const MessagePopUp = ({ id, name, email, title, content, date, metadata, toggleM
                     </button>
                 </div>
 
+                {/* Render the sender/recipient label */}
                 {!isSending ? (
                     <p className="text-gray-600 mb-2">
                         <strong>From:</strong> {name} (<a href={`mailto:${email}`} className="text-blue-600 hover:underline">{email}</a>)
@@ -104,14 +138,17 @@ const MessagePopUp = ({ id, name, email, title, content, date, metadata, toggleM
                     </p>
                 )}
 
+                {/* Render the timestamp if the pop-up is open via dashboard */}
                 {!isSending && (
                     <p className="text-gray-600 mb-4"><strong>Date Sent:</strong> {convertDate(date)}</p>
                 )}
 
+                {/* The message content text field */}
                 <div className="rounded-lg overflow-y-auto">
                     <textarea id="title" rows="9" value={contents} onChange={(e) => setContents(e.target.value)} className="p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-600 focus:border-primary-600" disabled={!isSending}></textarea>
                 </div>
 
+                {/* Loads either the delete button or the send & cancel button */}
                 {isSending ? (
                     <div className="flex justify-end mt-4 pb-1">
                         <button

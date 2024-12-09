@@ -1,8 +1,28 @@
+/**************************************************************
+* Author(s): Bryan Lee
+* Last Updated: 12/3/2024
+*
+* File:: ErrorAlert.jsx
+*
+* Description:: The error alert at the top of the page. This will
+*               display in case of server errors.
+*
+**************************************************************/
+
 import React, { useState } from 'react';
 
+/**
+ * Creates the error alert that will be displayed at the top of the page on any potential
+ * fatal server error(s).
+ * 
+ * @param {String} message The message to display on the error alert model. 
+ * @param {function} resetError The pass-by-reference to reset the error alert when it is dismissed.
+ * @returns The error alert model.
+ */
 const ErrorAlert = ({ message, resetError }) => {
     const [closeAlert, setCloseAlert] = useState(false);
 
+    // Handles the localize alert closure state
     const handleClose = () => {
         setCloseAlert(true);
         resetError();
