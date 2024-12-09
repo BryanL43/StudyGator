@@ -28,21 +28,22 @@ const Navbar = () => {
         setIsMenuOpen(!isMenuOpen);
     };
 
-    // Handle user dropdown button
+    // Handle the user icon dropdown button
     const [isDropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
     const toggleDropdown = () => {
         setDropdownOpen(!isDropdownOpen);
     };
 
-    // Hide user dropdown when user clicks anywhere outside of the menu
+    // Hide the user icon dropdown when user clicks anywhere outside of the menu
     const handleClickOutside = (event) => {
         if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
             setDropdownOpen(false);
         }
     };
 
-    // Load the user dropdown menu mouse event
+    // Load the user icon dropdown menu's mouse event for closing the dropdown
+    // when user clicks anywhere outside of the menu
     useEffect(() => {
         if (isDropdownOpen) {
             document.addEventListener('mousedown', handleClickOutside);
@@ -55,7 +56,7 @@ const Navbar = () => {
         };
     }, [isDropdownOpen]);
 
-    // State for managing search input value
+    // State for managing search input value for responsive design
     const [searchInput, setSearchInput] = useState('');
     const handleSearchChange = (event) => {
         setSearchInput(event.target.value);
@@ -73,7 +74,7 @@ const Navbar = () => {
         event.target.style.width = `${calculatedWidth}px`;
     };
 
-    // Load search bar drop down subjects
+    // Load search bar drop down subjects from the database
     const [subjectList, setSubjectList] = useState([]);
     const fetchSubjects = async() => {
         try {
@@ -84,18 +85,21 @@ const Navbar = () => {
         }
     }
 
-    // Render subject drop down on mount
+    // Render subject drop down on page mount
     useEffect(() => {
         fetchSubjects();
     }, []);
 
+    // Redirect handler for search with queries
     const handleSearch = async() => {
         navigate(`/search?selectedSubject=${selectedSubject}&searchTerm=${searchInput}`);
     };
 
     return (
         <nav className="bg-[#231161] border-gray-20">
-            <p className="text-white text-s text-center items-center font-medium py-1">SFSU SOFTWARE ENGINEERING PROJECT CSC 648-848, Fall 2024. For Demonstration Only</p>
+      
+            <p className="text-white text-s text-center items-center font-medium py-1">SFSU Software Engineering Project CSC 648-848, Fall 2024. For Demonstration Only.</p>
+      
             <div className="max-w-screen-xl flex flex-wrap items-center justify-center mx-auto px-4 pb-4 sm:gap-4">
                 <div className="flex flex-grow flex-row items-center space-x-3 rtl:space-x-reverse mr-8">
                     {/* Logo */}
@@ -115,6 +119,7 @@ const Navbar = () => {
                         >
                             <option value="">All</option>
 
+                            {/* Render the database defined subject dropdown options */}
                             {subjectList.map((subjectItem) => (
                                 <option key={subjectItem.id} value={subjectItem.name}>
                                     {subjectItem.name}
@@ -122,7 +127,7 @@ const Navbar = () => {
                             ))}
                         </select>
                         
-                        {/* Search Input */}
+                        {/* Search bar text field */}
                         <input
                             type="text"
                             value={searchInput}
@@ -167,7 +172,7 @@ const Navbar = () => {
                             <img className="w-8 h-8 rounded-full" src="/pfp.png" alt="Open user menu" />
                         </button>
 
-                        {/* User Dropdown */}
+                        {/* User Icon Dropdown */}
                         {isDropdownOpen && user && (
                             <div
                                 className="absolute -right-4 z-50 mt-5 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow"
@@ -219,7 +224,7 @@ const Navbar = () => {
                             ))}
                         </select>
                         
-                        {/* Search Input */}
+                        {/* Mobile search bar text field */}
                         <input
                             type="text"
                             value={searchInput}
@@ -258,7 +263,8 @@ const Navbar = () => {
                                 About Us
                             </Link>
                         </li>
-
+                        
+                        {/* Render login & signup button if user is in unregistered user state */}
                         {!user && (
                             <>
                                 <li className={`${user ? '' : 'md:flex items-center justify-center'}`}>

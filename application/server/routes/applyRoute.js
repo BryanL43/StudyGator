@@ -6,7 +6,7 @@
 *
 * Description:: The api endpoint for applying as tutor and creating a
 *               tutor listing. It also takes the buffered uploaded image
-*               via multer package.
+*               or video via multer package.
 *
 **************************************************************/
 

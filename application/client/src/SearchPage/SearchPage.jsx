@@ -9,6 +9,7 @@
 *
 **************************************************************/
 import React, { useEffect, useState, useCallback } from 'react';
+import ReactGA from "react-ga4";
 import TutorListingCard from '../components/TutorListingCard';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
@@ -76,9 +77,15 @@ const ListingPage = () => {
         }
     }, [selectedSubject, searchTerm]);
 
+    // Fetch listings when page mounts
     useEffect(() => {
         fetchListings();
     }, [fetchListings]);
+
+    // Google Analytics
+    useEffect(() => {
+        ReactGA.send({ hitType: "pageview", page: window.location.pathname, title: "Search page" });
+    }, []);
 
     return (
         <div
@@ -95,7 +102,7 @@ const ListingPage = () => {
                 <ErrorAlert message="Failed to load tutor listings. Internal server error!" resetError={resetServerError} />
             }
 
-            <div className="flex flex-col items-center p-8 bg-gray-50 min-h-screen">
+            <div className="flex flex-col items-center p-8 bg-gray-50 min-h-screen w-full lg:w-auto">
                 <h1 className="text-2xl font-bold mb-6">Browse Tutor Listings</h1>
 
                 {/* Container for search result text and filter button */}

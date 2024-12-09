@@ -1,17 +1,18 @@
 /**************************************************************
-* Author(s): Kenneth Wen, Bryan Lee
+* Author(s): Kenneth Wen & Bryan Lee
 * Last Updated: 11/19/2024
 *
 * File:: ApplyPage.jsx
 *
-* Description:: This file handles the apply page for users to 
-*               apply for tutor listings. Name and SFSU email 
+* Description:: This file handles the apply page for registered users to 
+*               create a new tutor listings. Name and SFSU email 
 *               are prefilled from user's backend information.
-*               Users can upload images, pdfs, and videos.
+*               Users can write their bio, upload images, pdfs, and videos.
 *
 **************************************************************/
 
 import React, { useEffect, useState } from 'react';
+import ReactGA from "react-ga4";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../AuthContext';
@@ -35,6 +36,7 @@ const ApplyPage = () => {
 
     const [loading, setLoading] = useState(false);
 
+    // Validates the uploaded image's size & extension
     const handleImageUpload = (e) => {
         const image = e.target.files[0];
         if (!image) {
@@ -59,6 +61,7 @@ const ApplyPage = () => {
         }
     }
 
+    // Validates the uploaded file's size & extension
     const handleFileUpload = (e) => {
         const file = e.target.files[0];
         if (!file) {
@@ -84,6 +87,7 @@ const ApplyPage = () => {
         }
     }
 
+    // Validates the uploaded video's size & extension
     const handleVideoUpload = (e) => {
         const video = e.target.files[0];
         if (!video) {
@@ -112,7 +116,7 @@ const ApplyPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        // Trigger lazy registeration
+        // Trigger lazy registeration if user is not logged in
         if (!user) {
             // Save form data to local storage
             const formState = {
@@ -140,7 +144,8 @@ const ApplyPage = () => {
             setLoading(false);
             return;
         }
-
+        
+        // Create the form data object that will package the application content for the backend
         const formData = new FormData();
         formData.append('title', title);
         formData.append('salesPitch', salesPitch);
@@ -167,7 +172,7 @@ const ApplyPage = () => {
         }
     };
 
-    // Load search bar drop down subjects
+    // Load search bar drop down subjects when page renders
     const [subjectList, setSubjectList] = useState([]);
     const fetchSubjects = async () => {
         try {
@@ -178,12 +183,12 @@ const ApplyPage = () => {
         }
     }
 
-    // Render subject drop down on mount
+    // Render subject drop down on page mount
     useEffect(() => {
         fetchSubjects();
     }, []);
 
-    // Repopulate data on re-entry from lazy registeration
+    // Repopulate form field on re-entry from lazy registeration
     useEffect(() => {
         const savedFormData = localStorage.getItem("formData");
         if (savedFormData) {
@@ -195,7 +200,7 @@ const ApplyPage = () => {
             setSubjectId(parsedData.subjectId || "");
             setPricing(parsedData.pricing || "");
     
-            // Note: Files like selectedImage, selectedFile, and selectedVideo need to be re-uploaded
+            // Note: Files like selectedImage, selectedFile, and selectedVideo need to be re-uploaded (Security enforcement)
             if (parsedData.selectedImage || parsedData.selectedFile || parsedData.selectedVideo) {
                 alert(`Please re-upload your image or attached files/videos.`);
             }
@@ -203,7 +208,12 @@ const ApplyPage = () => {
     
         // Clear local storage after repopulating
         localStorage.removeItem("formData");
-    }, []);    
+    }, []);
+
+    // Google Analytics
+    useEffect(() => {
+        ReactGA.send({ hitType: "pageview", page: window.location.pathname, title: "Apply page" });
+    }, []);
 
     return (
         <div
@@ -214,10 +224,10 @@ const ApplyPage = () => {
                 backgroundSize: "cover",
             }}
         >
-            {/* Background Overlay */}
+            {/* Dark background overlay for the image */}
             <div className="absolute inset-0 bg-black opacity-30 z-10 pointer-events-none"></div>
             
-            {/* Form Container */}
+            {/* Tutor listing form container */}
             <form action="#" onSubmit={handleSubmit}
                 className="sm:max-w-lg lg:max-h-fit relative z-20 mx-auto p-6 bg-white sm:rounded-lg shadow overflow-y-auto">
                 <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Apply As Tutor Form</h2>
@@ -231,7 +241,7 @@ const ApplyPage = () => {
 
                 <div className={`${loading ? "hidden" : "flex"} flex-col gap-4 mb-4`}>
 
-                    {/* Name Input Field*/}
+                    {/* Name Input Field */}
                     <div>
                         <label htmlFor="name-icon" className="block mb-2 text-sm font-semibold text-gray-900">Name</label>
                         <div className="relative">
@@ -250,7 +260,7 @@ const ApplyPage = () => {
                         </div>
                     </div>
 
-                    {/* Email Input Field*/}
+                    {/* Email Input Field */}
                     <div>
                         <label htmlFor="email-address-icon" className="block mb-2 text-sm font-semibold text-gray-900">SFSU Email</label>
                         <div className="relative">
@@ -269,7 +279,7 @@ const ApplyPage = () => {
                         </div>
                     </div>
 
-                    {/* Price Input Field*/}
+                    {/* Price Input Field */}
                     <div>
                         <label htmlFor="price" className="block mb-2 text-sm font-semibold text-gray-900">Price $/hr <label className="text-red-600">*</label></label>
                         <div className="relative">
@@ -292,7 +302,7 @@ const ApplyPage = () => {
                     </div>
                 </div>
 
-                    {/* Subject Dropdown Field*/}
+                    {/* Subject Dropdown Field */}
                     <div>
                         <label htmlFor="category" className="block mb-2 text-sm font-semibold text-gray-900">Which Subject Are You Tutoring? <label className="text-red-600">*</label></label>
                         <select id="category" value={subjectId || ""} onChange={(e) => setSubjectId(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" required>
@@ -307,26 +317,26 @@ const ApplyPage = () => {
                         </select>
                     </div>
 
-                    {/* Title Input Field*/}
+                    {/* Title Input Field */}
                     <div className="sm:col-span-1">
                         <label htmlFor="title" className="block mb-2 text-sm font-semibold text-gray-900">Creative title for listing <label className="text-red-600">*</label></label>
                         <textarea id="title" rows="3" maxLength={100} value={title || ""} onChange={(e) => setTitle(e.target.value)} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-600 focus:border-primary-600 " placeholder="Create a creative short title here! (100 characters max)" required></textarea>
                     </div>
 
-                    {/* Pitch Input Field*/}
+                    {/* Pitch Input Field */}
                     <div className="sm:col-span-2">
                         <label htmlFor="description" className="block mb-2 text-sm font-semibold text-gray-900">Short pitch for listing <label className="text-red-600">*</label></label>
                         <textarea id="description" rows="5" maxLength={300} value={salesPitch || ""} onChange={(e) => setSalesPitch(e.target.value)} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-600 focus:border-primary-600 " placeholder="Advertise yourself here! (300 characters max)" required></textarea>
                     </div>
 
-                    {/* Tutor bio Input Field*/}
+                    {/* Tutor bio Input Field */}
                     <div className="sm:col-span-3">
                         <label htmlFor="description" className="block mb-2 text-sm font-semibold text-gray-900">About Me <label className="text-red-600">*</label></label>
                         <textarea id="description" rows="8" value={description || ""} onChange={(e) => setDescription(e.target.value)} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-600 focus:border-primary-600 " placeholder="Write your tutor bio here" required></textarea>
                     </div>
                 </div>
 
-                {/* Upload Image */}
+                {/* Upload Image field. Supports drag and drop. */}
                 <div className={`${loading ? "hidden" : "flex"} w-full py-1`}>
                     <label className="block mb-1 text-sm font-semibold text-gray-900">
                         Upload Tutor Listing Picture: <span className="text-red-600">*</span>&emsp;&emsp; <u>{selectedImage ? selectedImage.name : 'No file selected'}</u>
@@ -370,10 +380,10 @@ const ApplyPage = () => {
                     </label>
                 </div>
 
-                {/* Upload Resume/CV*/}
+                {/* Upload CV field. Supports drag and drop. */}
                 <div className={`${loading ? "hidden" : "flex"} w-full py-1`}>
                     <label className="block mb-1 text-sm font-semibold text-gray-900">
-                        Upload Resume/CV (optional):&emsp;&emsp; <u>{selectedFile ? selectedFile.name : 'No file selected'}</u>
+                        Upload CV (optional):&emsp;&emsp; <u>{selectedFile ? selectedFile.name : 'No file selected'}</u>
                     </label>
                 </div>
                 <div className={`${loading ? "hidden" : "flex"} items-center justify-center w-full py-2 pb-6`}>
@@ -413,7 +423,7 @@ const ApplyPage = () => {
                     </label>
                 </div>
 
-                {/* Upload Video*/}
+                {/* Upload video field. Supports drag and drop. */}
                 <div className={`${loading ? "hidden" : "flex"} w-full py-1`}>
                     <label className="block mb-1 text-sm font-semibold text-gray-900">
                         Upload Video (optional):&emsp;&emsp; <u>{selectedVideo ? selectedVideo.name : 'No file selected'}</u>
@@ -455,7 +465,8 @@ const ApplyPage = () => {
                         />
                     </label>
                 </div>
-
+                
+                {/* Bottom warning & buttons for the form */}
                 <div className="text-sm pt-4 pb-2">
                     <p>Listing may take up to 24 to 48 hours to be approved by an admin before going public.</p>
                 </div>

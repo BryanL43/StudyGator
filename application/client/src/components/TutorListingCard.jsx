@@ -4,7 +4,8 @@
 *
 * File:: TutorListingCard.jsx
 *
-* Description:: Individual tutor's listing card module.
+* Description:: Individual tutor's listing card component that advertises
+*               the tutor's service.
 *
 **************************************************************/
 
@@ -19,12 +20,22 @@ import Confirmation from './Confirmation';
 import MessagePopUp from './MessagePopUp';
 import SuccessAlert from './SuccessAlert';
 
+/**
+ * Creates the individual tutor's listing card component. It will memorize the content
+ * for optimization.
+ * 
+ * @param {Object} metadata The underlying data retrieved from the database for a listing. 
+ * @param {boolean} isDashboard Determine if we should render the delete listing button on dashboard or not.
+ * @param {function} refreshList The pass-by-reference to refresh the dashboard listing list if the individual listing is deleted.
+ * @returns The tutor listing card.
+ */
 const TutorListingCard = React.memo(({ metadata, isDashboard, refreshList }) => {
     const [successAlert, setSuccessAlert] = useState(false);
     const [deleteWarning, setDeleteWarning] = useState(false);
 
     const toggleDeleteWarning = () => setDeleteWarning(!deleteWarning);
 
+    // Prompt the backend to verify credential and prompt the delete listing
     const deleteListing = async() => {
         try {
             await axios.delete(`${BASE_URL}/api/delete`, {
@@ -41,6 +52,7 @@ const TutorListingCard = React.memo(({ metadata, isDashboard, refreshList }) => 
         };
     }
 
+    // Trigger the api call if the user confirms to delete
     const handleDeleteConfirm = () => {
         setDeleteWarning(false);
         deleteListing();
@@ -122,7 +134,7 @@ const TutorListingCard = React.memo(({ metadata, isDashboard, refreshList }) => 
                 {/* Description content */}
                 <p className="mb-3 font-normal text-gray-700 min-h-48 max-h-48 overflow-hidden">{metadata.sales_pitch}</p>
 
-                {/* Bottom bar with Message & More detail button */}
+                {/* Bottom bar with Message & More detail button OR the delete button for dashboard */}
                 <div className="mt-4 flex items-center justify-between gap-4">
                     {/* Message Button */}
                     {isDashboard === false ? (

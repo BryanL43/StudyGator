@@ -1,5 +1,5 @@
 /**************************************************************
-* Author(s): Bryan Lee
+* Author(s): Bryan Lee & Nishi Suratia
 * Last Updated: 11/20/2024
 *
 * File:: messageModel.js
@@ -12,6 +12,15 @@
 
 const connectDB = require("../config/db");
 
+/**
+ * Add/Create a new message to the database associated with the sender, reciever, and listing id. 
+ * 
+ * @param {string} listingId The message's associated listing id.
+ * @param {string} senderId the message sender's id.
+ * @param {string} recipientId The message recipient's id.
+ * @param {string} content The message body.
+ * @returns void, otherwise throws an error.
+ */
 const createMessage = async(listingId, senderId, recipientId, content) => {
     const connection = await connectDB();
 
@@ -28,6 +37,12 @@ const createMessage = async(listingId, senderId, recipientId, content) => {
     } 
 };
 
+/**
+ * Retrieves all the messages sent to a specific registered user.
+ * 
+ * @param {string} userId The registered user's id associated to the message recipient id.
+ * @returns The list of messages, otherwise throws an error.
+ */
 const getMessages = async(userId) => {
     const connection = await connectDB();
 
@@ -49,7 +64,30 @@ const getMessages = async(userId) => {
     }
 }
 
+/**
+ * Deletes a specific message.
+ * 
+ * @param {string} messageId The message's id to be deleted.
+ * @param {string} userId The registered user's id associated to the message recipient id.
+ * @returns The list of messages, otherwise throws an error.
+ */
+const deleteMessage = async(messageId, userId) => {
+    const connection = await connectDB();
+    
+    try {
+        const query = `
+            DELETE FROM \`data-schema\`.MESSAGES
+            WHERE id = ? AND recipient_user_id = ?
+        `;
+        
+        await connection.execute(query, [messageId, userId]);
+    } catch (error) {
+        throw error;
+    }
+}
+
 module.exports = {
     createMessage,
-    getMessages
+    getMessages,
+    deleteMessage
 }

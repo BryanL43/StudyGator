@@ -1,14 +1,17 @@
 /**************************************************************
-* Author(s): Bryan Lee & Min Ye Thway Khaing
+* Author(s): Bryan Lee & Min Ye Thway Khaing & Kenneth Wen
 * Last Updated: 10/25/2024
 *
 * File:: LoginPage.jsx
 *
-* Description:: This file handles the login page.
+* Description:: This file handles the basic user login page.
+*               It validates credential and acquire the JWT token
+*               for dashboard, applying as tutor, and message operations.
 *
 **************************************************************/
 
 import React, { useState, useEffect } from 'react';
+import ReactGA from "react-ga4";
 import { Link, useNavigate } from 'react-router-dom';
 import { MdLock, MdMail } from 'react-icons/md';
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
@@ -32,9 +35,10 @@ const LoginPage = () => {
     const [error, setError] = useState('');
     const [serverError, setServerError] = useState(false);
 
+    // If user is already signed in, then forcefully redirect to browsing page.
     useEffect(() => {
         if (user) {
-            navigate("/search"); // Redirect to search all later (browsing pg)
+            navigate("/search");
         }
     })
 
@@ -42,6 +46,7 @@ const LoginPage = () => {
         setServerError(false);
     };
 
+    // Prompt a validation event on the backend with the filled credential
     const handleSubmit = async(e) => {
         e.preventDefault();
         setLoading(true);
@@ -53,10 +58,13 @@ const LoginPage = () => {
                 password,
             });
             
+            // Send the recieved JWT token to AuthContext for client-sided memorization
             login(response.data.token, rememberMe);
             setLoading(false);
             setServerError(false);
-
+            
+            // If there is a formData in localStorage, this indicates a lazy registeration for applying as tutor.
+            // Requires a forceful redirect to apply page for auto-fill
             if (!localStorage.getItem("formData")) {
                 navigate("/");
             } else {
@@ -72,6 +80,11 @@ const LoginPage = () => {
         }
     };
 
+    // Google Analytics
+    useEffect(() => {
+        ReactGA.send({ hitType: "pageview", page: window.location.pathname, title: "Login page" });
+    }, []);
+
     return (
         <div className="top-0 flex items-center justify-center sm:min-h-screen bg-gray-100">
             {/* Server error warning */}
@@ -79,7 +92,10 @@ const LoginPage = () => {
                 <ErrorAlert message="Failed to register. Fatal: network/server error!" resetError={resetServerError} />
             }
 
+            {/* Darken background image */}
             <img src="/SFSU-img-4.png" className="absolute w-full h-full object-cover z-10 filter brightness-[0.8] sm:block hidden" alt="Bird eye view of SFSU" />
+            
+            {/* Container for the login form */}
             <div className="w-full sm:max-w-md bg-white p-8 sm:rounded-lg sm:shadow-md z-30">
 
                 <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Login</h2>
@@ -118,6 +134,7 @@ const LoginPage = () => {
                                 maxLength={255}
                                 required
                             />
+                            {/* Password visibility toggle button */}
                             <button id="passwordVis" type="button" onClick={() => {setPwdVis(prevVisible => !prevVisible)}}>
                                 {pwdVis ? (
                                     <FaRegEyeSlash className="ml-2 mr-2 text-gray-400 hover:text-gray-500" size={25} />
@@ -127,7 +144,8 @@ const LoginPage = () => {
                             </button>
                         </div>
                     </div>
-
+                    
+                    {/* Label to display for any potential errors */}
                     {error && <p className='text-red-500 text-sm'>{error}</p>}
 
                     {/* Loading icon */}
@@ -150,6 +168,7 @@ const LoginPage = () => {
                         </label>
                     </div>
 
+                    {/* Dummy forgot password link */}
                     <div className="flex justify-between items-center">
                         <span className="text-sm text-blue-500 hover:underline">
                             Forgot Password?
@@ -161,7 +180,8 @@ const LoginPage = () => {
                             Login
                         </button>
                     </div>
-
+                    
+                    {/* Sign up redirect link */}
                     <div className="text-sm text-center">
                         <p className="text-gray-500 dark:text-gray-400">
                             Don't have an account? <Link to="/signup" className="text-blue-500 hover:underline">Sign up</Link>

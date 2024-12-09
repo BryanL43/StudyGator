@@ -1,10 +1,10 @@
 /**************************************************************
 * Author(s): Nishi Suratia
-* Last Updated: 14/11/2024
+* Last Updated: 11/14/2024
 *
-* File:: messageroutes.js
+* File:: messageRoute.js
 *
-*
+* Description:: The api endpoint for sending a message.
 *
 **************************************************************/
 

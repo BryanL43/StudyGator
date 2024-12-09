@@ -1,14 +1,17 @@
 /**************************************************************
-* Author(s): Bryan Lee & Min Ye Thway Khaing
+* Author(s): Bryan Lee & Min Ye Thway Khaing & Kenneth Wen
 * Last Updated: 10/25/2024
 *
 * File:: SignupPage.jsx
 *
-* Description:: This file handles the registeration page.
+* Description:: This file handles the registeration page. It perform some
+*               validation for creating a new account, such as password strength,
+*               appropriate email, and ensure that TOS checkbox is checked.
 *
 **************************************************************/
 
 import React, { useState, useEffect } from 'react';
+import ReactGA from "react-ga4";
 import { Link, useNavigate } from 'react-router-dom';
 import { MdLock, MdMail, MdPerson } from 'react-icons/md';
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
@@ -33,7 +36,7 @@ const SignupPage = () => {
     const [errors, setErrors] = useState([]);
     const [serverError, setServerError] = useState(false);
 
-    // Redirect registered user to search page if they are already signed in
+    // Forcefully redirect registered user to search page if they are already signed in
     useEffect(() => {
         if (user) {
             navigate("/search");
@@ -44,12 +47,16 @@ const SignupPage = () => {
         setServerError(false);
     };
 
+    // Intermediate to update the warning label for weak password
     const handlePasswordChange = (event) => {
         const newPassword = event.target.value;
         setPassword(newPassword);
         updatePWDStrength(newPassword);
     };
 
+    // Update the warning label for weak password.
+    // Basic requirements: 8 characters minimum, one lowercase & uppercase letter,
+    // one number, and a special character.
     const updatePWDStrength = (password) => {
         let hasUpperCase = /[A-Z]/.test(password);
         let hasLowerCase = /[a-z]/.test(password);
@@ -75,6 +82,7 @@ const SignupPage = () => {
         }
     };
 
+    // Ensure the newcoming user has @sfsu.edu email & strong password
     const validateRegistrationForm = () => {
         let formErrors = [];
     
@@ -94,7 +102,7 @@ const SignupPage = () => {
             formErrors.push("Password cannot contain spaces.");
         }
     
-        // Password specific checks
+        // Password strength checks
         const hasUpperCase = /[A-Z]/.test(password);
         const hasLowerCase = /[a-z]/.test(password);
         const hasNumber = /\d/.test(password);
@@ -116,7 +124,7 @@ const SignupPage = () => {
         return formErrors.length === 0;
     };
     
-
+    // Prompt the backend to create the new user's account
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (validateRegistrationForm()) {
@@ -142,14 +150,22 @@ const SignupPage = () => {
         }
     };
 
+    // Google Analytics
+    useEffect(() => {
+        ReactGA.send({ hitType: "pageview", page: window.location.pathname, title: "Signup page" });
+    }, []);
+
     return (
         <div className="top-0 flex items-center justify-center sm:min-h-screen bg-gray-100">
             {/* Server error warning */}
             {serverError &&
                 <ErrorAlert message="Failed to register. Fatal: network/server error!" resetError={resetServerError} />
             }
-
+            
+            {/* Darken background image */}
             <img src="/SFSU-img-4.png" className="absolute w-full h-full object-cover z-10 filter brightness-[0.8] sm:block hidden" alt="Bird eye view of SFSU" />
+            
+            {/* Container for register form */}
             <div className="w-full sm:max-w-md bg-white p-8 sm:rounded-lg sm:shadow-md z-30">
                 <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Sign Up</h2>
 
@@ -202,6 +218,7 @@ const SignupPage = () => {
                                 maxLength={255}
                                 required
                             />
+                            {/* Password visibility toggle button */}
                             <button id="passwordVis" type="button" onClick={() => { setPwdVis(prevVisible => !prevVisible) }}>
                                 {pwdVis ? (
                                     <FaRegEyeSlash className="ml-2 mr-2 text-gray-400 hover:text-gray-500" size={25} />
@@ -211,7 +228,8 @@ const SignupPage = () => {
                             </button>
                         </div>
                     </div>
-
+                    
+                    {/* Password strength color indicator (Note: From Bryan's previous project copy & pasted) */}
                     <div className={`h-2 w-full flex items-center justify-start ${passwordStrength === "no password" ? "hidden" : ""}`}>
                         <div className={`h-full w-2/12 bg-red-600 border border-gray-400 ${passwordStrength === "weak password" || "medium password" ? "" : "hidden"}`}></div>
                         <div className={`h-full w-2/12 bg-yellow-500 border border-gray-400 ${passwordStrength === "medium password" || passwordStrength === "strong password" ? "" : "hidden"}`}></div>
@@ -224,7 +242,8 @@ const SignupPage = () => {
                             </p>
                         )}
                     </div>
-
+                    
+                    {/* Error warning give user more context on failed registeration, i.e., weak password */}
                     {errors && errors.length > 0 && (
                         <div className="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50" role="alert">
                             <svg className="flex-shrink-0 inline w-4 h-4 me-3 mt-[2px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
@@ -268,7 +287,8 @@ const SignupPage = () => {
                     >
                         Sign Up
                     </button>
-
+                    
+                    {/* Link to sign in */}
                     <div className="text-sm text-center">
                         <p className="text-gray-500">
                             Already have an account? <Link to="/login" className="text-blue-500 hover:underline">Log In</Link>

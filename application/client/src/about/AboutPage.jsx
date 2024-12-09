@@ -10,7 +10,8 @@
 *
 **************************************************************/
 
-import React from 'react'
+import React, { useEffect } from 'react'
+import ReactGA from "react-ga4";
 import { Link, useParams } from 'react-router-dom';
 
 const usersData = [
@@ -44,7 +45,14 @@ const usersData = [
     }
 ]
 
-// Card template to display a team member
+/**
+ * Card template to dynamically display a team member's bio.
+ * 
+ * @param {string} name Team member's name.
+ * @param {string} role Team member's role in the project.
+ * @param {string} imgUrl The file system link to the team member's image.
+ * @param {string} linkUrl The query link to the individual's about page.
+ */
 const TeamMember = ({ name, role, imgUrl, linkUrl }) => (
     <Link to={`/about${linkUrl}`} rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
         <div className="items-center bg-gray-50 xl:h-full rounded-lg shadow sm:flex">
@@ -61,7 +69,7 @@ const TeamMember = ({ name, role, imgUrl, linkUrl }) => (
     </Link>
 );
 
-// Render the About page
+// Render the main About page
 const Team = () => {
     return (
         <>
@@ -98,7 +106,7 @@ const RenderUser = ({ user }) => {
                 <div className="mt-4 md:mt-0">
                     <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-gray-900">{name} - {role}</h2>
                     <p className="mb-6 font-light text-gray-500 md:text-lg">{description}</p>
-                    <a href="/about" class="inline-flex items-center text-white bg-[#231161] hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                    <a href="/about" class="inline-flex items-center text-white bg-[#231161] hover:bg-[#1f0e55] focus:ring-[#552988] focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                         Back
                         <svg class="ml-2 -mr-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
@@ -111,10 +119,15 @@ const RenderUser = ({ user }) => {
     )
 }
 
-// Render the sub about page
+// Render the sub about page via url querying
 const About = () => {
     const { name } = useParams();
     const foundUser = usersData.find(user => user.linkUrl.replace("/", "") === name);
+
+    // Google Analytics
+    useEffect(() => {
+        ReactGA.send({ hitType: "pageview", page: window.location.pathname, title: "About page" });
+    }, []);
 
     return (
         <section className="bg-white" >

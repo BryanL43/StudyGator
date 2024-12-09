@@ -6,7 +6,7 @@
 *
 * Description:: Tutor listing controller that handles communication between
 *               api endpoints and listing model to interact with the database.
-*               Offers the functionality of adding, searching, and deleting listing(s).
+*               Offers the functionality of adding, retrieving, searching, and deleting listing(s).
 *               The functions returns a status code and json message/data.
 *
 **************************************************************/
@@ -17,7 +17,7 @@ const { addListing, searchListing, getRecentListings, getListings, deleteListing
 /**
  * Communicates with api endpoint to verify credential and create a tutor listing.
  * 
- * @returns Response status: 201 (Success), 401 (Invalid token), 500 (Internal server error).
+ * @returns Response status: 201 (Success), 400 (Missing field), 401 (Invalid token), 500 (Internal server error).
  *          Response status has corresponding json message in form of { message: "status msg" }
  */
 const addListingHandler = async(req, res) => {
@@ -100,6 +100,13 @@ const getRecentListingsHandler = async(req, res) => {
     }
 }
 
+/**
+ * Communicates with api endpoint to verify credential and retrieving all of a tutor's listing to
+ * be rendered onto th dashboard for management.
+ * 
+ * @returns Response status: 201 (Success), 400 (Missing field), 401 (Invalid token), 500 (Internal server error).
+ *          Response status has corresponding json message in form of { message: "status msg" }
+ */
 const getTutorListingsHandler = async(req, res) => {
     const token = req.headers.authorization;
     if (!token) {
@@ -124,6 +131,12 @@ const getTutorListingsHandler = async(req, res) => {
     }
 };
 
+/**
+ * Communicates with api endpoint to verify credential and delete a specific tutor listing.
+ * 
+ * @returns Response status: 200 (Success), 400 (Missing field), 401 (Invalid token), 500 (Internal server error).
+ *          Response status has corresponding json message in form of { message: "status msg" }
+ */
 const deleteListingHandler = async(req, res) => {
     const token = req.headers.authorization;
     const { listingId } = req.body;

@@ -1,5 +1,25 @@
+/**************************************************************
+* Author(s): Bryan Lee
+* Last Updated: 12/3/2024
+*
+* File:: Confirmation.jsx
+*
+* Description:: The confirmation pop-up model for deleting a listing
+*               or a message.
+*
+**************************************************************/
+
 import React from 'react';
 
+/**
+ * Dynamically create the confirmation model, allowing for confirmation prompt to be use in various situations.
+ * 
+ * @param {boolean} deleteWarning The visibility state of the confirmation model.
+ * @param {function} toggleDeleteWarning The pass-by-reference to toggle the visibility of the model.
+ * @param {function} onConfirm The pass-by-reference to trigger an action if the user validates their action.
+ * @param {String} message The message to display on the confirmation model.
+ * @returns The confirmation model.
+ */
 const Confirmation = ({ deleteWarning, toggleDeleteWarning, onConfirm, message }) => {
 
     return (

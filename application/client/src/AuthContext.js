@@ -20,7 +20,7 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-    // Store authToken in localStorage
+    // Store JWT authToken in localStorage
     const [authToken, setAuthToken] = useState(() => {
         const storedData = localStorage.getItem('authToken');
         if (storedData) {
@@ -47,7 +47,7 @@ export const AuthProvider = ({ children }) => {
         }
     }, [authToken]);
 
-    // Properly allocate token returned from log in api
+    // Properly allocate token returned from sign in
     const login = (token) => {
         setAuthToken(token);
         localStorage.setItem("authToken", token);
@@ -60,6 +60,7 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
     };
 
+    // Returns pass-by-references to authorization functions/state
     return (
         <AuthContext.Provider value={{ user, login, logout }}>
             {children}
