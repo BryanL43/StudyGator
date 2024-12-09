@@ -113,7 +113,7 @@ const LoginPage = () => {
                                 className="block w-full p-2 border-none focus:ring-transparent"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                maxLength={255}
+                                maxLength={40}
                                 required
                             />
                         </div>
@@ -131,7 +131,7 @@ const LoginPage = () => {
                                 className="block w-full p-2 border-none focus:ring-transparent"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                maxLength={255}
+                                maxLength={40}
                                 required
                             />
                             {/* Password visibility toggle button */}

@@ -181,7 +181,7 @@ const SignupPage = () => {
                                 className="block w-full p-2 border-none focus:ring-transparent"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                maxLength={255}
+                                maxLength={40}
                                 required
                             />
                         </div>
@@ -198,7 +198,7 @@ const SignupPage = () => {
                                 className="block w-full p-2 border-none focus:ring-transparent0"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                maxLength={255}
+                                maxLength={40}
                                 required
                             />
                         </div>
@@ -215,7 +215,7 @@ const SignupPage = () => {
                                 className="block w-full p-2 border-none focus:ring-transparent"
                                 value={password}
                                 onChange={handlePasswordChange}
-                                maxLength={255}
+                                maxLength={40}
                                 required
                             />
                             {/* Password visibility toggle button */}
