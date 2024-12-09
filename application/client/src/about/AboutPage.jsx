@@ -76,7 +76,7 @@ const Team = () => {
             <div className="mx-auto max-w-screen-sm text-center mb-8 lg:mb-16">
                 <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-gray-900">Our Team</h2>
                 <p className="font-light text-gray-500 lg:mb-16 sm:text-xl">
-                    This is Team#8's group project for 648/848 Software Engineering class. As a team, innovating and delivering
+                    This is Team#8's group project for 648/848 Software Engineering className. As a team, innovating and delivering
                     high-quality solutions for clients and users alike.
                 </p>
             </div>
@@ -106,10 +106,10 @@ const RenderUser = ({ user }) => {
                 <div className="mt-4 md:mt-0">
                     <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-gray-900">{name} - {role}</h2>
                     <p className="mb-6 font-light text-gray-500 md:text-lg">{description}</p>
-                    <a href="/about" class="inline-flex items-center text-white bg-[#231161] hover:bg-[#1f0e55] focus:ring-[#552988] focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                    <a href="/about" className="inline-flex items-center text-white bg-[#231161] hover:bg-[#1f0e55] focus:ring-[#552988] focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                         Back
-                        <svg class="ml-2 -mr-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                        <svg className="ml-2 -mr-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd"></path>
                         </svg>
                     </a>
 

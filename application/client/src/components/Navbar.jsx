@@ -11,13 +11,14 @@
 **************************************************************/
 
 import { useEffect, useState, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../AuthContext.js';
 import axios from 'axios';
 import BASE_URL from '../utils/config';
 
 const Navbar = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const { user, logout } = useAuth();
 
     const [isSearchActive, setSearchActive] = useState(false);
@@ -95,6 +96,27 @@ const Navbar = () => {
         navigate(`/search?selectedSubject=${selectedSubject}&searchTerm=${searchInput}`);
     };
 
+    // Extract query information from URL
+    const queryParams = new URLSearchParams(location.search);
+    const urlSelectedSubject = queryParams.get('selectedSubject') || '';
+    const urlSearchTerm = queryParams.get('searchTerm') || '';
+
+    // Populate the selected subject & search field from any existing url queries.
+    // This is for persistent entries when page is refresh with the same queries.
+    useEffect(() => {
+        setSelectedSubject(urlSelectedSubject);
+        setSearchInput(urlSearchTerm);
+
+        // Adjust dropdown width based on initial URL-selected subject
+        const dropdown = document.querySelector("select");
+        if (dropdown) {
+            const selectedText = dropdown.options[Array.from(dropdown.options).findIndex((opt) => opt.value === urlSelectedSubject)]?.text || "";
+            const minDefaultWidth = 80;
+            const calculatedWidth = Math.max(minDefaultWidth, selectedText.length * 8 + 40);
+            dropdown.style.width = `${calculatedWidth}px`;
+        }
+    }, [urlSelectedSubject, urlSearchTerm]);
+
     return (
         <nav className="bg-[#231161] border-gray-20">
       
@@ -103,7 +125,7 @@ const Navbar = () => {
             <div className="max-w-screen-xl flex flex-wrap items-center justify-center mx-auto px-4 pb-4 sm:gap-4">
                 <div className="flex flex-grow flex-row items-center space-x-3 rtl:space-x-reverse mr-8">
                     {/* Logo */}
-                    <Link to="/" className="flex w-fit items-center space-x-3 rtl:space-x-reverse">
+                    <Link to="/" onClick={() => {setSelectedSubject(""); setSearchInput(""); }} className="flex w-fit items-center space-x-3 rtl:space-x-reverse">
                         <img src="/StudyGatorLogo.png" className="h-8" alt="StudyGator Logo" />
                     </Link>
 

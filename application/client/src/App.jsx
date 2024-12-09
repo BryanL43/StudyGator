@@ -25,7 +25,7 @@ import SearchPage from './SearchPage/SearchPage.jsx';
 import ApplyPage from './ApplyPage/ApplyPage.jsx';  
 import Detail from './DetailPage/Detail.jsx'
 
-ReactGA.initialize("WB2BBB7CCQ");
+ReactGA.initialize("G-WB2BBB7CCQ");
 
 function App() {
     document.title = "StudyGator";

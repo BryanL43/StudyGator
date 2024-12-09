@@ -114,7 +114,7 @@ const TutorListingCard = React.memo(({ metadata, isDashboard, refreshList }) => 
                         state={{ tutor: metadata }} 
                         className="flex-1 max-w-[75%]"
                     >
-                        <h5 className="text-2xl font-bold tracking-tight text-gray-900 overflow-hidden truncate">
+                        <h5 className="text-2xl font-bold tracking-tight text-gray-900 overflow-hidden truncate hover:underline">
                             {metadata.tutorName}
                         </h5>
                     </Link>
