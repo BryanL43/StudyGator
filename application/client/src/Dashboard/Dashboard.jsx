@@ -2,10 +2,10 @@
 * Author(s): Bryan Lee
 * Last Updated: 12/3/2024
 *
-* File:: Confirmation.jsx
+* File:: Dashboard.jsx
 *
-* Description:: The confirmation pop-up model for deleting a listing
-*               or a message.
+* Description:: The registered user's dashboard. They can view their
+*               messages or manage their tutor listings here.
 *
 **************************************************************/
 
@@ -78,7 +78,8 @@ const Dashboard = () => {
             setServerError(true);
         };
     }
-
+     
+    // Fetch the messages sent to registered user on mount
     const fetchMessages = async() => {
         try {
             const response = await axios.get(`${BASE_URL}/api/fetchmessages`, {
@@ -122,6 +123,7 @@ const Dashboard = () => {
                 <ErrorAlert message="Failed to load your tutor listings. Internal server error!" resetError={resetServerError} />
             )}
 
+            {/* Message pop up containing more content */}
             {isMsgPopUpOpen && selectedMessage && (
                 <MessagePopUp
                     id={selectedMessage.id}
@@ -139,10 +141,13 @@ const Dashboard = () => {
             <div>
                 <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50">
                     <div className="container px-6 py-8 mx-auto">
+                        {/* Dashboard header */}
                         <h3 className="text-3xl font-medium text-gray-700">Dashboard - Hello, {user?.name || "user"}</h3>
 
+                        {/* Dashboard navigation buttons */}
                         <div className="mt-4">
                             <div className="flex flex-wrap -mx-6">
+                                {/* View message button */}
                                 <div className="w-full px-6 sm:w-1/2 xl:w-1/3 cursor-pointer">
                                     <div className={`flex items-center px-5 py-6 ${showingMsg ? "bg-gray-200" : "bg-white"} hover:bg-gray-100 rounded-md shadow-sm`} onClick={() => { if (!showingMsg) setShowingMsg(true); }}>
                                         <div className="p-3 bg-indigo-600 bg-opacity-75 rounded-full">
@@ -156,6 +161,7 @@ const Dashboard = () => {
                                     </div>
                                 </div>
 
+                                {/* Manage tutor listing button */}
                                 <div className="w-full px-6 mt-6 sm:w-1/2 xl:w-1/3 sm:mt-0 cursor-pointer">
                                     <div className={`flex items-center px-5 py-6 ${!showingMsg ? "bg-gray-200" : "bg-white"} hover:bg-gray-100 rounded-md shadow-sm`} onClick={() => { if (showingMsg) setShowingMsg(false); }} >
                                         <div className="p-3 bg-orange-600 bg-opacity-75 rounded-full">
@@ -191,6 +197,7 @@ const Dashboard = () => {
                                     </div>
                                 }
 
+                                {/* Loads the tutor listings with a delete button */}
                                 {!loading && listings && listings.length > 0 ? (
                                     <div className={`${serverError ? "hidden" : ""} grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 w-full max-w-5xl justify-center`}>
                                         {listings.map((listing) => (
@@ -214,7 +221,7 @@ const Dashboard = () => {
                                 <div className="min-h-[406px] max-h-64 inline-block min-w-full overflow-y-auto align-middle border-b border-gray-200 shadow sm:rounded-lg">
                                     <table className="min-w-full">
                                         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                            {/* Loads the desktop version */}
+                                            {/* Loads the desktop version of messages container */}
                                             <tr> 
                                                 <th
                                                     className="sm:hidden px-5 py-[12px] text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
@@ -234,11 +241,13 @@ const Dashboard = () => {
                                             </tr>
                                         </thead>
 
+                                        {/* The message container's content */}
                                         <tbody className="bg-white max-h-64 overflow-y-auto">
 
+                                            {/* Loads the messages */}
                                             {messageList && messageList.length === 0 ? (
                                                 <tr>
-                                                    <td colSpan="4" className="text-center w-full h-[362px]">
+                                                    <td colSpan="4" className="text-center pr-[100px] sm:pr-0  w-full h-[362px]">
                                                         You have no messages yet!
                                                     </td>
                                                 </tr>
